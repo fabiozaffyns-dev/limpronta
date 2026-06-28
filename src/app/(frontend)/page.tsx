@@ -1,62 +1,192 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
-import { getPayload } from 'payload'
-import React from 'react'
-import { fileURLToPath } from 'url'
+import Link from 'next/link'
 
-import config from '@/payload.config'
-import './styles.css'
+import { ProductCard } from '@/components/ProductCard'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
+import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
+import { Eyebrow } from '@/components/ui/Eyebrow'
+import { Sigillo } from '@/components/ui/Sigillo'
+import { Wordmark } from '@/components/ui/Wordmark'
+import { Reveal } from '@/components/motion/Reveal'
+import {
+  getBrands,
+  getFeaturedProducts,
+  getLookbooks,
+  getServices,
+  getSettings,
+} from '@/lib/queries'
+import { appointmentMessage } from '@/lib/whatsapp'
+import type { Media } from '@/payload-types'
 
 export default async function HomePage() {
-  const headers = await getHeaders()
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
+  const [featured, brands, lookbooks, services, settings] = await Promise.all([
+    getFeaturedProducts(8),
+    getBrands(),
+    getLookbooks(),
+    getServices(),
+    getSettings(),
+  ])
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  const lookbook = lookbooks[0] ?? null
+  const lookbookCover = lookbook ? (lookbook.immagini?.[0] as Media | number | undefined) : null
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user || !('email' in user) ? (
-          <h1>Welcome to your new project.</h1>
-        ) : (
-          <h1>Welcome back, {user.email}</h1>
-        )}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
+    <>
+      {/* ─── Hero ─────────────────────────────────────────────────────────── */}
+      <section className="relative flex min-h-[100svh] items-center overflow-hidden pt-24">
+        <div className="shell grid w-full items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <Eyebrow>Boutique uomo · Orbassano · dal 2014</Eyebrow>
+            <h1 className="mt-6">
+              <Wordmark className="block text-[clamp(3.5rem,12vw,9rem)]" />
+            </h1>
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-pietra-scura">
+              Il segno lasciato nella materia pregiata. Una selezione sartoriale di marchi scelti,
+              con il consiglio di chi conosce ogni capo. Si guarda, si tocca, si prenota in negozio.
+            </p>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Link href="/catalogo" className="btn btn-primario">
+                Esplora il catalogo
+              </Link>
+              <WhatsAppButton
+                number={settings.whatsappNumber}
+                message={appointmentMessage()}
+                label="Prenota in negozio"
+                variant="ghost"
+              />
+            </div>
+          </div>
+
+          <div className="relative hidden lg:block">
+            <CloudinaryImage media={null} alt="" aspect="4 / 5" sizes="40vw" className="shadow-[0_30px_80px_-40px_rgba(28,26,23,0.5)]" />
+            <div className="absolute -bottom-6 -left-6">
+              <Sigillo size={72} />
+            </div>
+          </div>
         </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
-    </div>
+      </section>
+
+      {/* ─── Muro dei marchi ──────────────────────────────────────────────── */}
+      {brands.length > 0 && (
+        <section className="border-y" style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}>
+          <div className="shell py-10">
+            <Eyebrow className="mb-6">I nostri marchi</Eyebrow>
+            <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
+              {brands.map((b) => (
+                <Link
+                  key={b.id}
+                  href={`/marchi/${b.slug}`}
+                  className="font-display text-xl text-pietra-scura transition-colors hover:text-loden md:text-2xl"
+                >
+                  {b.nome}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── In evidenza ──────────────────────────────────────────────────── */}
+      {featured.length > 0 && (
+        <section className="shell py-24">
+          <Reveal>
+            <div className="flex items-end justify-between gap-6">
+              <div>
+                <Eyebrow>Selezione</Eyebrow>
+                <h2 className="mt-4 text-4xl md:text-5xl">In evidenza</h2>
+              </div>
+              <Link href="/catalogo" className="cartellino link-segno hidden text-loden sm:block">
+                Tutto il catalogo
+              </Link>
+            </div>
+          </Reveal>
+
+          <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
+            {featured.map((p, i) => (
+              <Reveal key={p.id} delay={(i % 4) * 80}>
+                <ProductCard product={p} priority={i < 4} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ─── Anteprima lookbook ───────────────────────────────────────────── */}
+      {lookbook && (
+        <section className="relative bg-inchiostro text-avorio">
+          <div className="grid lg:grid-cols-2">
+            <div className="relative min-h-[50vh]">
+              <CloudinaryImage media={lookbookCover} alt={lookbook.titolo} fillParent sizes="50vw" />
+            </div>
+            <div className="flex items-center px-8 py-20 md:px-16">
+              <Reveal>
+                <Eyebrow scuro>Lookbook</Eyebrow>
+                <h2 className="mt-4 text-4xl text-avorio md:text-5xl">{lookbook.titolo}</h2>
+                <p className="mt-6 max-w-md text-avorio/70">
+                  Racconti di stagione: accostamenti, materiali e dettagli che lasciano il segno.
+                </p>
+                <Link href={`/lookbook/${lookbook.slug}`} className="btn btn-loden mt-10">
+                  Sfoglia il lookbook
+                </Link>
+              </Reveal>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── Servizi ──────────────────────────────────────────────────────── */}
+      {services.length > 0 && (
+        <section className="shell py-24">
+          <Reveal>
+            <Eyebrow>Il nostro servizio</Eyebrow>
+            <h2 className="mt-4 max-w-2xl text-4xl md:text-5xl">
+              Non solo capi: un modo di vestire pensato su di te.
+            </h2>
+          </Reveal>
+          <div className="mt-14 grid gap-px overflow-hidden sm:grid-cols-2 lg:grid-cols-3" style={{ backgroundColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}>
+            {services.slice(0, 6).map((s, i) => (
+              <Reveal key={s.id} delay={(i % 3) * 80} className="bg-lino">
+                <div className="h-full px-7 py-10">
+                  <Sigillo size={40} />
+                  <h3 className="mt-6 text-2xl">{s.titolo}</h3>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+          <Link href="/servizi" className="cartellino link-segno mt-10 inline-block text-loden">
+            Scopri tutti i servizi
+          </Link>
+        </section>
+      )}
+
+      {/* ─── Contatti / negozio ───────────────────────────────────────────── */}
+      <section className="shell pb-12">
+        <Reveal>
+          <div className="border p-10 md:p-16" style={{ borderColor: 'color-mix(in srgb, var(--color-ottone) 40%, transparent)' }}>
+            <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+              <div>
+                <Eyebrow>Vieni a trovarci</Eyebrow>
+                <p className="mt-5 font-display text-3xl leading-tight md:text-4xl">
+                  {[settings.indirizzo?.via, settings.indirizzo?.civico].filter(Boolean).join(' ') ||
+                    'Via Vittorio Emanuele II 12/A'}
+                  <br />
+                  <span className="text-pietra-scura">
+                    {settings.indirizzo?.cap ?? '10043'} {settings.indirizzo?.citta ?? 'Orbassano'} (
+                    {settings.indirizzo?.provincia ?? 'TO'})
+                  </span>
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-4">
+                {settings.telefono && (
+                  <a href={`tel:${settings.telefono.replace(/\s/g, '')}`} className="btn btn-ghost">
+                    {settings.telefono}
+                  </a>
+                )}
+                <WhatsAppButton number={settings.whatsappNumber} message={appointmentMessage()} label="Scrivici su WhatsApp" />
+              </div>
+            </div>
+          </div>
+        </Reveal>
+      </section>
+    </>
   )
 }

@@ -1,0 +1,251 @@
+import type { Where } from 'payload'
+
+import type { Brand, Category, Lookbook, Page, Product, Service, Setting } from '@/payload-types'
+
+import { getPayloadClient } from './payload'
+
+const LOCALE = 'it' as const
+
+const published: Where = { _status: { equals: 'published' } }
+
+// ─── Settings ────────────────────────────────────────────────────────────────
+export async function getSettings(): Promise<Setting> {
+  const payload = await getPayloadClient()
+  return payload.findGlobal({ slug: 'settings', locale: LOCALE, depth: 1 })
+}
+
+// ─── Brands ──────────────────────────────────────────────────────────────────
+export async function getBrands(): Promise<Brand[]> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'brands',
+    locale: LOCALE,
+    limit: 100,
+    sort: 'ordine',
+    depth: 1,
+    pagination: false,
+  })
+  return res.docs
+}
+
+export async function getBrandBySlug(slug: string): Promise<Brand | null> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'brands',
+    locale: LOCALE,
+    where: { slug: { equals: slug } },
+    limit: 1,
+    depth: 1,
+  })
+  return res.docs[0] ?? null
+}
+
+// ─── Categories ──────────────────────────────────────────────────────────────
+export async function getCategories(): Promise<Category[]> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'categories',
+    locale: LOCALE,
+    limit: 100,
+    sort: 'ordine',
+    depth: 0,
+    pagination: false,
+  })
+  return res.docs
+}
+
+// ─── Products ────────────────────────────────────────────────────────────────
+export type ProductFilters = {
+  brand?: string
+  categoria?: string
+  taglia?: string
+  colore?: string
+  stagione?: string
+  q?: string
+  sort?: string
+  page?: number
+  limit?: number
+}
+
+export async function getProducts(filters: ProductFilters = {}) {
+  const payload = await getPayloadClient()
+  const and: Where[] = [published]
+
+  if (filters.brand) and.push({ 'brand.slug': { equals: filters.brand } })
+  if (filters.categoria) and.push({ 'categoria.slug': { equals: filters.categoria } })
+  if (filters.taglia) and.push({ 'taglie.taglia': { equals: filters.taglia } })
+  if (filters.colore) and.push({ 'colori.nome': { like: filters.colore } })
+  if (filters.stagione) and.push({ 'stagione.tipo': { equals: filters.stagione } })
+  if (filters.q) {
+    and.push({
+      or: [{ nome: { like: filters.q } }, { sku: { like: filters.q } }],
+    })
+  }
+
+  const sortMap: Record<string, string> = {
+    novita: '-createdAt',
+    'prezzo-asc': 'prezzo',
+    'prezzo-desc': '-prezzo',
+    nome: 'nome',
+  }
+
+  return payload.find({
+    collection: 'products',
+    locale: LOCALE,
+    where: { and },
+    sort: sortMap[filters.sort ?? 'novita'] ?? '-createdAt',
+    page: filters.page ?? 1,
+    limit: filters.limit ?? 24,
+    depth: 1,
+  })
+}
+
+/** Valori distinti di taglia e colore per i filtri del catalogo. */
+export async function getCatalogFacets(): Promise<{ taglie: string[]; colori: string[] }> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'products',
+    locale: LOCALE,
+    where: published,
+    limit: 500,
+    depth: 0,
+    pagination: false,
+  })
+  const taglie = new Set<string>()
+  const colori = new Set<string>()
+  for (const p of res.docs) {
+    for (const t of p.taglie ?? []) if (t?.taglia) taglie.add(t.taglia)
+    for (const c of p.colori ?? []) if (c?.nome) colori.add(c.nome)
+  }
+  return {
+    taglie: [...taglie].sort((a, b) => a.localeCompare(b, 'it')),
+    colori: [...colori].sort((a, b) => a.localeCompare(b, 'it')),
+  }
+}
+
+export async function getFeaturedProducts(limit = 6): Promise<Product[]> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'products',
+    locale: LOCALE,
+    where: { and: [published, { inEvidenza: { equals: true } }] },
+    limit,
+    depth: 1,
+    sort: '-updatedAt',
+  })
+  return res.docs
+}
+
+export async function getProductBySlug(slug: string): Promise<Product | null> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'products',
+    locale: LOCALE,
+    where: { and: [published, { slug: { equals: slug } }] },
+    limit: 1,
+    depth: 2,
+  })
+  return res.docs[0] ?? null
+}
+
+export async function getRelatedProducts(product: Product, limit = 4): Promise<Product[]> {
+  const payload = await getPayloadClient()
+  const brandId = typeof product.brand === 'object' ? product.brand.id : product.brand
+  const categoriaId = typeof product.categoria === 'object' ? product.categoria.id : product.categoria
+  const res = await payload.find({
+    collection: 'products',
+    locale: LOCALE,
+    where: {
+      and: [
+        published,
+        { id: { not_equals: product.id } },
+        { or: [{ categoria: { equals: categoriaId } }, { brand: { equals: brandId } }] },
+      ],
+    },
+    limit,
+    depth: 1,
+    sort: '-updatedAt',
+  })
+  return res.docs
+}
+
+export async function getProductsByBrand(brandId: number | string, limit = 48): Promise<Product[]> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'products',
+    locale: LOCALE,
+    where: { and: [published, { brand: { equals: brandId } }] },
+    limit,
+    depth: 1,
+    sort: '-updatedAt',
+  })
+  return res.docs
+}
+
+// ─── Lookbooks ───────────────────────────────────────────────────────────────
+export async function getLookbooks(): Promise<Lookbook[]> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'lookbooks',
+    locale: LOCALE,
+    where: published,
+    limit: 50,
+    depth: 1,
+    sort: '-createdAt',
+  })
+  return res.docs
+}
+
+export async function getLookbookBySlug(slug: string): Promise<Lookbook | null> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'lookbooks',
+    locale: LOCALE,
+    where: { and: [published, { slug: { equals: slug } }] },
+    limit: 1,
+    depth: 2,
+  })
+  return res.docs[0] ?? null
+}
+
+// ─── Services ────────────────────────────────────────────────────────────────
+export async function getServices(): Promise<Service[]> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'services',
+    locale: LOCALE,
+    limit: 50,
+    sort: 'ordine',
+    depth: 1,
+    pagination: false,
+  })
+  return res.docs
+}
+
+// ─── Pages ───────────────────────────────────────────────────────────────────
+export async function getPageBySlug(slug: string): Promise<Page | null> {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection: 'pages',
+    locale: LOCALE,
+    where: { and: [published, { slug: { equals: slug } }] },
+    limit: 1,
+    depth: 1,
+  })
+  return res.docs[0] ?? null
+}
+
+// ─── Sitemap helpers ─────────────────────────────────────────────────────────
+export async function getAllSlugs(collection: 'products' | 'brands' | 'lookbooks' | 'pages') {
+  const payload = await getPayloadClient()
+  const res = await payload.find({
+    collection,
+    locale: LOCALE,
+    where: collection === 'brands' ? {} : published,
+    limit: 1000,
+    depth: 0,
+    pagination: false,
+    select: { slug: true, updatedAt: true } as never,
+  })
+  return res.docs as Array<{ slug?: string | null; updatedAt?: string | null }>
+}
