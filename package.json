@@ -20,9 +20,9 @@
     "migrate:create": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:create",
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:status": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:status",
-    "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed.ts",
+    "seed": "cross-env NODE_OPTIONS=--no-deprecation node --env-file=.env --import tsx/esm src/scripts/seed.ts",
     "template:prodotti": "tsx src/scripts/make-template.ts",
-    "import:prodotti": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/import-products.ts"
+    "import:prodotti": "cross-env NODE_OPTIONS=--no-deprecation node --env-file=.env --import tsx/esm src/scripts/import-products.ts"
   },
   "dependencies": {
     "@gsap/react": "2.1.2",

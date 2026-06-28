@@ -231,11 +231,14 @@ async function main() {
     for (const e of report.errori) log(`  • ${e}`)
   }
   log('────────────────────────────────────────────────────────────')
-
-  process.exit(0)
 }
 
-main().catch((err) => {
-  console.error(err)
+// Top-level await: indispensabile sotto `payload run` (un main() non-awaited
+// uscirebbe prima del completamento delle operazioni asincrone).
+try {
+  await main()
+  process.exit(0)
+} catch (err) {
+  console.error('IMPORT ERRORE:', err)
   process.exit(1)
-})
+}

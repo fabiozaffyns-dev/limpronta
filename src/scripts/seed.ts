@@ -65,10 +65,11 @@ const SERVICES = [
 ]
 
 async function main() {
+  console.log('— Seed L’Impronta: avvio —')
   const payload = await getPayload({ config })
-  const log = (s: string) => payload.logger.info(s)
+  const log = (s: string) => console.log(s)
 
-  log('— Seed L’Impronta —')
+  log('Payload pronto, inizio seed…')
 
   // Categorie
   let catCreate = 0
@@ -188,9 +189,11 @@ async function main() {
   }
   log(`Pagine: ${pageCreate} create, ${PAGES.length - pageCreate} già presenti`)
 
-  // Impostazioni (solo se non ancora configurate)
+  // Impostazioni (solo se non ancora configurate).
+  // Nota: telefono/indirizzo hanno defaultValue, quindi controllo gli ORARI
+  // (senza default) per capire se il global è già stato popolato.
   const settings = await payload.findGlobal({ slug: 'settings', depth: 0 })
-  if (!settings.telefono) {
+  if (!settings.orari || settings.orari.length === 0) {
     await payload.updateGlobal({
       slug: 'settings',
       locale: 'it',
@@ -229,11 +232,25 @@ async function main() {
     log('Utenti: già presenti, nessun admin creato')
   }
 
+  // Verifica conteggi effettivi a DB
+  const counts = {
+    categorie: (await payload.count({ collection: 'categories' })).totalDocs,
+    marchi: (await payload.count({ collection: 'brands' })).totalDocs,
+    servizi: (await payload.count({ collection: 'services' })).totalDocs,
+    pagine: (await payload.count({ collection: 'pages' })).totalDocs,
+    utenti: (await payload.count({ collection: 'users' })).totalDocs,
+  }
+  console.log('VERIFICA conteggi a DB:', JSON.stringify(counts))
   log('— Seed completato —')
-  process.exit(0)
+
 }
 
-main().catch((err) => {
-  console.error(err)
+// Top-level await: tiene vivo il processo sotto `payload run` finché il seed
+// non è davvero finito (un main() "fire-and-forget" usciva prima del tempo).
+try {
+  await main()
+  process.exit(0)
+} catch (err) {
+  console.error('SEED ERRORE:', err)
   process.exit(1)
-})
+}
