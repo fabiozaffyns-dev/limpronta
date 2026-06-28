@@ -5,7 +5,7 @@ import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { Sigillo } from '@/components/ui/Sigillo'
-import { Wordmark } from '@/components/ui/Wordmark'
+import { DebossHero } from '@/components/motion/DebossHero'
 import { Reveal } from '@/components/motion/Reveal'
 import {
   getBrands,
@@ -31,39 +31,8 @@ export default async function HomePage() {
 
   return (
     <>
-      {/* ─── Hero ─────────────────────────────────────────────────────────── */}
-      <section className="relative flex min-h-[100svh] items-center overflow-hidden pt-24">
-        <div className="shell grid w-full items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
-          <div>
-            <Eyebrow>Boutique uomo · Orbassano · dal 2014</Eyebrow>
-            <h1 className="mt-6">
-              <Wordmark className="block text-[clamp(3.5rem,12vw,9rem)]" />
-            </h1>
-            <p className="mt-6 max-w-md text-lg leading-relaxed text-pietra-scura">
-              Il segno lasciato nella materia pregiata. Una selezione sartoriale di marchi scelti,
-              con il consiglio di chi conosce ogni capo. Si guarda, si tocca, si prenota in negozio.
-            </p>
-            <div className="mt-10 flex flex-wrap items-center gap-4">
-              <Link href="/catalogo" className="btn btn-primario">
-                Esplora il catalogo
-              </Link>
-              <WhatsAppButton
-                number={settings.whatsappNumber}
-                message={appointmentMessage()}
-                label="Prenota in negozio"
-                variant="ghost"
-              />
-            </div>
-          </div>
-
-          <div className="relative hidden lg:block">
-            <CloudinaryImage media={null} alt="" aspect="4 / 5" sizes="40vw" className="shadow-[0_30px_80px_-40px_rgba(28,26,23,0.5)]" />
-            <div className="absolute -bottom-6 -left-6">
-              <Sigillo size={72} />
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ─── Hero (momento orchestrato) ───────────────────────────────────── */}
+      <DebossHero whatsappNumber={settings.whatsappNumber} />
 
       {/* ─── Muro dei marchi ──────────────────────────────────────────────── */}
       {brands.length > 0 && (

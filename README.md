@@ -1,67 +1,101 @@
-# Payload Blank Template
+# L'Impronta — sito vetrina/catalogo
 
-This template comes configured with the bare minimum to get started on anything you need.
+Sito della boutique uomo **L'Impronta** (Orbassano, TO): catalogo elegante e
+editoriale con call-to-action "contatta/prenota in negozio". Nessuna vendita
+online.
 
-## Quick start
+Concept d'identità: **"La materia e il segno"** — wordmark e dettagli trattati
+come un segno *debossato/inciso* su fondo materico.
 
-This template can be deployed directly from our Cloud hosting and it will setup MongoDB and cloud S3 object storage for media.
+## Stack
 
-## Quick Start - local setup
+- **Next.js 16** (App Router, TypeScript) + **React 19**
+- **Payload CMS 3** (admin + frontend nello stesso repo)
+- **PostgreSQL** su Neon (adapter Drizzle)
+- **Cloudinary** per le immagini (storage adapter, dietro env)
+- **Tailwind CSS v4** + design token in CSS variables
+- **Lenis** (smooth scroll) + **GSAP ScrollTrigger** (momento hero)
+- Deploy: **Vercel**
 
-To spin up this template locally, follow these steps:
+## Avvio in locale
 
-### Clone
+1. **Variabili d'ambiente**
 
-After you click the `Deploy` button above, you'll want to have standalone copy of this repo on your machine. If you've already cloned this repo, skip to [Development](#development).
+   ```bash
+   cp .env.example .env
+   ```
 
-### Development
+   Compila almeno: `DATABASE_URI` (Neon), `PAYLOAD_SECRET`, le chiavi
+   `CLOUDINARY_*` e, per i contatti, `NEXT_PUBLIC_WHATSAPP_NUMBER` /
+   `NEXT_PUBLIC_FORMSPREE_ENDPOINT`. Senza Cloudinary, in dev le immagini usano
+   lo storage su disco.
 
-1. First [clone the repo](#clone) if you have not done so already
-2. `cd my-project && cp .env.example .env` to copy the example environment variables. You'll need to add the `MONGODB_URL` from your Cloud project to your `.env` if you want to use S3 storage and the MongoDB database that was created for you.
+2. **Dipendenze**
 
-3. `pnpm install && pnpm dev` to install dependencies and start the dev server
-4. open `http://localhost:3000` to open the app in your browser
+   ```bash
+   pnpm install
+   ```
 
-That's it! Changes made in `./src` will be reflected in your app. Follow the on-screen instructions to login and create your first admin user. Then check out [Production](#production) once you're ready to build and serve your app, and [Deployment](#deployment) when you're ready to go live.
+3. **Migrazioni database** (Neon — consigliata la stringa diretta non-pooled)
 
-#### Docker (Optional)
+   ```bash
+   pnpm migrate:create   # genera la migrazione dal config
+   pnpm migrate          # applica al database
+   ```
 
-If you prefer to use Docker for local development instead of a local MongoDB instance, the provided docker-compose.yml file can be used.
+4. **Dati iniziali** (categorie, marchi, servizi, pagine, impostazioni, admin)
 
-To do so, follow these steps:
+   ```bash
+   pnpm seed
+   ```
 
-- Modify the `MONGODB_URL` in your `.env` file to `mongodb://127.0.0.1/<dbname>`
-- Modify the `docker-compose.yml` file's `MONGODB_URL` to match the above `<dbname>`
-- Run `docker-compose up` to start the database, optionally pass `-d` to run in the background.
+5. **Avvio**
 
-## How it works
+   ```bash
+   pnpm dev
+   ```
 
-The Payload config is tailored specifically to the needs of most websites. It is pre-configured in the following ways:
+   - Sito: http://localhost:3000
+   - Admin: http://localhost:3000/admin
 
-### Collections
+## Script utili
 
-See the [Collections](https://payloadcms.com/docs/configuration/collections) docs for details on how to extend this functionality.
+| Comando | Descrizione |
+|---|---|
+| `pnpm dev` / `pnpm build` / `pnpm start` | Dev / build / produzione |
+| `pnpm typecheck` / `pnpm lint` | Controlli TypeScript / ESLint |
+| `pnpm generate:types` | Rigenera `src/payload-types.ts` dal config |
+| `pnpm generate:importmap` | Rigenera la import map dell'admin |
+| `pnpm migrate:create` / `pnpm migrate` | Crea / applica migrazioni |
+| `pnpm seed` | Seed idempotente |
+| `pnpm template:prodotti` | Genera il template Excel per l'import |
+| `pnpm import:prodotti <xlsx> <foto> [--dry-run]` | Import massivo prodotti |
 
-- #### Users (Authentication)
+L'import massivo e la convenzione di naming delle foto sono documentati in
+[`src/templates/README.md`](./src/templates/README.md).
 
-  Users are auth-enabled collections that have access to the admin panel.
+## Struttura
 
-  For additional help, see the official [Auth Example](https://github.com/payloadcms/payload/tree/main/examples/auth) or the [Authentication](https://payloadcms.com/docs/authentication/overview#authentication-overview) docs.
+```
+src/
+├─ payload.config.ts        # config CMS (collezioni, globals, localization, plugin)
+├─ collections/             # Products, Brands, Categories, Lookbooks, Pages, Services, Media, Users
+├─ globals/Settings.ts      # contatti, indirizzo, orari, social, mappa
+├─ app/(frontend)/          # sito pubblico (Home, Catalogo, schede, marchi, lookbook, …)
+├─ app/(payload)/           # admin + API Payload
+├─ components/              # UI, layout, motion
+├─ lib/                     # client Payload, query, JSON-LD, helper
+└─ scripts/                 # seed, import, template
+```
 
-- #### Media
+## Portabilità
 
-  This is the uploads enabled collection. It features pre-configured sizes, focal point and manual resizing to help you manage your pictures.
+Database e storage sono dietro adapter/variabili d'ambiente: la migrazione a una
+VPS (Postgres locale + dischi) o a un altro storage richiede solo cambi di
+configurazione, non riscritture.
 
-### Docker
+## Deploy su Vercel
 
-Alternatively, you can use [Docker](https://www.docker.com) to spin up this template locally. To do so, follow these steps:
-
-1. Follow [steps 1 and 2 from above](#development), the docker-compose file will automatically use the `.env` file in your project root
-1. Next run `docker-compose up`
-1. Follow [steps 4 and 5 from above](#development) to login and create your first admin user
-
-That's it! The Docker instance will help you get up and running quickly while also standardizing the development environment across your teams.
-
-## Questions
-
-If you have any issues or questions, reach out to us on [Discord](https://discord.com/invite/payload) or start a [GitHub discussion](https://github.com/payloadcms/payload/discussions).
+Imposta le stesse variabili d'ambiente del `.env` nel progetto Vercel. Le
+migrazioni vanno eseguite verso Neon (stringa diretta) prima/durante il deploy.
+Le immagini risiedono su Cloudinary (il filesystem di Vercel è effimero).
