@@ -6,6 +6,8 @@ import { PageIntro } from '@/components/ui/PageIntro'
 import { mediaUrl } from '@/lib/media'
 import { getBrands } from '@/lib/queries'
 
+export const revalidate = 120
+
 export const metadata: Metadata = {
   title: 'Marchi',
   description:

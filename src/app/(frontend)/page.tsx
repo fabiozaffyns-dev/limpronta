@@ -17,6 +17,9 @@ import {
 import { appointmentMessage } from '@/lib/whatsapp'
 import type { Media } from '@/payload-types'
 
+// ISR: rigenera dal CMS ogni 2 minuti (le modifiche in admin compaiono da sole).
+export const revalidate = 120
+
 export default async function HomePage() {
   const [featured, brands, lookbooks, services, settings] = await Promise.all([
     getFeaturedProducts(8),

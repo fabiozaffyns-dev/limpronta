@@ -9,6 +9,8 @@ import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { getServices, getSettings } from '@/lib/queries'
 import { appointmentMessage } from '@/lib/whatsapp'
 
+export const revalidate = 120
+
 export const metadata: Metadata = {
   title: 'Servizi',
   description:

@@ -36,20 +36,22 @@ come un segno *debossato/inciso* su fondo materico.
    pnpm install
    ```
 
-3. **Migrazioni database** (Neon — consigliata la stringa diretta non-pooled)
-
-   ```bash
-   pnpm migrate:create   # genera la migrazione dal config
-   pnpm migrate          # applica al database
-   ```
-
-4. **Dati iniziali** (categorie, marchi, servizi, pagine, impostazioni, admin)
+3. **Schema + dati iniziali** (categorie, marchi, servizi, pagine, impostazioni, admin)
 
    ```bash
    pnpm seed
    ```
 
-5. **Avvio**
+   In sviluppo lo schema viene sincronizzato automaticamente su Neon (modalità
+   *push* dell'adapter Postgres): `pnpm seed` avvia Payload — che crea/aggiorna le
+   tabelle — e poi popola i dati in modo idempotente.
+
+   > Nota: gli script CLI girano con `node --import tsx/esm` (vedi `package.json`).
+   > I comandi `pnpm migrate:create/migrate` restano disponibili ma su Node 24 +
+   > Windows hanno un bug noto del loader CJS di `tsx`; per la v1 lo schema è
+   > gestito via *push* sul database Neon condiviso.
+
+4. **Avvio**
 
    ```bash
    pnpm dev

@@ -7,6 +7,8 @@ import { PageIntro } from '@/components/ui/PageIntro'
 import { formatStagioneEstesa } from '@/lib/format'
 import { getLookbooks } from '@/lib/queries'
 
+export const revalidate = 120
+
 export const metadata: Metadata = {
   title: 'Lookbook',
   description:

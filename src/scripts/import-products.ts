@@ -2,7 +2,7 @@ import config from '@payload-config'
 import { existsSync, readdirSync } from 'fs'
 import path from 'path'
 import { getPayload, type RequiredDataFromCollectionSlug } from 'payload'
-import * as XLSX from 'xlsx'
+import XLSX from 'xlsx'
 
 type ProductData = RequiredDataFromCollectionSlug<'products'>
 

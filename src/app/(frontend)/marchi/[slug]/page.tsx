@@ -10,6 +10,8 @@ import { getBrandBySlug, getProductsByBrand } from '@/lib/queries'
 
 type Params = { params: Promise<{ slug: string }> }
 
+export const revalidate = 120
+
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params
   const brand = await getBrandBySlug(slug)

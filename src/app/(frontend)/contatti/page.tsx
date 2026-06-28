@@ -8,6 +8,8 @@ import { Sigillo } from '@/components/ui/Sigillo'
 import { getSettings } from '@/lib/queries'
 import { appointmentMessage } from '@/lib/whatsapp'
 
+export const revalidate = 120
+
 export const metadata: Metadata = {
   title: 'Contatti',
   description:

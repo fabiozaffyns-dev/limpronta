@@ -1,7 +1,7 @@
 import { mkdirSync } from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import * as XLSX from 'xlsx'
+import XLSX from 'xlsx'
 
 /**
  * Genera templates/prodotti-template.xlsx con intestazioni, righe d'esempio e
