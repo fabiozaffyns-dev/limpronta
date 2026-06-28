@@ -18,11 +18,14 @@ export function Eyebrow({
     <Tag
       className={cn(
         'cartellino inline-flex items-center gap-2',
-        scuro ? 'text-ottone-chiaro' : 'text-ottone',
+        scuro ? 'text-ottone-chiaro' : 'text-ottone-testo',
         className,
       )}
     >
-      <span aria-hidden className="inline-block h-px w-6 bg-current opacity-60" />
+      <span
+        aria-hidden
+        className={cn('inline-block h-px w-6 opacity-70', scuro ? 'bg-ottone-chiaro' : 'bg-ottone')}
+      />
       {children}
     </Tag>
   )

@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Wordmark } from '@/components/ui/Wordmark'
 import { cn } from '@/lib/cn'
@@ -21,6 +21,7 @@ export function Header({ whatsappNumber }: { whatsappNumber?: string | null }) {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
+  const drawerRef = useRef<HTMLDivElement>(null)
 
   const solid = scrolled || pathname !== '/'
 
@@ -35,6 +36,17 @@ export function Header({ whatsappNumber }: { whatsappNumber?: string | null }) {
   useEffect(() => {
     document.documentElement.classList.toggle('lenis-stopped', open)
     return () => document.documentElement.classList.remove('lenis-stopped')
+  }, [open])
+
+  // Menù mobile aperto: porta il focus al primo link e chiudi con Esc.
+  useEffect(() => {
+    if (!open) return
+    drawerRef.current?.querySelector('a')?.focus()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
   }, [open])
 
   const waLink = buildWhatsAppLink({ number: whatsappNumber, message: appointmentMessage() })
@@ -88,6 +100,10 @@ export function Header({ whatsappNumber }: { whatsappNumber?: string | null }) {
 
       {/* Drawer mobile */}
       <div
+        ref={drawerRef}
+        role="dialog"
+        aria-modal={open || undefined}
+        aria-label="Menù di navigazione"
         className={cn(
           'fixed inset-0 z-0 flex flex-col bg-lino transition-[opacity,visibility] duration-400 lg:hidden',
           open ? 'visible opacity-100' : 'invisible opacity-0',

@@ -252,12 +252,28 @@ export interface Media {
    */
   alt: string;
   caption?: string | null;
+  cloudinaryPublicId?: string | null;
+  cloudinaryUrl?: string | null;
+  cloudinaryResourceType?: string | null;
+  cloudinaryFormat?: string | null;
+  cloudinaryVersion?: number | null;
+  /**
+   * Direct URL to the original file without transformations
+   */
+  originalUrl?: string | null;
+  /**
+   * URL with applied transformations
+   */
+  transformedUrl?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
   thumbnailURL?: string | null;
   filename?: string | null;
   mimeType?: string | null;
+  /**
+   * File size in bytes
+   */
   filesize?: number | null;
   width?: number | null;
   height?: number | null;
@@ -668,6 +684,13 @@ export interface PagesSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  cloudinaryPublicId?: T;
+  cloudinaryUrl?: T;
+  cloudinaryResourceType?: T;
+  cloudinaryFormat?: T;
+  cloudinaryVersion?: T;
+  originalUrl?: T;
+  transformedUrl?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;

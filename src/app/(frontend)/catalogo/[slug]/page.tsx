@@ -13,6 +13,7 @@ import { formatPrice, formatStagioneEstesa } from '@/lib/format'
 import { breadcrumbLd, productLd } from '@/lib/json-ld'
 import { mediaUrl, rel } from '@/lib/media'
 import { getProductBySlug, getRelatedProducts, getSettings } from '@/lib/queries'
+import { jsonLdSafe } from '@/lib/sanitize'
 import { productInquiryMessage } from '@/lib/whatsapp'
 import type { Brand, Category } from '@/payload-types'
 
@@ -52,12 +53,12 @@ export default async function ProductPage({ params }: Params) {
     <article className="pt-28 md:pt-32">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd(product, settings)) }}
+        dangerouslySetInnerHTML={{ __html: jsonLdSafe(productLd(product, settings)) }}
       />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdSafe(
             breadcrumbLd([
               { name: 'Home', path: '/' },
               { name: 'Catalogo', path: '/catalogo' },
@@ -112,7 +113,7 @@ export default async function ProductPage({ params }: Params) {
                       className={cn(
                         'cartellino border px-3 py-1.5',
                         t.disponibile === false
-                          ? 'text-pietra/60 line-through'
+                          ? 'text-pietra-scura/80 line-through'
                           : 'text-inchiostro',
                       )}
                       style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 50%, transparent)' }}
@@ -191,7 +192,7 @@ export default async function ProductPage({ params }: Params) {
         {related.length > 0 && (
           <section className="mt-24">
             <Eyebrow>Potrebbe piacerti</Eyebrow>
-            <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
+            <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
               {related.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}

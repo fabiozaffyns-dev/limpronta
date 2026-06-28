@@ -37,7 +37,9 @@ function splitList(v: unknown): string[] {
 function parseStagione(v: unknown): { tipo?: 'PE' | 'AI'; anno?: number } | undefined {
   const m = str(v)
     .toUpperCase()
-    .match(/^(PE|AI)\s?(\d{2,4})$/)
+    .replace(/[\/.]/g, ' ')
+    .trim()
+    .match(/^(PE|AI)\s*(\d{2,4})$/)
   if (!m) return undefined
   const tipo = m[1] as 'PE' | 'AI'
   let anno = parseInt(m[2]!, 10)
@@ -164,6 +166,7 @@ async function main() {
       const taglie = splitList(row.taglie).map((t) => ({ taglia: t, disponibile: true }))
       const colori = splitList(row.colori).map((c) => ({ nome: c }))
       const stagione = parseStagione(row.stagione)
+      const suRichiesta = toBool(row.prezzo_su_richiesta)
       const prezzoRaw = str(row.prezzo)
       const prezzo = prezzoRaw ? Number(prezzoRaw.replace(',', '.')) : undefined
       const descrizioneTxt = str(row.descrizione)
@@ -181,14 +184,15 @@ async function main() {
         sku,
         brand: brandId,
         categoria: categoriaId,
-        prezzoSuRichiesta: toBool(row.prezzo_su_richiesta),
+        prezzoSuRichiesta: suRichiesta,
         inEvidenza: toBool(row.in_evidenza),
         disponibile: toBool(row.disponibile, true),
         taglie,
         colori,
         _status: 'published',
       }
-      if (prezzo != null && !Number.isNaN(prezzo)) data.prezzo = prezzo
+      // Il prezzo si salva solo se NON è "su richiesta".
+      if (!suRichiesta && prezzo != null && !Number.isNaN(prezzo)) data.prezzo = prezzo
       if (stagione) data.stagione = stagione
       if (descrizioneTxt) data.descrizione = paragraphs(descrizioneTxt)
       if (immagini.length) data.immagini = immagini

@@ -6,6 +6,26 @@ import { fileURLToPath } from 'url'
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
 
+const isProd = process.env.NODE_ENV === 'production'
+
+// CSP solo in produzione (in dev romperebbe HMR/eval di Next). 'unsafe-inline'
+// resta necessario per script inline e admin Payload; il resto è ristretto.
+const contentSecurityPolicy = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "frame-ancestors 'self'",
+  "img-src 'self' data: blob: https://res.cloudinary.com",
+  "media-src 'self' https://res.cloudinary.com",
+  "font-src 'self' data:",
+  "style-src 'self' 'unsafe-inline'",
+  "script-src 'self' 'unsafe-inline'",
+  "worker-src 'self' blob:",
+  "connect-src 'self' https://res.cloudinary.com https://formspree.io https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+  "form-action 'self' https://formspree.io",
+  "frame-src 'self'",
+].join('; ')
+
 // Header di sicurezza applicati a tutte le risposte.
 const securityHeaders = [
   { key: 'X-Content-Type-Options', value: 'nosniff' },
@@ -20,6 +40,7 @@ const securityHeaders = [
     key: 'Permissions-Policy',
     value: 'camera=(self), microphone=(), geolocation=(), browsing-topics=()',
   },
+  ...(isProd ? [{ key: 'Content-Security-Policy', value: contentSecurityPolicy }] : []),
 ]
 
 const nextConfig: NextConfig = {

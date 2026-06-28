@@ -47,7 +47,7 @@ export function ProductCard({
       </div>
 
       <div className="mt-4">
-        {brand?.nome && <p className="cartellino text-ottone">{brand.nome}</p>}
+        {brand?.nome && <p className="cartellino text-ottone-testo">{brand.nome}</p>}
         <h3 className="font-display mt-1 text-lg leading-snug text-inchiostro transition-colors duration-300 group-hover:text-loden">
           {product.nome}
         </h3>

@@ -5,6 +5,8 @@ const FALLBACK_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? ''
 export function buildWhatsAppLink(opts: { number?: string | null; message: string }): string {
   const num = (opts.number || FALLBACK_NUMBER).replace(/[^0-9]/g, '')
   const text = encodeURIComponent(opts.message)
+  // Senza numero: apre WhatsApp col testo precompilato per scegliere il contatto.
+  if (!num) return `https://wa.me/?text=${text}`
   return `https://wa.me/${num}?text=${text}`
 }
 

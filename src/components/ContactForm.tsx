@@ -48,7 +48,14 @@ export function ContactForm({
 
   if (status === 'ok') {
     return (
-      <div role="status" className="border border-loden/40 bg-loden/5 p-6">
+      <div
+        role="status"
+        tabIndex={-1}
+        ref={(el) => {
+          el?.focus()
+        }}
+        className="border border-loden/40 bg-loden/5 p-6 outline-none"
+      >
         <p className="font-display text-xl text-loden">Messaggio inviato.</p>
         <p className="mt-2 text-sm text-pietra-scura">
           Ti ricontatteremo al più presto. Grazie per averci scritto.
@@ -88,14 +95,17 @@ export function ContactForm({
       </label>
 
       <div className="flex items-center gap-4">
-        <button type="submit" disabled={status === 'sending'} className="btn btn-primario disabled:opacity-60">
+        <button
+          type="submit"
+          disabled={status === 'sending'}
+          aria-busy={status === 'sending'}
+          className="btn btn-primario disabled:opacity-60"
+        >
           {status === 'sending' ? 'Invio…' : 'Invia richiesta'}
         </button>
-        {status === 'error' && (
-          <p role="alert" className="text-sm text-loden">
-            Invio non riuscito. Riprova o scrivici su WhatsApp.
-          </p>
-        )}
+        <p role="alert" aria-live="assertive" className="text-sm font-semibold text-errore">
+          {status === 'error' ? 'Invio non riuscito. Riprova o scrivici su WhatsApp.' : ''}
+        </p>
       </div>
     </form>
   )
@@ -116,7 +126,12 @@ function Field({
     <label className="flex flex-col gap-2">
       <span className="cartellino text-pietra-scura">
         {label}
-        {required && <span className="text-ottone"> *</span>}
+        {required && (
+          <span className="text-ottone-testo" aria-hidden>
+            {' '}
+            *
+          </span>
+        )}
       </span>
       <input
         type={type}

@@ -58,6 +58,7 @@ export function Filters({
         <label className="flex flex-1 flex-col gap-1">
           <span className="cartellino text-pietra-scura">Cerca</span>
           <input
+            key={sp.get('q') ?? ''}
             type="search"
             name="q"
             defaultValue={sp.get('q') ?? ''}

@@ -72,13 +72,16 @@ export default async function HomePage() {
             </div>
           </Reveal>
 
-          <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
+          <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
             {featured.map((p, i) => (
               <Reveal key={p.id} delay={(i % 4) * 80}>
                 <ProductCard product={p} priority={i < 4} />
               </Reveal>
             ))}
           </div>
+          <Link href="/catalogo" className="cartellino link-segno mt-10 inline-block text-loden sm:hidden">
+            Tutto il catalogo →
+          </Link>
         </section>
       )}
 

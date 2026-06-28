@@ -27,6 +27,7 @@ function first(v: string | string[] | undefined): string | undefined {
 
 export default async function CatalogoPage({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams
+  const pageRaw = Math.floor(Number(first(sp.page)))
   const filters: ProductFilters = {
     brand: first(sp.brand),
     categoria: first(sp.categoria),
@@ -35,7 +36,7 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
     stagione: first(sp.stagione),
     q: first(sp.q),
     sort: first(sp.sort),
-    page: Number(first(sp.page) ?? '1') || 1,
+    page: Number.isFinite(pageRaw) && pageRaw >= 1 ? pageRaw : 1,
   }
 
   const [result, brands, categories, facets] = await Promise.all([
@@ -76,7 +77,7 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
             </Link>
           </div>
         ) : (
-          <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
+          <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
             {products.map((p, i) => (
               <ProductCard key={p.id} product={p} priority={i < 4} />
             ))}
@@ -126,7 +127,7 @@ function Pagination({
           ← Precedente
         </Link>
       ) : (
-        <span className="cartellino text-pietra/50">← Precedente</span>
+        <span className="cartellino text-pietra">← Precedente</span>
       )}
       <span className="cartellino text-pietra-scura">
         {page} / {totalPages}
@@ -136,7 +137,7 @@ function Pagination({
           Successiva →
         </Link>
       ) : (
-        <span className="cartellino text-pietra/50">Successiva →</span>
+        <span className="cartellino text-pietra">Successiva →</span>
       )}
     </nav>
   )

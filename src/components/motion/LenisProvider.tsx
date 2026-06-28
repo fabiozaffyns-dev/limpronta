@@ -9,8 +9,7 @@ import { useEffect, type ReactNode } from 'react'
  */
 export function LenisProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
-    document.documentElement.classList.add('js')
-
+    // html.js è già aggiunto dallo script inline in layout (pre-paint).
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduce) return
 

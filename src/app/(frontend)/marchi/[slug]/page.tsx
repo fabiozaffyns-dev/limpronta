@@ -7,6 +7,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { RichText } from '@/components/ui/RichText'
 import { breadcrumbLd } from '@/lib/json-ld'
 import { getBrandBySlug, getProductsByBrand } from '@/lib/queries'
+import { jsonLdSafe, safeHref } from '@/lib/sanitize'
 
 type Params = { params: Promise<{ slug: string }> }
 
@@ -28,13 +29,14 @@ export default async function BrandPage({ params }: Params) {
   if (!brand) notFound()
 
   const products = await getProductsByBrand(brand.id)
+  const sito = safeHref(brand.sito)
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(
+          __html: jsonLdSafe(
             breadcrumbLd([
               { name: 'Home', path: '/' },
               { name: 'Marchi', path: '/marchi' },
@@ -52,9 +54,9 @@ export default async function BrandPage({ params }: Params) {
         </Eyebrow>
         <h1 className="mt-5 text-[clamp(2.5rem,7vw,5rem)] leading-none">{brand.nome}</h1>
         {brand.descrizione && <RichText data={brand.descrizione} className="mt-8" />}
-        {brand.sito && (
+        {sito && (
           <a
-            href={brand.sito}
+            href={sito}
             target="_blank"
             rel="noopener noreferrer"
             className="cartellino link-segno mt-6 inline-block text-loden"
@@ -72,7 +74,7 @@ export default async function BrandPage({ params }: Params) {
             novità.
           </p>
         ) : (
-          <div className="grid grid-cols-2 gap-x-6 gap-y-12 lg:grid-cols-4">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
             {products.map((p, i) => (
               <ProductCard key={p.id} product={p} priority={i < 4} />
             ))}

@@ -2,7 +2,7 @@
 
 import { Analytics } from '@vercel/analytics/react'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const KEY = 'limpronta-consent-v1'
 type Consent = 'accepted' | 'rejected'
@@ -15,6 +15,7 @@ type Consent = 'accepted' | 'rejected'
 export function ConsentBanner() {
   const [consent, setConsent] = useState<Consent | null>(null)
   const [showBanner, setShowBanner] = useState(false)
+  const dialogRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Lettura una-tantum del consenso da localStorage (disponibile solo lato client).
@@ -28,6 +29,17 @@ export function ConsentBanner() {
     /* eslint-enable react-hooks/set-state-in-effect */
   }, [])
 
+  // Quando il banner è visibile: focus e chiusura con Esc (senza concedere consenso).
+  useEffect(() => {
+    if (!showBanner) return
+    dialogRef.current?.focus()
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setShowBanner(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [showBanner])
+
   const choose = (c: Consent) => {
     localStorage.setItem(KEY, c)
     setConsent(c)
@@ -40,10 +52,12 @@ export function ConsentBanner() {
 
       {showBanner && (
         <div
+          ref={dialogRef}
           role="dialog"
+          aria-modal="true"
           aria-label="Preferenze cookie"
-          aria-live="polite"
-          className="fixed inset-x-0 bottom-0 z-[90] border-t bg-inchiostro text-avorio"
+          tabIndex={-1}
+          className="fixed inset-x-0 bottom-0 z-[90] border-t bg-inchiostro text-avorio outline-none"
           style={{ borderColor: 'color-mix(in srgb, var(--color-ottone) 40%, transparent)' }}
         >
           <div className="shell flex flex-col gap-5 py-6 md:flex-row md:items-center md:justify-between">

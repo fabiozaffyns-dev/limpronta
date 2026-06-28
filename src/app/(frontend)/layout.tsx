@@ -7,6 +7,7 @@ import { Header } from '@/components/layout/Header'
 import { LenisProvider } from '@/components/motion/LenisProvider'
 import { clothingStoreLd } from '@/lib/json-ld'
 import { getSettings } from '@/lib/queries'
+import { jsonLdSafe } from '@/lib/sanitize'
 
 import './globals.css'
 
@@ -56,7 +57,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(clothingStoreLd(settings)) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdSafe(clothingStoreLd(settings)) }}
         />
 
         <a

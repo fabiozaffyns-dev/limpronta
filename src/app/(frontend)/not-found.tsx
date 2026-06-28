@@ -5,7 +5,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 
 export default function NotFound() {
   return (
-    <section className="shell flex min-h-[70svh] flex-col items-center justify-center text-center">
+    <section className="shell flex min-h-[80svh] flex-col items-center justify-center pt-28 text-center">
       <Sigillo size={64} />
       <Eyebrow className="mt-8">Errore 404</Eyebrow>
       <h1 className="mt-4 text-4xl md:text-5xl">Pagina non trovata</h1>

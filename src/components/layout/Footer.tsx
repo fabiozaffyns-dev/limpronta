@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { Sigillo } from '@/components/ui/Sigillo'
 import { Wordmark } from '@/components/ui/Wordmark'
 import type { Setting } from '@/payload-types'
+import { safeHref } from '@/lib/sanitize'
 import { buildWhatsAppLink, appointmentMessage } from '@/lib/whatsapp'
 
 const NAV_ESPLORA = [
@@ -18,6 +19,9 @@ export function Footer({ settings }: { settings: Setting }) {
   const indirizzo = [a?.via, a?.civico].filter(Boolean).join(' ')
   const localita = [a?.cap, a?.citta, a?.provincia ? `(${a.provincia})` : null].filter(Boolean).join(' ')
   const waLink = buildWhatsAppLink({ number: settings.whatsappNumber, message: appointmentMessage() })
+  const instagram = safeHref(settings.social?.instagram)
+  const facebook = safeHref(settings.social?.facebook)
+  const mapsUrl = safeHref(settings.mappa?.googleMapsUrl)
 
   return (
     <footer className="relative mt-32 bg-inchiostro text-avorio">
@@ -46,9 +50,9 @@ export function Footer({ settings }: { settings: Setting }) {
           <FooterCol titolo="Il negozio">
             {indirizzo && <p className="text-avorio/80">{indirizzo}</p>}
             {localita && <p className="text-avorio/80">{localita}</p>}
-            {settings.mappa?.googleMapsUrl && (
+            {mapsUrl && (
               <a
-                href={settings.mappa.googleMapsUrl}
+                href={mapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="link-segno mt-2 inline-block text-ottone-chiaro"
@@ -82,13 +86,13 @@ export function Footer({ settings }: { settings: Setting }) {
               </a>
             )}
             <div className="mt-3 flex gap-4">
-              {settings.social?.instagram && (
-                <a href={settings.social.instagram} target="_blank" rel="noopener noreferrer" className="cartellino text-ottone-chiaro hover:text-avorio">
+              {instagram && (
+                <a href={instagram} target="_blank" rel="noopener noreferrer" className="cartellino text-ottone-chiaro hover:text-avorio">
                   Instagram
                 </a>
               )}
-              {settings.social?.facebook && (
-                <a href={settings.social.facebook} target="_blank" rel="noopener noreferrer" className="cartellino text-ottone-chiaro hover:text-avorio">
+              {facebook && (
+                <a href={facebook} target="_blank" rel="noopener noreferrer" className="cartellino text-ottone-chiaro hover:text-avorio">
                   Facebook
                 </a>
               )}

@@ -6,6 +6,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { PageIntro } from '@/components/ui/PageIntro'
 import { Sigillo } from '@/components/ui/Sigillo'
 import { getSettings } from '@/lib/queries'
+import { safeHref } from '@/lib/sanitize'
 import { appointmentMessage } from '@/lib/whatsapp'
 
 export const revalidate = 120
@@ -22,8 +23,10 @@ export default async function ContattiPage() {
   const via = [a?.via, a?.civico].filter(Boolean).join(' ')
   const localita = [a?.cap, a?.citta, a?.provincia ? `(${a.provincia})` : null].filter(Boolean).join(' ')
   const mapsUrl =
-    settings.mappa?.googleMapsUrl ||
+    safeHref(settings.mappa?.googleMapsUrl) ||
     `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${via} ${localita}`)}`
+  const instagram = safeHref(settings.social?.instagram)
+  const facebook = safeHref(settings.social?.facebook)
 
   return (
     <>
@@ -72,15 +75,15 @@ export default async function ContattiPage() {
 
           <div className="flex flex-wrap gap-3">
             <WhatsAppButton number={settings.whatsappNumber} message={appointmentMessage()} label="Scrivici su WhatsApp" />
-            {(settings.social?.instagram || settings.social?.facebook) && (
+            {(instagram || facebook) && (
               <div className="flex items-center gap-4">
-                {settings.social?.instagram && (
-                  <a href={settings.social.instagram} target="_blank" rel="noopener noreferrer" className="cartellino link-segno text-loden">
+                {instagram && (
+                  <a href={instagram} target="_blank" rel="noopener noreferrer" className="cartellino link-segno text-loden">
                     Instagram
                   </a>
                 )}
-                {settings.social?.facebook && (
-                  <a href={settings.social.facebook} target="_blank" rel="noopener noreferrer" className="cartellino link-segno text-loden">
+                {facebook && (
+                  <a href={facebook} target="_blank" rel="noopener noreferrer" className="cartellino link-segno text-loden">
                     Facebook
                   </a>
                 )}

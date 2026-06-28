@@ -4,11 +4,16 @@ import { notFound } from 'next/navigation'
 import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { RichText } from '@/components/ui/RichText'
 import { mediaUrl } from '@/lib/media'
-import { getPageBySlug } from '@/lib/queries'
+import { getAllSlugs, getPageBySlug } from '@/lib/queries'
 
 type Params = { params: Promise<{ slug: string }> }
 
 export const revalidate = 120
+
+export async function generateStaticParams() {
+  const pages = await getAllSlugs('pages')
+  return pages.filter((p) => p.slug).map((p) => ({ slug: p.slug as string }))
+}
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params

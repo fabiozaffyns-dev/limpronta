@@ -25,10 +25,15 @@ export default async function MarchiPage() {
       </PageIntro>
 
       <section className="shell pb-24">
-        <div
-          className="grid grid-cols-2 gap-px overflow-hidden md:grid-cols-3 lg:grid-cols-4"
-          style={{ backgroundColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}
-        >
+        {brands.length === 0 ? (
+          <p className="py-12 text-pietra-scura">
+            I nostri marchi saranno presto online. Intanto, passa a trovarci in negozio.
+          </p>
+        ) : (
+          <div
+            className="grid grid-cols-2 gap-px overflow-hidden md:grid-cols-3 lg:grid-cols-4"
+            style={{ backgroundColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}
+          >
           {brands.map((b) => {
             const logo = mediaUrl(b.logo)
             return (
@@ -47,7 +52,8 @@ export default async function MarchiPage() {
               </Link>
             )
           })}
-        </div>
+          </div>
+        )}
       </section>
     </>
   )

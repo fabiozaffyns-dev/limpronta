@@ -1,4 +1,5 @@
 import type { Where } from 'payload'
+import { cache } from 'react'
 
 import type { Brand, Category, Lookbook, Page, Product, Service, Setting } from '@/payload-types'
 
@@ -9,10 +10,11 @@ const LOCALE = 'it' as const
 const published: Where = { _status: { equals: 'published' } }
 
 // ─── Settings ────────────────────────────────────────────────────────────────
-export async function getSettings(): Promise<Setting> {
+// cache(): deduplica la query nel singolo render (layout + pagina la chiamano entrambi).
+export const getSettings = cache(async (): Promise<Setting> => {
   const payload = await getPayloadClient()
   return payload.findGlobal({ slug: 'settings', locale: LOCALE, depth: 1 })
-}
+})
 
 // ─── Brands ──────────────────────────────────────────────────────────────────
 export async function getBrands(): Promise<Brand[]> {
@@ -74,7 +76,7 @@ export async function getProducts(filters: ProductFilters = {}) {
   if (filters.brand) and.push({ 'brand.slug': { equals: filters.brand } })
   if (filters.categoria) and.push({ 'categoria.slug': { equals: filters.categoria } })
   if (filters.taglia) and.push({ 'taglie.taglia': { equals: filters.taglia } })
-  if (filters.colore) and.push({ 'colori.nome': { like: filters.colore } })
+  if (filters.colore) and.push({ 'colori.nome': { equals: filters.colore } })
   if (filters.stagione) and.push({ 'stagione.tipo': { equals: filters.stagione } })
   if (filters.q) {
     and.push({
@@ -107,7 +109,7 @@ export async function getCatalogFacets(): Promise<{ taglie: string[]; colori: st
     collection: 'products',
     locale: LOCALE,
     where: published,
-    limit: 500,
+    limit: 2000,
     depth: 0,
     pagination: false,
   })

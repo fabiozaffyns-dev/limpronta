@@ -14,7 +14,8 @@ import { appointmentMessage } from '@/lib/whatsapp'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-const DEBOSS_SHADOW = '0 1px 0 rgba(255,255,255,0.55), 0 -1px 1px rgba(28,26,23,0.2)'
+// Allineato al token .incisa di globals.css.
+const DEBOSS_SHADOW = '0 1px 0 rgba(255,255,255,0.5), 0 -1px 1px rgba(28,26,23,0.12)'
 
 /**
  * Hero "momento orchestrato": il wordmark si imprime sul fondo materico,

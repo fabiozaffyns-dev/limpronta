@@ -15,10 +15,12 @@
   --color-inchiostro-tenue: #2a2722;
   --color-loden: #3a4a2c; /* verde firma */
   --color-loden-chiaro: #4c603a;
-  --color-ottone: #9e7e45; /* accenti, filetti, sigillo */
+  --color-ottone: #9e7e45; /* accenti, filetti, sigillo — MAI testo di corpo */
   --color-ottone-chiaro: #b9965b;
+  --color-ottone-testo: #6b5226; /* brass scuro AA su Lino (5.5:1) per etichette */
   --color-pietra: #8a8072; /* bordi, hairline */
   --color-pietra-scura: #5e574c; /* testo secondario, AA su Lino */
+  --color-errore: #9a3b2a; /* terracotta per messaggi d'errore (AA su Lino) */
   --color-avorio: #f2ece0; /* testo su Inchiostro */
 
   /* Tipografia (le var --font-fraunces/--font-hanken arrivano da next/font) */
@@ -259,7 +261,7 @@
     font-family: var(--font-display);
     font-size: clamp(2rem, 6vw, 3.5rem);
     letter-spacing: 0.05em;
-    color: color-mix(in srgb, var(--color-ottone) 38%, transparent);
+    color: color-mix(in srgb, var(--color-ottone) 52%, transparent);
   }
 
   /* Tipografia dei contenuti richtext */
