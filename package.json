@@ -21,7 +21,7 @@
     "migrate": "cross-env NODE_OPTIONS=--no-deprecation payload migrate",
     "migrate:status": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:status",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/seed.ts",
-    "template:prodotti": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/make-template.ts",
+    "template:prodotti": "tsx src/scripts/make-template.ts",
     "import:prodotti": "cross-env NODE_OPTIONS=--no-deprecation payload run src/scripts/import-products.ts"
   },
   "dependencies": {
