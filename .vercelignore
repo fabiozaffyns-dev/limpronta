@@ -1,0 +1,9 @@
+# File da NON caricare su Vercel (build usa le env vars del progetto).
+.env
+.env.*
+!.env.example
+node_modules
+.next
+.git
+photos
+src/templates/prodotti-template.xlsx

@@ -1,6 +1,5 @@
 import Link from 'next/link'
 
-import { Sigillo } from '@/components/ui/Sigillo'
 import { Wordmark } from '@/components/ui/Wordmark'
 import type { Setting } from '@/payload-types'
 import { safeHref } from '@/lib/sanitize'
@@ -26,14 +25,12 @@ export function Footer({ settings }: { settings: Setting }) {
   return (
     <footer className="relative mt-32 bg-inchiostro text-avorio">
       <div className="shell py-20">
-        <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <div>
-            <Wordmark as="p" scuro className="text-4xl md:text-5xl" />
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-avorio/70">
-              Boutique uomo a Orbassano dal 2014. Selezione sartoriale, marchi scelti, consiglio su misura.
-            </p>
-          </div>
-          <Sigillo size={56} />
+        <div>
+          <Wordmark as="p" scuro className="text-4xl md:text-5xl" />
+          <p className="mt-4 max-w-sm text-sm leading-relaxed text-avorio/70">
+            Boutique uomo a Orbassano dal 2014. Selezione sartoriale, marchi scelti, consiglio su
+            misura.
+          </p>
         </div>
 
         <hr className="filetto my-12" />

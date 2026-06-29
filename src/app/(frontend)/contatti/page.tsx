@@ -4,7 +4,6 @@ import { ContactForm } from '@/components/ContactForm'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { PageIntro } from '@/components/ui/PageIntro'
-import { Sigillo } from '@/components/ui/Sigillo'
 import { getSettings } from '@/lib/queries'
 import { safeHref } from '@/lib/sanitize'
 import { appointmentMessage } from '@/lib/whatsapp'
@@ -99,7 +98,7 @@ export default async function ContattiPage() {
             className="group flex aspect-[16/9] flex-col items-center justify-center gap-3 border bg-lino-chiaro text-center transition-colors hover:bg-lino-scuro"
             style={{ borderColor: 'color-mix(in srgb, var(--color-ottone) 40%, transparent)' }}
           >
-            <Sigillo size={48} />
+            <span aria-hidden className="block h-10 w-px" style={{ backgroundColor: 'color-mix(in srgb, var(--color-ottone) 55%, transparent)' }} />
             <span className="cartellino text-inchiostro">Apri in Google Maps →</span>
           </a>
         </div>

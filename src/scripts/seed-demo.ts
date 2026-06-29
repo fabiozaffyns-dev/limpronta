@@ -67,19 +67,19 @@ function xmlEsc(s: string) {
 
 function svg(bg: string, accent: string, label: string, w: number, h: number) {
   const cx = w / 2
-  const safe = xmlEsc(label.toUpperCase())
+  const main = xmlEsc(label.toUpperCase())
   return `<svg width="${w}" height="${h}" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <radialGradient id="v" cx="50%" cy="38%" r="80%">
+    <radialGradient id="v" cx="50%" cy="42%" r="85%">
       <stop offset="0%" stop-color="${bg}"/>
-      <stop offset="100%" stop-color="#1C1A17" stop-opacity="0.35"/>
+      <stop offset="100%" stop-color="#1C1A17" stop-opacity="0.42"/>
     </radialGradient>
   </defs>
   <rect width="${w}" height="${h}" fill="${bg}"/>
   <rect width="${w}" height="${h}" fill="url(#v)"/>
-  <rect x="28" y="28" width="${w - 56}" height="${h - 56}" fill="none" stroke="${accent}" stroke-opacity="0.35" stroke-width="1"/>
-  <text x="${cx}" y="${h * 0.46}" font-family="Georgia, 'Times New Roman', serif" font-size="${Math.round(w * 0.2)}" fill="${accent}" fill-opacity="0.55" text-anchor="middle" dominant-baseline="middle" letter-spacing="6">LI</text>
-  <text x="${cx}" y="${h * 0.88}" font-family="Helvetica, Arial, sans-serif" font-size="${Math.round(w * 0.026)}" fill="${accent}" fill-opacity="0.85" text-anchor="middle" letter-spacing="${Math.round(w * 0.01)}">${safe}</text>
+  <rect x="24" y="24" width="${w - 48}" height="${h - 48}" fill="none" stroke="${accent}" stroke-opacity="0.3" stroke-width="1"/>
+  <text x="${cx}" y="${h * 0.5}" font-family="Georgia, 'Times New Roman', serif" font-size="${Math.round(w * 0.052)}" fill="${accent}" fill-opacity="0.92" text-anchor="middle" dominant-baseline="middle" letter-spacing="${Math.round(w * 0.004)}">${main}</text>
+  <text x="${cx}" y="${h * 0.9}" font-family="Helvetica, Arial, sans-serif" font-size="${Math.round(w * 0.019)}" fill="${accent}" fill-opacity="0.6" text-anchor="middle" letter-spacing="${Math.round(w * 0.013)}">L'IMPRONTA</text>
 </svg>`
 }
 

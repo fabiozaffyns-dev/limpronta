@@ -179,16 +179,17 @@
       0 -1px 0 rgba(255, 255, 255, 0.06);
   }
 
-  /* Wordmark "L'IMPRONTA": serif lapidaria, leggermente allungata come l'insegna.
-     --wordmark-stretch regola l'elongazione verticale (1 = neutro). */
+  /* Wordmark "L'IMPRONTA": serif lapidaria condensata e alta, come l'insegna.
+     --wordmark-condense = larghezza (più basso = più stretto)
+     --wordmark-stretch  = altezza   (più alto = più allungato) */
   .wordmark {
     font-family: var(--font-wordmark);
     text-transform: uppercase;
     font-weight: 500;
-    letter-spacing: 0.11em;
+    letter-spacing: 0.04em;
     line-height: 1;
     display: inline-block;
-    transform: scaleY(var(--wordmark-stretch, 1.12));
+    transform: scaleX(var(--wordmark-condense, 0.78)) scaleY(var(--wordmark-stretch, 1.18));
     transform-origin: center;
   }
 
@@ -266,16 +267,10 @@
       );
   }
   .placeholder-materico::after {
-    content: 'LI';
+    content: '';
     position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-display);
-    font-size: clamp(2rem, 6vw, 3.5rem);
-    letter-spacing: 0.05em;
-    color: color-mix(in srgb, var(--color-ottone) 52%, transparent);
+    inset: 14px;
+    border: 1px solid color-mix(in srgb, var(--color-ottone) 28%, transparent);
   }
 
   /* Tipografia dei contenuti richtext */

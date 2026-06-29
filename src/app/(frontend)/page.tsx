@@ -4,7 +4,7 @@ import { ProductCard } from '@/components/ProductCard'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { Eyebrow } from '@/components/ui/Eyebrow'
-import { Sigillo } from '@/components/ui/Sigillo'
+import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { DebossHero } from '@/components/motion/DebossHero'
 import { Reveal } from '@/components/motion/Reveal'
 import {
@@ -139,7 +139,7 @@ export default async function HomePage() {
             {services.slice(0, 6).map((s, i) => (
               <Reveal key={s.id} delay={(i % 3) * 80} className="bg-lino">
                 <div className="h-full px-7 py-10">
-                  <Sigillo size={40} />
+                  <ServiceIcon name={s.icona} size={34} />
                   <h3 className="mt-6 text-2xl">{s.titolo}</h3>
                 </div>
               </Reveal>
