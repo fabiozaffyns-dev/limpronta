@@ -27,9 +27,9 @@ export default async function ContattiPage() {
     `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${via} ${localita}`)}`
   const instagram = safeHref(settings.social?.instagram)
   const facebook = safeHref(settings.social?.facebook)
-  // Coordinate negozio: da Impostazioni o fallback su Orbassano centro.
-  const lat = typeof settings.mappa?.lat === 'number' ? settings.mappa.lat : 45.0086
-  const lng = typeof settings.mappa?.lng === 'number' ? settings.mappa.lng : 7.5363
+  // Coordinate negozio: da Impostazioni, altrimenti la posizione del negozio.
+  const lat = typeof settings.mappa?.lat === 'number' ? settings.mappa.lat : 45.00662805023706
+  const lng = typeof settings.mappa?.lng === 'number' ? settings.mappa.lng : 7.5364317686679625
 
   return (
     <>

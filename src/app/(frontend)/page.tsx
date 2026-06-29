@@ -10,6 +10,7 @@ import { DebossHero } from '@/components/motion/DebossHero'
 import { Reveal } from '@/components/motion/Reveal'
 import { formatStagioneEstesa } from '@/lib/format'
 import { mediaDoc } from '@/lib/media'
+import { safeHref } from '@/lib/sanitize'
 import {
   getBrands,
   getFeaturedProducts,
@@ -47,19 +48,28 @@ export default async function HomePage() {
       {/* ─── Muro dei marchi ──────────────────────────────────────────────── */}
       {brands.length > 0 && (
         <section className="border-y" style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}>
-          <div className="shell py-10">
+          <div className="shell py-12">
             <Eyebrow className="mb-6">I nostri marchi</Eyebrow>
             <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
-              {brands.map((b) => (
-                <Link
-                  key={b.id}
-                  href={`/marchi/${b.slug}`}
-                  className="font-display link-marchio text-xl md:text-2xl"
-                >
-                  <SwapLabel as="link">{b.nome}</SwapLabel>
-                </Link>
-              ))}
+              {brands.map((b) => {
+                // Click sul marchio in home → sito ufficiale del brand (nuova scheda).
+                // Senza sito impostato, fallback alla pagina marchio interna.
+                const sito = safeHref(b.sito)
+                const cls = 'font-display link-marchio text-xl md:text-2xl'
+                return sito ? (
+                  <a key={b.id} href={sito} target="_blank" rel="noopener noreferrer" className={cls}>
+                    <SwapLabel as="link">{b.nome}</SwapLabel>
+                  </a>
+                ) : (
+                  <Link key={b.id} href={`/marchi/${b.slug}`} className={cls}>
+                    <SwapLabel as="link">{b.nome}</SwapLabel>
+                  </Link>
+                )
+              })}
             </div>
+            <Link href="/marchi" className="btn btn-ghost mt-10">
+              <SwapLabel>Scopri i marchi</SwapLabel>
+            </Link>
           </div>
         </section>
       )}

@@ -567,6 +567,12 @@
   }
 
   /* ─── Mappa negozio (Leaflet, stile editoriale monocromo) ─────────────────── */
+  /* CRITICO: il preflight di Tailwind (img{max-width:100%}) collassa le tile di
+     Leaflet → mappa "vuota". Lo annulliamo dentro la mappa. */
+  .store-map img,
+  .leaflet-container img {
+    max-width: none;
+  }
   .store-map .leaflet-container {
     font-family: var(--font-body);
     background-color: var(--color-lino-scuro);

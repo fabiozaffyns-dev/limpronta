@@ -54,6 +54,7 @@ export function StoreMap({
         scrollWheelZoom: false,
         zoomControl: true,
         attributionControl: true,
+        fadeAnimation: false,
       })
 
       L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
