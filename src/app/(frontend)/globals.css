@@ -577,10 +577,10 @@
     font-family: var(--font-body);
     background-color: var(--color-inchiostro);
   }
-  /* Dark Matter molto schiarito (strade/nomi leggibili) + tono caldo verso
-     l'inchiostro del brand; il pin resta ottone. */
+  /* Dark Matter ad ALTO contrasto: brightness+contrast spingono i nomi verso il
+     bianco e tengono lo sfondo nero; strade grigio chiaro leggibili. Tono caldo. */
   .store-map .leaflet-tile-pane {
-    filter: sepia(0.18) saturate(0.9) brightness(1.7) contrast(1.05);
+    filter: brightness(2.5) contrast(1.45) sepia(0.18);
   }
   .store-map .leaflet-control-attribution {
     background-color: color-mix(in srgb, var(--color-inchiostro) 82%, transparent);
