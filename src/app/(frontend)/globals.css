@@ -249,39 +249,83 @@
     transition-duration: 0.09s;
   }
 
-  /* Pieni (colorati): niente "deboss" (faceva un effetto sporco sul colore).
-     In hover si SOLLEVANO con ombra calda pulita + leggera schiaritura; la
-     label continua a girare (swap). Sovrascrive lo scale globale per i pieni. */
+  /* Pieni (colorati) — INVERSIONE EDITORIALE (fashion): in hover il colore si
+     INVERTE con un wipe netto orizzontale (ottone↔inchiostro); testo e icona
+     invertono in sincrono, con micro-lift e ombra. Niente swap, niente deboss.
+     Il pannello d'inversione è un ::after a z-index:-1 → sopra il fondo ma sotto
+     testo/icona (niente wrapper, immune al cascade). */
   .btn-primario {
     background-color: var(--color-inchiostro);
     color: var(--color-avorio);
-  }
-  .btn-primario:hover,
-  .btn-primario:focus-visible {
-    transform: translateY(-3px);
-    background-color: var(--color-inchiostro-tenue);
-    box-shadow: 0 16px 30px -14px rgba(28, 26, 23, 0.65);
+    --btn-flip: var(--color-ottone);
+    --btn-flip-text: var(--color-inchiostro);
   }
   .btn-loden {
     background-color: var(--color-loden);
     color: var(--color-avorio);
-  }
-  .btn-loden:hover,
-  .btn-loden:focus-visible {
-    transform: translateY(-3px);
-    background-color: var(--color-loden-chiaro);
-    box-shadow: 0 16px 30px -14px rgba(58, 74, 44, 0.55);
+    --btn-flip: var(--color-inchiostro);
+    --btn-flip-text: var(--color-avorio);
   }
   /* CTA firma: ottone brunito, testo scuro (AA su ottone). Risalta sul video. */
   .btn-ottone {
     background-color: var(--color-ottone);
     color: var(--color-inchiostro);
+    --btn-flip: var(--color-inchiostro);
+    --btn-flip-text: var(--color-avorio);
   }
+
+  /* Pannello d'inversione: entra da sinistra (scaleX) */
+  .btn-primario::after,
+  .btn-loden::after,
+  .btn-ottone::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-color: var(--btn-flip);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s cubic-bezier(0.76, 0, 0.24, 1);
+  }
+  .btn-primario:hover::after,
+  .btn-primario:focus-visible::after,
+  .btn-loden:hover::after,
+  .btn-loden:focus-visible::after,
+  .btn-ottone:hover::after,
+  .btn-ottone:focus-visible::after {
+    transform: scaleX(1);
+  }
+
+  /* hover: testo/icona invertiti + micro-lift + ombra calda */
+  .btn-primario:hover,
+  .btn-primario:focus-visible,
+  .btn-loden:hover,
+  .btn-loden:focus-visible,
   .btn-ottone:hover,
   .btn-ottone:focus-visible {
-    transform: translateY(-3px);
-    background-color: var(--color-ottone-chiaro);
-    box-shadow: 0 18px 34px -14px rgba(110, 82, 38, 0.65);
+    transform: translateY(-2px);
+    color: var(--btn-flip-text);
+    box-shadow: 0 16px 32px -16px rgba(28, 26, 23, 0.45);
+  }
+  /* La label statica (.btn-swap) ha colore esplicito: va invertita (specificità
+     alzata con l'attributo per vincere sulle regole di colore dello swap). */
+  .btn-primario:hover .btn-swap > span[data-swap-out],
+  .btn-primario:focus-visible .btn-swap > span[data-swap-out],
+  .btn-loden:hover .btn-swap > span[data-swap-out],
+  .btn-loden:focus-visible .btn-swap > span[data-swap-out],
+  .btn-ottone:hover .btn-swap > span[data-swap-out],
+  .btn-ottone:focus-visible .btn-swap > span[data-swap-out] {
+    color: var(--btn-flip-text);
+  }
+
+  /* Reduced-motion: inversione istantanea, niente wipe né lift */
+  @media (prefers-reduced-motion: reduce) {
+    .btn-primario::after,
+    .btn-loden::after,
+    .btn-ottone::after {
+      transition: none;
+    }
   }
 
   /* Outline: riempimento che sale dal basso (wipe) */
@@ -401,7 +445,7 @@
   .btn-ottone .btn-swap > span,
   .btn-loden .btn-swap > span {
     transform: none;
-    transition: none;
+    transition: color 0.4s ease;
     letter-spacing: inherit;
   }
   .btn-primario .btn-swap > span[data-swap-in],
