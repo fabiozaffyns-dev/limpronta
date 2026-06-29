@@ -578,8 +578,9 @@
     background-color: var(--color-lino-scuro);
   }
   /* Solo le tile ricevono il trattamento seppia/avorio: il pin resta ottone */
+  /* Voyager (strade ben leggibili) smorzato in tono caldo/seppia ma definito. */
   .store-map .leaflet-tile-pane {
-    filter: sepia(0.42) saturate(0.7) brightness(1.03) contrast(0.98);
+    filter: sepia(0.5) saturate(0.62) brightness(0.99) contrast(1.05);
   }
   .store-map .leaflet-control-attribution {
     background-color: color-mix(in srgb, var(--color-lino) 88%, transparent);

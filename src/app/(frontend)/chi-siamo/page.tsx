@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { WhatsAppButton } from '@/components/WhatsAppButton'
-import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
+import { EditorialFigure } from '@/components/ui/EditorialFigure'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { PageIntro } from '@/components/ui/PageIntro'
 import { SwapLabel } from '@/components/ui/SwapLabel'
@@ -47,21 +47,12 @@ export default async function ChiSiamoPage() {
       {/* ─── Storia ───────────────────────────────────────────────────────── */}
       <section className="shell grid items-center gap-12 pb-24 lg:grid-cols-2 lg:gap-20">
         <Reveal>
-          {settings.chiSiamoFoto1 ? (
-            <CloudinaryImage
-              media={settings.chiSiamoFoto1}
-              alt="L'Impronta — la nostra storia"
-              aspect="4 / 5"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="w-full"
-            />
-          ) : (
-            <div className="placeholder-materico relative aspect-[4/5] w-full">
-              <span className="cartellino absolute bottom-4 left-4 text-pietra-scura">
-                Orbassano · dal 2014
-              </span>
-            </div>
-          )}
+          <EditorialFigure
+            media={settings.chiSiamoFoto1}
+            alt="L'Impronta — la nostra storia"
+            aspect="4 / 5"
+            label="Orbassano · dal 2014"
+          />
         </Reveal>
         <Reveal delay={120}>
           <Eyebrow>La nostra storia</Eyebrow>
@@ -124,19 +115,12 @@ export default async function ChiSiamoPage() {
       {/* ─── Il negozio + CTA ─────────────────────────────────────────────── */}
       <section className="shell grid items-center gap-12 pb-28 lg:grid-cols-2 lg:gap-20">
         <Reveal className="lg:order-2">
-          {settings.chiSiamoFoto2 ? (
-            <CloudinaryImage
-              media={settings.chiSiamoFoto2}
-              alt="Il negozio L'Impronta a Orbassano"
-              aspect="4 / 3"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="w-full"
-            />
-          ) : (
-            <div className="placeholder-materico relative aspect-[4/3] w-full">
-              <span className="cartellino absolute bottom-4 left-4 text-pietra-scura">Il negozio</span>
-            </div>
-          )}
+          <EditorialFigure
+            media={settings.chiSiamoFoto2}
+            alt="Il negozio L'Impronta a Orbassano"
+            aspect="4 / 3"
+            label="Il negozio"
+          />
         </Reveal>
         <Reveal delay={120} className="lg:order-1">
           <Eyebrow>Vieni a trovarci</Eyebrow>
