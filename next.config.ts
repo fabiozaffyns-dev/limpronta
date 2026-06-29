@@ -15,7 +15,7 @@ const contentSecurityPolicy = [
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'self'",
-  "img-src 'self' data: blob: https://res.cloudinary.com",
+  "img-src 'self' data: blob: https://res.cloudinary.com https://*.basemaps.cartocdn.com",
   "media-src 'self' https://res.cloudinary.com",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",

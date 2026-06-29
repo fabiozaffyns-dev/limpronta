@@ -14,7 +14,7 @@ export const revalidate = 120
 export const metadata: Metadata = {
   title: 'Chi siamo',
   description:
-    "L'Impronta: boutique uomo a Orbassano dal 2014. La materia e il segno — pochi marchi scelti, qualità vera e consiglio sartoriale.",
+    "L'Impronta: abbigliamento uomo a Orbassano dal 2014. La materia e il segno — pochi marchi scelti, qualità vera e consiglio sartoriale.",
 }
 
 const VALORI = [
@@ -39,7 +39,7 @@ export default async function ChiSiamoPage() {
   return (
     <>
       <PageIntro eyebrow="Dal 2014" titolo="Chi siamo">
-        Una boutique di abbigliamento uomo a Orbassano, costruita su un&apos;idea semplice: poche
+        Un negozio di abbigliamento uomo a Orbassano, costruito su un&apos;idea semplice: poche
         cose, scelte bene. Perché vestire con cura è una forma di rispetto — e lascia un segno.
       </PageIntro>
 

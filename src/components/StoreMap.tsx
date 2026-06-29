@@ -56,7 +56,7 @@ export function StoreMap({
         attributionControl: true,
       })
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
         subdomains: 'abcd',
         maxZoom: 20,
         attribution: '&copy; OpenStreetMap &copy; CARTO',
@@ -69,6 +69,11 @@ export function StoreMap({
         iconAnchor: [11, 11],
       })
       L.marker([lat, lng], { icon, keyboard: false, title: label }).addTo(map)
+
+      // Ricalcola la dimensione dopo il mount (evita la mappa "vuota").
+      setTimeout(() => {
+        if (!cancelled && map) map.invalidateSize()
+      }, 80)
     })()
 
     return () => {

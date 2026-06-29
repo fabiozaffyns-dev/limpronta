@@ -41,16 +41,16 @@ const SITE = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: {
-    default: "L'Impronta — Boutique uomo a Orbassano",
+    default: "L'Impronta — Abbigliamento uomo a Orbassano",
     template: "%s · L'Impronta",
   },
   description:
-    "Boutique multimarca di abbigliamento uomo a Orbassano (Torino). Selezione sartoriale di fascia medio-alta, consulenza su misura e prenotazione in negozio.",
+    "Abbigliamento uomo multimarca a Orbassano (Torino). Selezione sartoriale di fascia medio-alta, consulenza su misura e prenotazione in negozio.",
   openGraph: {
     type: 'website',
     locale: 'it_IT',
     siteName: "L'Impronta",
-    title: "L'Impronta — Boutique uomo a Orbassano",
+    title: "L'Impronta — Abbigliamento uomo a Orbassano",
     description:
       "Selezione sartoriale di abbigliamento uomo a Orbassano (Torino). Marchi scelti, consiglio su misura, prenotazione in negozio.",
   },

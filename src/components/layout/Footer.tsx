@@ -28,7 +28,7 @@ export function Footer({ settings }: { settings: Setting }) {
         <div>
           <Wordmark as="p" scuro className="text-4xl md:text-5xl" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-avorio/70">
-            Boutique uomo a Orbassano dal 2014. Selezione sartoriale, marchi scelti, consiglio su
+            Abbigliamento uomo a Orbassano dal 2014. Selezione sartoriale, marchi scelti, consiglio su
             misura.
           </p>
         </div>

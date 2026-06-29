@@ -133,7 +133,7 @@ async function main() {
       slug: 'chi-siamo',
       titolo: 'Chi siamo',
       sommario:
-        'L’Impronta nasce a Orbassano nel 2014: una boutique uomo dove la selezione conta più dell’assortimento.',
+        'L’Impronta nasce a Orbassano nel 2014: un negozio di abbigliamento uomo dove la selezione conta più dell’assortimento.',
       contenuto: paragraphs(
         'Dal 2014 vestiamo l’uomo di Orbassano e della provincia di Torino con una selezione pensata, non accumulata. Crediamo che un capo valga per come è fatto, per il tessuto, per il modo in cui cade addosso a chi lo indossa.',
         '## La nostra idea di stile',
