@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 
+import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { cn } from '@/lib/cn'
 import { appointmentMessage, buildWhatsAppLink } from '@/lib/whatsapp'
@@ -96,7 +97,7 @@ export function Header({
             )
           })}
           <a href={waLink} target="_blank" rel="noopener noreferrer" className="btn btn-ottone" style={{ padding: '0.6rem 1.1rem' }}>
-            Prenota in negozio
+            <SwapLabel>Prenota in negozio</SwapLabel>
           </a>
         </nav>
 
@@ -145,7 +146,7 @@ export function Header({
             onClick={() => setOpen(false)}
             className="btn btn-ottone mt-8 self-start"
           >
-            Prenota in negozio
+            <SwapLabel>Prenota in negozio</SwapLabel>
           </a>
         </nav>
       </div>

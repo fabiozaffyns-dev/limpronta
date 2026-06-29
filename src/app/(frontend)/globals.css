@@ -1,5 +1,19 @@
 @import 'tailwindcss';
 
+/* Rende ANIMABILE l'interpolazione dell'asse variabile di Fraunces (peso +
+   optical-size) sull'hover dei link marchio. Deve stare a TOP-LEVEL, fuori da
+   @layer. Dove non supportato l'asse cambia comunque a scatto (risultato ok). */
+@property --mk-wght {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 400;
+}
+@property --mk-opsz {
+  syntax: '<number>';
+  inherits: false;
+  initial-value: 24;
+}
+
 /* ─────────────────────────────────────────────────────────────────────────────
    L'Impronta — design system
    "La materia e il segno": fondo materico (Lino), segni incisi/debossati,
@@ -194,10 +208,10 @@
   }
 
   /* Pulsanti
-     Hover "materici": il tasto si solleva con ombra calda (lift), un glint
-     metallico attraversa i pieni (luce sull'ottone), e un riempimento sale
-     dal basso sugli outline. Tutto su transform/opacity (GPU) e disattivato
-     con prefers-reduced-motion. */
+     Hover "deboss": il tasto si IMPRIME nella materia (micro-scale + incavo
+     interno), la label gira come un cartellino sartoriale (swap verticale) e
+     un lume caldo accende il fondo. Gli outline si riempiono dal basso. Tutto
+     su transform/opacity (GPU), disattivato con prefers-reduced-motion. */
   .btn {
     position: relative;
     isolation: isolate;
@@ -217,67 +231,87 @@
     transition:
       transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
       box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      letter-spacing 0.5s ease,
       background-color 0.4s ease,
       color 0.4s ease,
       border-color 0.4s ease;
   }
-  .btn:hover {
-    transform: translateY(-2px);
+  /* DEBOSS: il pieno si preme nella materia (niente lift) */
+  .btn:hover,
+  .btn:focus-visible {
+    transform: scale(0.988);
+    letter-spacing: 0.052em;
+    will-change: transform, box-shadow;
   }
   .btn:active {
-    transform: translateY(0);
-    transition-duration: 0.08s;
+    transform: scale(0.982);
+    transition-duration: 0.09s;
   }
 
-  /* Glint metallico che attraversa i pulsanti pieni */
+  /* Lume caldo statico sul fondo dei pieni (al posto del glint debole) */
   .btn-primario::after,
   .btn-ottone::after,
   .btn-loden::after {
     content: '';
     position: absolute;
     inset: 0;
-    z-index: 2;
+    z-index: 1;
     pointer-events: none;
-    background: linear-gradient(
-      100deg,
-      transparent 28%,
-      rgba(255, 255, 255, 0.38) 48%,
-      rgba(255, 255, 255, 0.38) 52%,
-      transparent 72%
+    background: radial-gradient(
+      125% 145% at 50% 118%,
+      var(--btn-lume, rgba(242, 236, 224, 0.2)),
+      transparent 62%
     );
-    transform: translateX(-130%) skewX(-12deg);
-    transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity: 0;
+    transition: opacity 0.5s ease;
   }
   .btn-primario:hover::after,
+  .btn-primario:focus-visible::after,
   .btn-ottone:hover::after,
-  .btn-loden:hover::after {
-    transform: translateX(130%) skewX(-12deg);
+  .btn-ottone:focus-visible::after,
+  .btn-loden:hover::after,
+  .btn-loden:focus-visible::after {
+    opacity: 1;
   }
 
   .btn-primario {
     background-color: var(--color-inchiostro);
     color: var(--color-avorio);
   }
-  .btn-primario:hover {
+  .btn-primario:hover,
+  .btn-primario:focus-visible {
     background-color: var(--color-inchiostro-tenue);
-    box-shadow: 0 14px 30px -12px rgba(28, 26, 23, 0.7);
+    box-shadow:
+      inset 0 2px 6px rgba(0, 0, 0, 0.55),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+      0 10px 24px -16px rgba(28, 26, 23, 0.7);
   }
   .btn-loden {
     background-color: var(--color-loden);
     color: var(--color-avorio);
   }
-  .btn-loden:hover {
+  .btn-loden:hover,
+  .btn-loden:focus-visible {
+    --btn-lume: rgba(242, 236, 224, 0.16);
     background-color: var(--color-loden-chiaro);
-    box-shadow: 0 14px 30px -12px rgba(58, 74, 44, 0.65);
+    box-shadow:
+      inset 0 2px 6px rgba(0, 0, 0, 0.42),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.12),
+      0 10px 24px -16px rgba(58, 74, 44, 0.6);
   }
   /* CTA firma: ottone brunito, testo scuro (AA su ottone). Risalta sul video. */
   .btn-ottone {
     background-color: var(--color-ottone);
     color: var(--color-inchiostro);
   }
-  .btn-ottone:hover {
+  .btn-ottone:hover,
+  .btn-ottone:focus-visible {
+    --btn-lume: rgba(255, 248, 232, 0.3);
     background-color: var(--color-ottone-chiaro);
-    box-shadow: 0 14px 32px -12px rgba(110, 82, 38, 0.8);
+    box-shadow:
+      inset 0 2px 6px rgba(74, 54, 24, 0.5),
+      inset 0 -1px 0 rgba(255, 244, 222, 0.45),
+      0 12px 26px -16px rgba(110, 82, 38, 0.75);
   }
 
   /* Outline: riempimento che sale dal basso (wipe) */
@@ -325,22 +359,99 @@
     transform: scaleY(1);
   }
 
-  /* Accessibilità: niente animazioni di movimento, solo feedback istantaneo */
+  /* SWAP della label (cartellino che gira). La label vive in <span.btn-swap>
+     con due righe gemelle; inline-grid le sovrappone nella stessa cella. */
+  .btn .btn-swap {
+    position: relative;
+    z-index: 3;
+    display: inline-grid;
+    grid-template-areas: 'lbl';
+    overflow: hidden;
+    vertical-align: top;
+    line-height: 1.1;
+  }
+  .btn .btn-swap > span {
+    grid-area: lbl;
+    display: block;
+    transform: translateY(var(--swap-y, 0));
+    transition:
+      transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+      letter-spacing 0.55s ease;
+    backface-visibility: hidden;
+  }
+  .btn .btn-swap > span[data-swap-in] {
+    --swap-y: 100%;
+  }
+  .btn:hover .btn-swap > span[data-swap-out],
+  .btn:focus-visible .btn-swap > span[data-swap-out] {
+    --swap-y: -100%;
+  }
+  .btn:hover .btn-swap > span[data-swap-in],
+  .btn:focus-visible .btn-swap > span[data-swap-in] {
+    --swap-y: 0%;
+    letter-spacing: 0.075em;
+  }
+
+  /* Colori delle due righe — posseduti dal componente (immuni al cascade) */
+  .btn-ottone .btn-swap > span {
+    color: var(--color-inchiostro);
+  }
+  .btn-loden .btn-swap > span {
+    color: var(--color-avorio);
+  }
+  .btn-primario .btn-swap > span[data-swap-out] {
+    color: var(--color-avorio);
+  }
+  .btn-primario .btn-swap > span[data-swap-in] {
+    color: var(--color-ottone-chiaro);
+  }
+  .btn-ghost .btn-swap > span {
+    color: var(--color-inchiostro);
+  }
+  .btn-chiaro .btn-swap > span[data-swap-out] {
+    color: var(--color-avorio);
+  }
+  .btn-chiaro .btn-swap > span[data-swap-in] {
+    color: var(--color-inchiostro);
+  }
+  .btn-chiaro:hover .btn-swap > span[data-swap-out],
+  .btn-chiaro:focus-visible .btn-swap > span[data-swap-out] {
+    color: var(--color-inchiostro);
+  }
+
+  /* Accessibilità: niente movimento; lo swap diventa un crossfade istantaneo,
+     deboss e colori restano corretti */
   @media (prefers-reduced-motion: reduce) {
-    .btn {
-      transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease;
-    }
     .btn:hover,
+    .btn:focus-visible,
     .btn:active {
       transform: none;
+      letter-spacing: 0.06em;
     }
-    .btn::after {
-      display: none;
+    .btn .btn-swap {
+      overflow: visible;
     }
-    .btn::before {
+    .btn .btn-swap > span {
+      transform: none !important;
+      will-change: auto;
+      letter-spacing: inherit !important;
+    }
+    .btn .btn-swap > span[data-swap-in] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+    }
+    .btn:hover .btn-swap > span[data-swap-out],
+    .btn:focus-visible .btn-swap > span[data-swap-out] {
+      opacity: 0;
+    }
+    .btn:hover .btn-swap > span[data-swap-in],
+    .btn:focus-visible .btn-swap > span[data-swap-in] {
+      opacity: 1;
+    }
+    .btn-primario::after,
+    .btn-ottone::after,
+    .btn-loden::after {
       transition: none;
     }
   }
@@ -359,37 +470,69 @@
     background-size: 100% 1px;
   }
 
-  /* Link "marchio/editoriale": il testo scurisce e un filetto ottone si traccia
-     da sinistra. Per i link grandi (muro marchi, titoli) dove serve un hover
-     evidente e di carattere. */
+  /* Link "marchio": SWAP verticale — il nome gira e torna più inciso in ottone
+     (peso + optical-size della Fraunces variabile). Niente filetto/underline.
+     Il colore vive nelle .swap-line, non in utility Tailwind: vince il cascade. */
   .link-marchio {
     position: relative;
     display: inline-block;
-    transition: color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    vertical-align: top;
+    overflow: hidden;
+    line-height: 1.15;
+    isolation: isolate;
   }
-  .link-marchio::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -3px;
-    height: 1.5px;
-    width: 100%;
-    background-color: var(--color-ottone);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  .link-marchio .swap-track {
+    display: inline-grid;
+    grid-template-areas: 'l';
   }
-  .link-marchio:hover,
-  .link-marchio:focus-visible {
-    color: var(--color-inchiostro);
+  .link-marchio .swap-line {
+    grid-area: l;
+    display: block;
+    transform: translateY(var(--ly, 0));
+    transition:
+      transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+      font-variation-settings 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    backface-visibility: hidden;
   }
-  .link-marchio:hover::after,
-  .link-marchio:focus-visible::after {
-    transform: scaleX(1);
+  .link-marchio .swap-line[data-line='out'] {
+    color: var(--color-pietra-scura);
+    --ly: 0;
+  }
+  .link-marchio .swap-line[data-line='in'] {
+    color: var(--color-ottone-testo);
+    --ly: 100%;
+    font-variation-settings: 'opsz' var(--mk-opsz, 24), 'wght' var(--mk-wght, 400);
+  }
+  .link-marchio:hover .swap-line[data-line='out'],
+  .link-marchio:focus-visible .swap-line[data-line='out'] {
+    --ly: -100%;
+  }
+  .link-marchio:hover .swap-line[data-line='in'],
+  .link-marchio:focus-visible .swap-line[data-line='in'] {
+    --ly: 0%;
+    --mk-wght: 560;
+    --mk-opsz: 40;
   }
   @media (prefers-reduced-motion: reduce) {
-    .link-marchio::after {
-      transition: none;
+    .link-marchio {
+      overflow: visible;
+    }
+    .link-marchio .swap-line {
+      transform: none !important;
+      font-variation-settings: normal !important;
+    }
+    .link-marchio .swap-line[data-line='in'] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+    }
+    .link-marchio:hover .swap-line[data-line='out'],
+    .link-marchio:focus-visible .swap-line[data-line='out'] {
+      opacity: 0;
+    }
+    .link-marchio:hover .swap-line[data-line='in'],
+    .link-marchio:focus-visible .swap-line[data-line='in'] {
+      opacity: 1;
     }
   }
 

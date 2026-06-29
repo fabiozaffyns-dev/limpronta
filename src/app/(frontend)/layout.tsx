@@ -17,6 +17,9 @@ const fraunces = Fraunces({
   variable: '--font-fraunces',
   display: 'swap',
   style: ['normal', 'italic'],
+  // 'opsz' (optical size) variabile: serve all'hover dei link marchio, dove il
+  // nome "si incide" guadagnando peso e grazie più piene.
+  axes: ['opsz'],
 })
 
 const hanken = Hanken_Grotesk({

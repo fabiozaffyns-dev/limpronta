@@ -10,6 +10,7 @@ import { useRef } from 'react'
 
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Eyebrow } from '@/components/ui/Eyebrow'
+import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { cn } from '@/lib/cn'
 import { appointmentMessage } from '@/lib/whatsapp'
@@ -143,7 +144,7 @@ export function DebossHero({
 
       <div data-hero-cta className="relative mt-12 flex flex-wrap items-center justify-center gap-4">
         <Link href="/catalogo" className={cn('btn', dark ? 'btn-ottone' : 'btn-primario')}>
-          Esplora il catalogo
+          <SwapLabel>Esplora il catalogo</SwapLabel>
         </Link>
         <WhatsAppButton
           number={whatsappNumber}

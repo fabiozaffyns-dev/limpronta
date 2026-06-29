@@ -1,3 +1,4 @@
+import { SwapLabel } from '@/components/ui/SwapLabel'
 import { cn } from '@/lib/cn'
 import { buildWhatsAppLink } from '@/lib/whatsapp'
 
@@ -23,7 +24,7 @@ export function WhatsAppButton({
       className={cn('btn', `btn-${variant}`, className)}
     >
       <WhatsAppIcon />
-      {label}
+      <SwapLabel>{label}</SwapLabel>
     </a>
   )
 }

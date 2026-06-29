@@ -5,6 +5,7 @@ import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'
+import { SwapLabel } from '@/components/ui/SwapLabel'
 import { DebossHero } from '@/components/motion/DebossHero'
 import { Reveal } from '@/components/motion/Reveal'
 import { mediaDoc } from '@/lib/media'
@@ -53,9 +54,9 @@ export default async function HomePage() {
                 <Link
                   key={b.id}
                   href={`/marchi/${b.slug}`}
-                  className="font-display link-marchio text-xl text-pietra-scura md:text-2xl"
+                  className="font-display link-marchio text-xl md:text-2xl"
                 >
-                  {b.nome}
+                  <SwapLabel as="link">{b.nome}</SwapLabel>
                 </Link>
               ))}
             </div>
@@ -124,7 +125,7 @@ export default async function HomePage() {
                   Racconti di stagione: accostamenti, materiali e dettagli che lasciano il segno.
                 </p>
                 <Link href={`/lookbook/${lookbook.slug}`} className="btn btn-ottone mt-10">
-                  Sfoglia il lookbook
+                  <SwapLabel>Sfoglia il lookbook</SwapLabel>
                 </Link>
               </Reveal>
             </div>

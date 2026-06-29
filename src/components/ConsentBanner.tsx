@@ -2,6 +2,8 @@
 
 import { Analytics } from '@vercel/analytics/react'
 import Link from 'next/link'
+
+import { SwapLabel } from '@/components/ui/SwapLabel'
 import { useEffect, useRef, useState } from 'react'
 
 const KEY = 'limpronta-consent-v1'
@@ -74,7 +76,7 @@ export function ConsentBanner() {
                 Rifiuta
               </button>
               <button type="button" onClick={() => choose('accepted')} className="btn btn-ottone">
-                Accetta
+                <SwapLabel>Accetta</SwapLabel>
               </button>
             </div>
           </div>
