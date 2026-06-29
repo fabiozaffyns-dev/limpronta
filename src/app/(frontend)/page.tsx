@@ -2,13 +2,13 @@ import Link from 'next/link'
 
 import { ProductCard } from '@/components/ProductCard'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
-import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { DebossHero } from '@/components/motion/DebossHero'
 import { Reveal } from '@/components/motion/Reveal'
+import { formatStagioneEstesa } from '@/lib/format'
 import { mediaDoc } from '@/lib/media'
 import {
   getBrands,
@@ -18,7 +18,6 @@ import {
   getSettings,
 } from '@/lib/queries'
 import { appointmentMessage } from '@/lib/whatsapp'
-import type { Media } from '@/payload-types'
 
 // ISR: rigenera dal CMS ogni 2 minuti (le modifiche in admin compaiono da sole).
 export const revalidate = 120
@@ -33,7 +32,7 @@ export default async function HomePage() {
   ])
 
   const lookbook = lookbooks[0] ?? null
-  const lookbookCover = lookbook ? (lookbook.immagini?.[0] as Media | number | undefined) : null
+  const lookbookStagione = lookbook ? formatStagioneEstesa(lookbook.stagione) : null
 
   const heroDoc = mediaDoc(settings.heroMedia)
   const heroMedia = heroDoc?.url
@@ -115,8 +114,18 @@ export default async function HomePage() {
       {lookbook && (
         <section className="relative bg-inchiostro text-avorio">
           <div className="grid lg:grid-cols-2">
-            <div className="relative min-h-[50vh]">
-              <CloudinaryImage media={lookbookCover} alt={lookbook.titolo} fillParent sizes="50vw" />
+            <div className="relative flex min-h-[52vh] items-center justify-center overflow-hidden px-8 py-20">
+              <span
+                aria-hidden
+                className="absolute inset-6 border"
+                style={{ borderColor: 'color-mix(in srgb, var(--color-ottone) 22%, transparent)' }}
+              />
+              <div className="relative text-center">
+                {lookbookStagione && (
+                  <span className="cartellino text-ottone-chiaro">{lookbookStagione}</span>
+                )}
+                <Wordmark scuro className="mt-6 block text-5xl md:text-6xl" />
+              </div>
             </div>
             <div className="flex items-center px-8 py-20 md:px-16">
               <Reveal>

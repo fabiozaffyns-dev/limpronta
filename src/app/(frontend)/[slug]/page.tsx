@@ -12,7 +12,11 @@ export const revalidate = 120
 
 export async function generateStaticParams() {
   const pages = await getAllSlugs('pages')
-  return pages.filter((p) => p.slug).map((p) => ({ slug: p.slug as string }))
+  // 'chi-siamo' ha una route statica dedicata (più ricca): la escludiamo qui
+  // per non creare un percorso in conflitto.
+  return pages
+    .filter((p) => p.slug && p.slug !== 'chi-siamo')
+    .map((p) => ({ slug: p.slug as string }))
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {

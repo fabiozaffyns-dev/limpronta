@@ -566,6 +566,50 @@
     }
   }
 
+  /* ─── Mappa negozio (Leaflet, stile editoriale monocromo) ─────────────────── */
+  .store-map .leaflet-container {
+    font-family: var(--font-body);
+    background-color: var(--color-lino-scuro);
+  }
+  /* Solo le tile ricevono il trattamento seppia/avorio: il pin resta ottone */
+  .store-map .leaflet-tile-pane {
+    filter: sepia(0.42) saturate(0.7) brightness(1.03) contrast(0.98);
+  }
+  .store-map .leaflet-control-attribution {
+    background-color: color-mix(in srgb, var(--color-lino) 88%, transparent);
+    color: var(--color-pietra-scura);
+    font-size: 10px;
+  }
+  .store-map .leaflet-control-attribution a {
+    color: var(--color-ottone-testo);
+  }
+  .store-map .leaflet-bar a {
+    background-color: var(--color-lino);
+    color: var(--color-inchiostro);
+    border-color: color-mix(in srgb, var(--color-pietra) 40%, transparent);
+  }
+  .store-map .leaflet-bar a:hover {
+    background-color: var(--color-lino-chiaro);
+  }
+  /* Pin "sigillo" in ottone */
+  .store-pin {
+    display: block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background-color: var(--color-ottone);
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--color-ottone) 28%, transparent),
+      0 6px 16px -4px rgba(0, 0, 0, 0.55);
+  }
+  .store-pin--lg {
+    width: 28px;
+    height: 28px;
+    box-shadow:
+      0 0 0 6px color-mix(in srgb, var(--color-ottone) 22%, transparent),
+      0 8px 20px -6px rgba(0, 0, 0, 0.5);
+  }
+
   /* Placeholder materico (in attesa delle foto reali): non stock, coerente col design */
   .placeholder-materico {
     position: relative;

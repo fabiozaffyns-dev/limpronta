@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { ContactForm } from '@/components/ContactForm'
+import { StoreMap } from '@/components/StoreMap'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { PageIntro } from '@/components/ui/PageIntro'
@@ -26,6 +27,9 @@ export default async function ContattiPage() {
     `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${via} ${localita}`)}`
   const instagram = safeHref(settings.social?.instagram)
   const facebook = safeHref(settings.social?.facebook)
+  // Coordinate negozio: da Impostazioni o fallback su Orbassano centro.
+  const lat = typeof settings.mappa?.lat === 'number' ? settings.mappa.lat : 45.0086
+  const lng = typeof settings.mappa?.lng === 'number' ? settings.mappa.lng : 7.5363
 
   return (
     <>
@@ -90,17 +94,6 @@ export default async function ContattiPage() {
             )}
           </div>
 
-          {/* Blocco mappa statico (niente iframe prima del consenso) */}
-          <a
-            href={mapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex aspect-[16/9] flex-col items-center justify-center gap-3 border bg-lino-chiaro text-center transition-colors hover:bg-lino-scuro"
-            style={{ borderColor: 'color-mix(in srgb, var(--color-ottone) 40%, transparent)' }}
-          >
-            <span aria-hidden className="block h-10 w-px" style={{ backgroundColor: 'color-mix(in srgb, var(--color-ottone) 55%, transparent)' }} />
-            <span className="cartellino text-inchiostro">Apri in Google Maps →</span>
-          </a>
         </div>
 
         <div>
@@ -108,6 +101,16 @@ export default async function ContattiPage() {
           <h2 className="mt-3 mb-8 text-3xl">Modulo contatti</h2>
           <ContactForm endpoint={settings.formspreeEndpoint} />
         </div>
+      </section>
+
+      {/* Mappa full-width, stile editoriale (sotto "Il negozio" e "Scrivici") */}
+      <section className="w-full">
+        <StoreMap
+          lat={lat}
+          lng={lng}
+          label={[via, localita].filter(Boolean).join(' · ')}
+          mapsUrl={mapsUrl}
+        />
       </section>
     </>
   )
