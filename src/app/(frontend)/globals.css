@@ -389,6 +389,27 @@
     color: var(--color-inchiostro);
   }
 
+  /* Pulsanti PIENI: NIENTE swap della label (su fondo colorato non rendeva).
+     Testo statico → l'effetto resta solo il sollevamento pulito + ombra. Lo swap
+     vive sugli outline (ghost/chiaro) e sui link marchio. */
+  .btn-primario .btn-swap,
+  .btn-ottone .btn-swap,
+  .btn-loden .btn-swap {
+    overflow: visible;
+  }
+  .btn-primario .btn-swap > span,
+  .btn-ottone .btn-swap > span,
+  .btn-loden .btn-swap > span {
+    transform: none;
+    transition: none;
+    letter-spacing: inherit;
+  }
+  .btn-primario .btn-swap > span[data-swap-in],
+  .btn-ottone .btn-swap > span[data-swap-in],
+  .btn-loden .btn-swap > span[data-swap-in] {
+    display: none;
+  }
+
   /* Accessibilità: niente movimento; lo swap diventa un crossfade istantaneo,
      deboss e colori restano corretti */
   @media (prefers-reduced-motion: reduce) {
