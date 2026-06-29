@@ -121,7 +121,7 @@ export function DebossHero({
 
       <div data-hero-eyebrow className="relative">
         <Eyebrow as="div" scuro={dark}>
-          Boutique uomo · Orbassano · dal 2014
+          Abbigliamento uomo · Orbassano · dal 2014
         </Eyebrow>
       </div>
 
