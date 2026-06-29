@@ -193,8 +193,15 @@
     transform-origin: center;
   }
 
-  /* Pulsanti */
+  /* Pulsanti
+     Hover "materici": il tasto si solleva con ombra calda (lift), un glint
+     metallico attraversa i pieni (luce sull'ottone), e un riempimento sale
+     dal basso sugli outline. Tutto su transform/opacity (GPU) e disattivato
+     con prefers-reduced-motion. */
   .btn {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -208,17 +215,52 @@
     cursor: pointer;
     border: 1px solid transparent;
     transition:
-      background-color 0.35s ease,
-      color 0.35s ease,
-      border-color 0.35s ease,
-      transform 0.35s ease;
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 0.4s ease,
+      color 0.4s ease,
+      border-color 0.4s ease;
   }
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+  .btn:active {
+    transform: translateY(0);
+    transition-duration: 0.08s;
+  }
+
+  /* Glint metallico che attraversa i pulsanti pieni */
+  .btn-primario::after,
+  .btn-ottone::after,
+  .btn-loden::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      100deg,
+      transparent 28%,
+      rgba(255, 255, 255, 0.38) 48%,
+      rgba(255, 255, 255, 0.38) 52%,
+      transparent 72%
+    );
+    transform: translateX(-130%) skewX(-12deg);
+    transition: transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .btn-primario:hover::after,
+  .btn-ottone:hover::after,
+  .btn-loden:hover::after {
+    transform: translateX(130%) skewX(-12deg);
+  }
+
   .btn-primario {
     background-color: var(--color-inchiostro);
     color: var(--color-avorio);
   }
   .btn-primario:hover {
-    background-color: var(--color-ottone-testo);
+    background-color: var(--color-inchiostro-tenue);
+    box-shadow: 0 14px 30px -12px rgba(28, 26, 23, 0.7);
   }
   .btn-loden {
     background-color: var(--color-loden);
@@ -226,6 +268,7 @@
   }
   .btn-loden:hover {
     background-color: var(--color-loden-chiaro);
+    box-shadow: 0 14px 30px -12px rgba(58, 74, 44, 0.65);
   }
   /* CTA firma: ottone brunito, testo scuro (AA su ottone). Risalta sul video. */
   .btn-ottone {
@@ -234,25 +277,72 @@
   }
   .btn-ottone:hover {
     background-color: var(--color-ottone-chiaro);
+    box-shadow: 0 14px 32px -12px rgba(110, 82, 38, 0.8);
+  }
+
+  /* Outline: riempimento che sale dal basso (wipe) */
+  .btn-ghost,
+  .btn-chiaro {
+    background-color: transparent;
+  }
+  .btn-ghost::before,
+  .btn-chiaro::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .btn-ghost {
-    background-color: transparent;
     color: var(--color-inchiostro);
     border-color: color-mix(in srgb, var(--color-pietra) 70%, transparent);
   }
+  .btn-ghost::before {
+    background-color: var(--color-ottone);
+  }
   .btn-ghost:hover {
+    color: var(--color-inchiostro);
     border-color: var(--color-ottone);
-    color: var(--color-ottone-testo);
+  }
+  .btn-ghost:hover::before {
+    transform: scaleY(1);
   }
   /* Outline chiaro, per fondi scuri (es. hero con video) */
   .btn-chiaro {
-    background-color: transparent;
     color: var(--color-avorio);
     border-color: color-mix(in srgb, var(--color-avorio) 45%, transparent);
   }
-  .btn-chiaro:hover {
+  .btn-chiaro::before {
     background-color: var(--color-avorio);
+  }
+  .btn-chiaro:hover {
     color: var(--color-inchiostro);
+    border-color: var(--color-avorio);
+  }
+  .btn-chiaro:hover::before {
+    transform: scaleY(1);
+  }
+
+  /* Accessibilità: niente animazioni di movimento, solo feedback istantaneo */
+  @media (prefers-reduced-motion: reduce) {
+    .btn {
+      transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+    }
+    .btn:hover,
+    .btn:active {
+      transform: none;
+    }
+    .btn::after {
+      display: none;
+    }
+    .btn::before {
+      transition: none;
+    }
   }
 
   /* Link con sottolineatura "che si imprime" all'hover */
@@ -267,6 +357,40 @@
   .link-segno:hover,
   .link-segno:focus-visible {
     background-size: 100% 1px;
+  }
+
+  /* Link "marchio/editoriale": il testo scurisce e un filetto ottone si traccia
+     da sinistra. Per i link grandi (muro marchi, titoli) dove serve un hover
+     evidente e di carattere. */
+  .link-marchio {
+    position: relative;
+    display: inline-block;
+    transition: color 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-marchio::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1.5px;
+    width: 100%;
+    background-color: var(--color-ottone);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-marchio:hover,
+  .link-marchio:focus-visible {
+    color: var(--color-inchiostro);
+  }
+  .link-marchio:hover::after,
+  .link-marchio:focus-visible::after {
+    transform: scaleX(1);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .link-marchio::after {
+      transition: none;
+    }
   }
 
   /* Placeholder materico (in attesa delle foto reali): non stock, coerente col design */

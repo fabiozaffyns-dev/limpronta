@@ -53,7 +53,7 @@ export default async function HomePage() {
                 <Link
                   key={b.id}
                   href={`/marchi/${b.slug}`}
-                  className="font-display text-xl text-pietra-scura transition-colors hover:text-loden md:text-2xl"
+                  className="font-display link-marchio text-xl text-pietra-scura md:text-2xl"
                 >
                   {b.nome}
                 </Link>
