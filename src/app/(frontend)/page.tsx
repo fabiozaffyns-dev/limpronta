@@ -123,7 +123,7 @@ export default async function HomePage() {
                 <p className="mt-6 max-w-md text-avorio/70">
                   Racconti di stagione: accostamenti, materiali e dettagli che lasciano il segno.
                 </p>
-                <Link href={`/lookbook/${lookbook.slug}`} className="btn btn-loden mt-10">
+                <Link href={`/lookbook/${lookbook.slug}`} className="btn btn-ottone mt-10">
                   Sfoglia il lookbook
                 </Link>
               </Reveal>

@@ -106,12 +106,13 @@ export function DebossHero({
           ) : (
             <Image src={heroMedia.url} alt="" fill priority sizes="100vw" className="object-cover" />
           )}
-          {/* Velo scuro: il wordmark resta leggibile, il media resta elegante */}
+          {/* Velo scuro: vignettatura (centro più chiaro, bordi scuri) + gradiente
+             verticale. Tiene il wordmark leggibile e dà profondità al media. */}
           <div
             className="absolute inset-0"
             style={{
               background:
-                'linear-gradient(180deg, rgba(28,26,23,0.55) 0%, rgba(28,26,23,0.48) 45%, rgba(28,26,23,0.62) 100%)',
+                'radial-gradient(120% 90% at 50% 42%, rgba(20,18,16,0.35) 0%, rgba(20,18,16,0.62) 100%), linear-gradient(180deg, rgba(20,18,16,0.62) 0%, rgba(20,18,16,0.55) 45%, rgba(20,18,16,0.8) 100%)',
             }}
           />
         </div>
@@ -141,7 +142,7 @@ export function DebossHero({
       </p>
 
       <div data-hero-cta className="relative mt-12 flex flex-wrap items-center justify-center gap-4">
-        <Link href="/catalogo" className={cn('btn', dark ? 'btn-loden' : 'btn-primario')}>
+        <Link href="/catalogo" className={cn('btn', dark ? 'btn-ottone' : 'btn-primario')}>
           Esplora il catalogo
         </Link>
         <WhatsAppButton

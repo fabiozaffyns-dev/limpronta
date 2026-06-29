@@ -6,13 +6,13 @@ export function WhatsAppButton({
   message,
   label = 'Chiedi disponibilità',
   className,
-  variant = 'loden',
+  variant = 'ottone',
 }: {
   number?: string | null
   message: string
   label?: string
   className?: string
-  variant?: 'loden' | 'primario' | 'ghost' | 'chiaro'
+  variant?: 'loden' | 'primario' | 'ghost' | 'chiaro' | 'ottone'
 }) {
   const href = buildWhatsAppLink({ number, message })
   return (

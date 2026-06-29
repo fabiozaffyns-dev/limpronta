@@ -86,8 +86,8 @@ export function Header({
                       ? 'text-ottone-chiaro'
                       : 'text-avorio hover:text-ottone-chiaro'
                     : active
-                      ? 'text-loden'
-                      : 'text-inchiostro hover:text-loden',
+                      ? 'text-ottone-testo'
+                      : 'text-inchiostro hover:text-ottone-testo',
                 )}
                 style={{ fontSize: '0.72rem' }}
               >
@@ -95,7 +95,7 @@ export function Header({
               </Link>
             )
           })}
-          <a href={waLink} target="_blank" rel="noopener noreferrer" className="btn btn-loden" style={{ padding: '0.6rem 1.1rem' }}>
+          <a href={waLink} target="_blank" rel="noopener noreferrer" className="btn btn-ottone" style={{ padding: '0.6rem 1.1rem' }}>
             Prenota in negozio
           </a>
         </nav>
@@ -143,7 +143,7 @@ export function Header({
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="btn btn-loden mt-8 self-start"
+            className="btn btn-ottone mt-8 self-start"
           >
             Prenota in negozio
           </a>

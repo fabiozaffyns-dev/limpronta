@@ -73,7 +73,7 @@ export function ConsentBanner() {
               <button type="button" onClick={() => choose('rejected')} className="btn btn-ghost text-avorio" style={{ borderColor: 'color-mix(in srgb, var(--color-avorio) 40%, transparent)' }}>
                 Rifiuta
               </button>
-              <button type="button" onClick={() => choose('accepted')} className="btn btn-loden">
+              <button type="button" onClick={() => choose('accepted')} className="btn btn-ottone">
                 Accetta
               </button>
             </div>
@@ -86,7 +86,7 @@ export function ConsentBanner() {
           type="button"
           onClick={() => setShowBanner(true)}
           aria-label="Preferenze cookie"
-          className="fixed bottom-4 left-4 z-[80] flex h-9 w-9 items-center justify-center rounded-full border bg-lino/90 text-[10px] text-pietra-scura backdrop-blur-sm transition-colors hover:text-loden"
+          className="fixed bottom-4 left-4 z-[80] flex h-9 w-9 items-center justify-center rounded-full border bg-lino/90 text-[10px] text-pietra-scura backdrop-blur-sm transition-colors hover:text-ottone-testo"
           style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 50%, transparent)' }}
         >
           <span className="cartellino" style={{ fontSize: '0.5rem' }}>

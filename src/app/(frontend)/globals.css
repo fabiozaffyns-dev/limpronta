@@ -218,7 +218,7 @@
     color: var(--color-avorio);
   }
   .btn-primario:hover {
-    background-color: var(--color-loden);
+    background-color: var(--color-ottone-testo);
   }
   .btn-loden {
     background-color: var(--color-loden);
@@ -227,6 +227,14 @@
   .btn-loden:hover {
     background-color: var(--color-loden-chiaro);
   }
+  /* CTA firma: ottone brunito, testo scuro (AA su ottone). Risalta sul video. */
+  .btn-ottone {
+    background-color: var(--color-ottone);
+    color: var(--color-inchiostro);
+  }
+  .btn-ottone:hover {
+    background-color: var(--color-ottone-chiaro);
+  }
   .btn-ghost {
     background-color: transparent;
     color: var(--color-inchiostro);
@@ -234,7 +242,7 @@
   }
   .btn-ghost:hover {
     border-color: var(--color-ottone);
-    color: var(--color-loden);
+    color: var(--color-ottone-testo);
   }
   /* Outline chiaro, per fondi scuri (es. hero con video) */
   .btn-chiaro {
