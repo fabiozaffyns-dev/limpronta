@@ -35,27 +35,35 @@ export function DebossHero({ whatsappNumber }: { whatsappNumber?: string | null 
         markEl && (split = new SplitText(markEl, { type: 'chars', mask: 'chars' })).chars
 
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
-      tl.from('[data-hero-eyebrow]', { y: 18, autoAlpha: 0, duration: 0.7 }, 0)
+      tl.from('[data-hero-eyebrow]', { y: 22, autoAlpha: 0, duration: 0.8 }, 0)
 
       if (targets && targets.length) {
+        // Le lettere salgono da dietro la maschera sfocandosi a fuoco, a cascata.
         tl.from(
           targets,
-          { yPercent: 118, duration: 1.05, stagger: 0.045, ease: 'power4.out' },
-          0.25,
+          { yPercent: 135, filter: 'blur(14px)', stagger: 0.06, duration: 1.3, ease: 'expo.out' },
+          0.2,
         )
       } else {
-        tl.from('[data-hero-mark]', { yPercent: 30, autoAlpha: 0, duration: 1 }, 0.25)
+        tl.from('[data-hero-mark]', { yPercent: 40, autoAlpha: 0, duration: 1.1 }, 0.2)
       }
 
+      // "Stampa": una pressione verticale e il segno che si imprime di colpo.
       tl.fromTo(
-        '[data-hero-mark]',
-        { textShadow: '0 0 0 rgba(0,0,0,0)' },
-        { textShadow: DEBOSS_SHADOW, duration: 0.9, ease: 'power2.out' },
-        '-=0.35',
+        '[data-hero-word]',
+        { scaleY: 1.08 },
+        { scaleY: 1, duration: 0.5, ease: 'power4.out' },
+        '-=0.4',
       )
-        .from('[data-hero-tag]', { y: 18, autoAlpha: 0, duration: 0.8 }, '-=0.5')
-        .from('[data-hero-cta] > *', { y: 14, autoAlpha: 0, stagger: 0.12, duration: 0.6 }, '-=0.4')
-        .from('[data-hero-scroll]', { autoAlpha: 0, duration: 0.9 }, '-=0.2')
+        .fromTo(
+          '[data-hero-mark]',
+          { textShadow: '0 0 0 rgba(0,0,0,0)' },
+          { textShadow: DEBOSS_SHADOW, duration: 0.5, ease: 'power2.out' },
+          '<',
+        )
+        .from('[data-hero-tag]', { y: 22, autoAlpha: 0, duration: 0.85 }, '-=0.2')
+        .from('[data-hero-cta] > *', { y: 16, autoAlpha: 0, stagger: 0.13, duration: 0.65 }, '-=0.45')
+        .from('[data-hero-scroll]', { autoAlpha: 0, y: -6, duration: 0.9 }, '-=0.15')
 
       // Parallax + dissolvenza del wordmark allo scroll.
       gsap.to('[data-hero-word]', {
