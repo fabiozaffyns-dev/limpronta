@@ -14,7 +14,7 @@ export const Users: CollectionConfig = {
   access: {
     read: ({ req }) => Boolean(req.user),
     create: isAdmin,
-    update: ({ req, id }) => req.user?.role === 'admin' || req.user?.id === id,
+    update: ({ req, id }) => req.user?.role === 'admin' || String(req.user?.id) === String(id),
     delete: isAdmin,
   },
   fields: [
@@ -25,6 +25,10 @@ export const Users: CollectionConfig = {
       required: true,
       defaultValue: 'editor',
       label: 'Ruolo',
+      // ESSENZIALE: include il ruolo nel JWT così req.user.role è disponibile
+      // nei controlli di accesso (isAdmin / isAdminOrEditor). Senza, ogni
+      // scrittura via admin verrebbe bloccata con "Non sei autorizzato".
+      saveToJWT: true,
       options: [
         { label: 'Amministratore', value: 'admin' },
         { label: 'Redattore', value: 'editor' },
