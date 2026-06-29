@@ -17,13 +17,21 @@ const NAV = [
   { href: '/contatti', label: 'Contatti' },
 ]
 
-export function Header({ whatsappNumber }: { whatsappNumber?: string | null }) {
+export function Header({
+  whatsappNumber,
+  heroDark = false,
+}: {
+  whatsappNumber?: string | null
+  heroDark?: boolean
+}) {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const drawerRef = useRef<HTMLDivElement>(null)
 
   const solid = scrolled || pathname !== '/'
+  // Header trasparente sopra un hero con sfondo scuro → testo chiaro.
+  const onDark = !solid && heroDark
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -61,7 +69,7 @@ export function Header({ whatsappNumber }: { whatsappNumber?: string | null }) {
     >
       <div className="shell flex h-16 items-center justify-between md:h-20">
         <Link href="/" aria-label="L'Impronta — home" className="z-10">
-          <Wordmark className="text-xl md:text-2xl" />
+          <Wordmark scuro={onDark} className="text-xl md:text-2xl" />
         </Link>
 
         <nav aria-label="Navigazione principale" className="hidden items-center gap-7 lg:flex">
@@ -73,7 +81,13 @@ export function Header({ whatsappNumber }: { whatsappNumber?: string | null }) {
                 href={item.href}
                 className={cn(
                   'cartellino link-segno py-1 transition-colors',
-                  active ? 'text-loden' : 'text-inchiostro hover:text-loden',
+                  onDark
+                    ? active
+                      ? 'text-ottone-chiaro'
+                      : 'text-avorio hover:text-ottone-chiaro'
+                    : active
+                      ? 'text-loden'
+                      : 'text-inchiostro hover:text-loden',
                 )}
                 style={{ fontSize: '0.72rem' }}
               >
@@ -94,7 +108,7 @@ export function Header({ whatsappNumber }: { whatsappNumber?: string | null }) {
           className="z-10 flex h-10 w-10 items-center justify-center lg:hidden"
         >
           <span className="sr-only">{open ? 'Chiudi menù' : 'Apri menù'}</span>
-          <Burger open={open} />
+          <Burger open={open} dark={onDark && !open} />
         </button>
       </div>
 
@@ -139,19 +153,20 @@ export function Header({ whatsappNumber }: { whatsappNumber?: string | null }) {
   )
 }
 
-function Burger({ open }: { open: boolean }) {
+function Burger({ open, dark = false }: { open: boolean; dark?: boolean }) {
+  const bar = dark ? 'bg-avorio' : 'bg-inchiostro'
   return (
     <span className="relative block h-4 w-6" aria-hidden>
       <span
-        className="absolute left-0 block h-px w-full bg-inchiostro transition-transform duration-300"
+        className={cn('absolute left-0 block h-px w-full transition-transform duration-300', bar)}
         style={{ top: open ? '50%' : '2px', transform: open ? 'rotate(45deg)' : 'none' }}
       />
       <span
-        className="absolute left-0 top-1/2 block h-px w-full bg-inchiostro transition-opacity duration-300"
+        className={cn('absolute left-0 top-1/2 block h-px w-full transition-opacity duration-300', bar)}
         style={{ opacity: open ? 0 : 1 }}
       />
       <span
-        className="absolute left-0 block h-px w-full bg-inchiostro transition-transform duration-300"
+        className={cn('absolute left-0 block h-px w-full transition-transform duration-300', bar)}
         style={{ bottom: open ? '50%' : '2px', transform: open ? 'rotate(-45deg)' : 'none' }}
       />
     </span>

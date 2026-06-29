@@ -13,7 +13,7 @@ const adminThumbnail: CollectionConfig['upload'] = {
   },
   focalPoint: true,
   // Niente imageSizes: con Cloudinary le trasformazioni sono on-the-fly (un solo upload).
-  mimeTypes: ['image/*'],
+  mimeTypes: ['image/*', 'video/*'],
 }
 
 export const Media: CollectionConfig = {

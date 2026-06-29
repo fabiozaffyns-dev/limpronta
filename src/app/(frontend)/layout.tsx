@@ -6,6 +6,7 @@ import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { LenisProvider } from '@/components/motion/LenisProvider'
 import { clothingStoreLd } from '@/lib/json-ld'
+import { mediaDoc } from '@/lib/media'
 import { getSettings } from '@/lib/queries'
 import { jsonLdSafe } from '@/lib/sanitize'
 
@@ -55,6 +56,7 @@ export const metadata: Metadata = {
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
   const settings = await getSettings()
+  const heroDark = Boolean(mediaDoc(settings.heroMedia)?.url)
 
   return (
     <html lang="it" className={`${fraunces.variable} ${hanken.variable} ${cinzel.variable}`}>
@@ -76,7 +78,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         </a>
 
         <LenisProvider>
-          <Header whatsappNumber={settings.whatsappNumber} />
+          <Header whatsappNumber={settings.whatsappNumber} heroDark={heroDark} />
           <main id="contenuto">{children}</main>
           <Footer settings={settings} />
         </LenisProvider>

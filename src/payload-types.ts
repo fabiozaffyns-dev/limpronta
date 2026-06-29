@@ -192,6 +192,10 @@ export interface Product {
     tipo?: ('PE' | 'AI') | null;
     anno?: number | null;
   };
+  /**
+   * Numero più basso = mostrato prima. Lascia 0 per l’ordine alfabetico.
+   */
+  ordine?: number | null;
   inEvidenza?: boolean | null;
   /**
    * Se disattivato, il prodotto resta visibile ma segnalato come non disponibile.
@@ -237,6 +241,9 @@ export interface Brand {
     [k: string]: unknown;
   } | null;
   sito?: string | null;
+  /**
+   * Numero più basso = mostrato prima. Lascia 0 per l’ordine alfabetico.
+   */
   ordine?: number | null;
   updatedAt: string;
   createdAt: string;
@@ -576,6 +583,7 @@ export interface ProductsSelect<T extends boolean = true> {
         tipo?: T;
         anno?: T;
       };
+  ordine?: T;
   inEvidenza?: T;
   disponibile?: T;
   meta?:
@@ -806,6 +814,10 @@ export interface Setting {
     lng?: number | null;
     googleMapsUrl?: string | null;
   };
+  /**
+   * Opzionale. Foto o breve video di sfondo per la home: appare dietro al wordmark con un velo scuro (il wordmark diventa chiaro). Vuoto = hero tipografico chiaro.
+   */
+  heroMedia?: (number | null) | Media;
   seoDefault?: {
     titolo?: string | null;
     descrizione?: string | null;
@@ -855,6 +867,7 @@ export interface SettingsSelect<T extends boolean = true> {
         lng?: T;
         googleMapsUrl?: T;
       };
+  heroMedia?: T;
   seoDefault?:
     | T
     | {

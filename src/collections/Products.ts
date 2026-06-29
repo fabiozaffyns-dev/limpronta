@@ -191,6 +191,16 @@ export const Products: CollectionConfig = {
       ],
     },
     {
+      name: 'ordine',
+      type: 'number',
+      defaultValue: 0,
+      label: 'Ordine',
+      admin: {
+        position: 'sidebar',
+        description: 'Numero più basso = mostrato prima. Lascia 0 per l’ordine alfabetico.',
+      },
+    },
+    {
       name: 'inEvidenza',
       type: 'checkbox',
       defaultValue: false,

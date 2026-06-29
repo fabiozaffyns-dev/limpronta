@@ -181,6 +181,21 @@ export const Settings: GlobalConfig = {
           ],
         },
         {
+          label: 'Home',
+          fields: [
+            {
+              name: 'heroMedia',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Sfondo hero (foto o video)',
+              admin: {
+                description:
+                  'Opzionale. Foto o breve video di sfondo per la home: appare dietro al wordmark con un velo scuro (il wordmark diventa chiaro). Vuoto = hero tipografico chiaro.',
+              },
+            },
+          ],
+        },
+        {
           label: 'SEO',
           fields: [
             {

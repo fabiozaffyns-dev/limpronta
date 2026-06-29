@@ -12,7 +12,7 @@ export function WhatsAppButton({
   message: string
   label?: string
   className?: string
-  variant?: 'loden' | 'primario' | 'ghost'
+  variant?: 'loden' | 'primario' | 'ghost' | 'chiaro'
 }) {
   const href = buildWhatsAppLink({ number, message })
   return (

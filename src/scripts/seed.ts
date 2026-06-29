@@ -103,7 +103,9 @@ async function main() {
     const slug = slugify(nome)
     const exists = await payload.find({ collection: 'brands', where: { slug: { equals: slug } }, limit: 1, depth: 0 })
     if (exists.docs.length === 0) {
-      await payload.create({ collection: 'brands', locale: 'it', data: { nome, slug, ordine: i } })
+      // ordine=0 (default) → i marchi si mostrano in ordine alfabetico finché
+      // non si imposta un ordine manuale dall'admin.
+      await payload.create({ collection: 'brands', locale: 'it', data: { nome, slug } })
       brandCreate++
     }
   }

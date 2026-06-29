@@ -236,6 +236,16 @@
     border-color: var(--color-ottone);
     color: var(--color-loden);
   }
+  /* Outline chiaro, per fondi scuri (es. hero con video) */
+  .btn-chiaro {
+    background-color: transparent;
+    color: var(--color-avorio);
+    border-color: color-mix(in srgb, var(--color-avorio) 45%, transparent);
+  }
+  .btn-chiaro:hover {
+    background-color: var(--color-avorio);
+    color: var(--color-inchiostro);
+  }
 
   /* Link con sottolineatura "che si imprime" all'hover */
   .link-segno {

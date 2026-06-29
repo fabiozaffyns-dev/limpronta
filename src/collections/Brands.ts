@@ -44,7 +44,10 @@ export const Brands: CollectionConfig = {
       type: 'number',
       defaultValue: 0,
       label: 'Ordine',
-      admin: { position: 'sidebar' },
+      admin: {
+        position: 'sidebar',
+        description: 'Numero più basso = mostrato prima. Lascia 0 per l’ordine alfabetico.',
+      },
     },
   ],
 }

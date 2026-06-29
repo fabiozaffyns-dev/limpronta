@@ -7,6 +7,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { DebossHero } from '@/components/motion/DebossHero'
 import { Reveal } from '@/components/motion/Reveal'
+import { mediaDoc } from '@/lib/media'
 import {
   getBrands,
   getFeaturedProducts,
@@ -32,10 +33,15 @@ export default async function HomePage() {
   const lookbook = lookbooks[0] ?? null
   const lookbookCover = lookbook ? (lookbook.immagini?.[0] as Media | number | undefined) : null
 
+  const heroDoc = mediaDoc(settings.heroMedia)
+  const heroMedia = heroDoc?.url
+    ? { url: heroDoc.url, isVideo: Boolean(heroDoc.mimeType?.startsWith('video')) }
+    : null
+
   return (
     <>
       {/* ─── Hero (momento orchestrato) ───────────────────────────────────── */}
-      <DebossHero whatsappNumber={settings.whatsappNumber} />
+      <DebossHero whatsappNumber={settings.whatsappNumber} heroMedia={heroMedia} />
 
       {/* ─── Muro dei marchi ──────────────────────────────────────────────── */}
       {brands.length > 0 && (

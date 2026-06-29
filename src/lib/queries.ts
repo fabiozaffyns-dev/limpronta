@@ -23,7 +23,7 @@ export async function getBrands(): Promise<Brand[]> {
     collection: 'brands',
     locale: LOCALE,
     limit: 100,
-    sort: 'ordine',
+    sort: ['ordine', 'nome'],
     depth: 1,
     pagination: false,
   })
@@ -90,12 +90,15 @@ export async function getProducts(filters: ProductFilters = {}) {
     'prezzo-desc': '-prezzo',
     nome: 'nome',
   }
+  // Default: ordine manuale poi alfabetico. Le opzioni esplicite sovrascrivono.
+  const sort: string | string[] =
+    filters.sort && sortMap[filters.sort] ? sortMap[filters.sort]! : ['ordine', 'nome']
 
   return payload.find({
     collection: 'products',
     locale: LOCALE,
     where: { and },
-    sort: sortMap[filters.sort ?? 'novita'] ?? '-createdAt',
+    sort,
     page: filters.page ?? 1,
     limit: filters.limit ?? 24,
     depth: 1,
@@ -133,7 +136,7 @@ export async function getFeaturedProducts(limit = 6): Promise<Product[]> {
     where: { and: [published, { inEvidenza: { equals: true } }] },
     limit,
     depth: 1,
-    sort: '-updatedAt',
+    sort: ['ordine', 'nome'],
   })
   return res.docs
 }
@@ -179,7 +182,7 @@ export async function getProductsByBrand(brandId: number | string, limit = 48): 
     where: { and: [published, { brand: { equals: brandId } }] },
     limit,
     depth: 1,
-    sort: '-updatedAt',
+    sort: ['ordine', 'nome'],
   })
   return res.docs
 }

@@ -78,7 +78,8 @@ export default buildConfig({
               api_secret: process.env.CLOUDINARY_API_SECRET,
             },
             collections: {
-              media: { folder: 'limpronta' },
+              // resourceType 'auto' → gestisce immagini e video (sfondo hero).
+              media: { folder: 'limpronta', resourceType: 'auto' },
             },
           }),
         ]
