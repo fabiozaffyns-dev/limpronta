@@ -98,7 +98,7 @@ export default async function ProductPage({ params }: Params) {
               </Eyebrow>
             )}
             <h1 className="mt-4 text-4xl leading-tight md:text-5xl">{product.nome}</h1>
-            <p className="mt-4 font-display text-2xl text-loden">{prezzo}</p>
+            <p className="mt-4 font-display text-2xl text-ottone-testo">{prezzo}</p>
 
             {product.descrizione && <RichText data={product.descrizione} className="mt-8" />}
 

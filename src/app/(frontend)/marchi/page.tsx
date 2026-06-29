@@ -45,7 +45,7 @@ export default async function MarchiPage() {
                 {logo ? (
                   <CloudinaryImage media={b.logo} alt={b.nome} aspect="3 / 2" sizes="280px" className="w-full" imgClassName="object-contain" />
                 ) : (
-                  <span className="font-display text-center text-2xl text-inchiostro transition-colors group-hover:text-loden">
+                  <span className="font-display text-center text-2xl text-inchiostro transition-colors group-hover:text-ottone-testo">
                     {b.nome}
                   </span>
                 )}

@@ -59,7 +59,7 @@ export default async function BrandPage({ params }: Params) {
             href={sito}
             target="_blank"
             rel="noopener noreferrer"
-            className="cartellino link-segno mt-6 inline-block text-loden"
+            className="cartellino link-segno mt-6 inline-block text-ottone-testo"
           >
             Sito ufficiale
           </a>

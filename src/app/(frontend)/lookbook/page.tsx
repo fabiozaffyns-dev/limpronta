@@ -46,7 +46,7 @@ export default async function LookbookIndexPage() {
                   </div>
                   <div className="mt-5">
                     {stagione && <Eyebrow>{stagione}</Eyebrow>}
-                    <h2 className="mt-2 text-3xl transition-colors group-hover:text-loden">{lb.titolo}</h2>
+                    <h2 className="mt-2 text-3xl transition-colors group-hover:text-ottone-testo">{lb.titolo}</h2>
                   </div>
                 </Link>
               )

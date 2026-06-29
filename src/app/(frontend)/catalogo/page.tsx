@@ -72,7 +72,7 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
         {products.length === 0 ? (
           <div className="py-24 text-center">
             <p className="font-display text-2xl text-inchiostro">Nessun capo corrisponde ai filtri.</p>
-            <Link href="/catalogo" className="cartellino link-segno mt-4 inline-block text-loden">
+            <Link href="/catalogo" className="cartellino link-segno mt-4 inline-block text-ottone-testo">
               Azzera i filtri
             </Link>
           </div>
@@ -123,7 +123,7 @@ function Pagination({
   return (
     <nav aria-label="Paginazione" className="mt-16 flex items-center justify-center gap-6">
       {hasPrev ? (
-        <Link href={build(page - 1)} className="cartellino link-segno text-loden" scroll>
+        <Link href={build(page - 1)} className="cartellino link-segno text-ottone-testo" scroll>
           ← Precedente
         </Link>
       ) : (
@@ -133,7 +133,7 @@ function Pagination({
         {page} / {totalPages}
       </span>
       {hasNext ? (
-        <Link href={build(page + 1)} className="cartellino link-segno text-loden" scroll>
+        <Link href={build(page + 1)} className="cartellino link-segno text-ottone-testo" scroll>
           Successiva →
         </Link>
       ) : (

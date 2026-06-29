@@ -90,7 +90,7 @@ export default async function HomePage() {
                 <Eyebrow>Selezione</Eyebrow>
                 <h2 className="mt-4 text-4xl md:text-5xl">In evidenza</h2>
               </div>
-              <Link href="/catalogo" className="cartellino link-segno hidden text-loden sm:block">
+              <Link href="/catalogo" className="cartellino link-segno hidden text-ottone-testo sm:block">
                 Tutto il catalogo
               </Link>
             </div>
@@ -103,7 +103,7 @@ export default async function HomePage() {
               </Reveal>
             ))}
           </div>
-          <Link href="/catalogo" className="cartellino link-segno mt-10 inline-block text-loden sm:hidden">
+          <Link href="/catalogo" className="cartellino link-segno mt-10 inline-block text-ottone-testo sm:hidden">
             Tutto il catalogo →
           </Link>
         </section>
@@ -151,7 +151,7 @@ export default async function HomePage() {
               </Reveal>
             ))}
           </div>
-          <Link href="/servizi" className="cartellino link-segno mt-10 inline-block text-loden">
+          <Link href="/servizi" className="cartellino link-segno mt-10 inline-block text-ottone-testo">
             Scopri tutti i servizi
           </Link>
         </section>

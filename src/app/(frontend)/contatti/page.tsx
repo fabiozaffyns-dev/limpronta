@@ -77,12 +77,12 @@ export default async function ContattiPage() {
             {(instagram || facebook) && (
               <div className="flex items-center gap-4">
                 {instagram && (
-                  <a href={instagram} target="_blank" rel="noopener noreferrer" className="cartellino link-segno text-loden">
+                  <a href={instagram} target="_blank" rel="noopener noreferrer" className="cartellino link-segno text-ottone-testo">
                     Instagram
                   </a>
                 )}
                 {facebook && (
-                  <a href={facebook} target="_blank" rel="noopener noreferrer" className="cartellino link-segno text-loden">
+                  <a href={facebook} target="_blank" rel="noopener noreferrer" className="cartellino link-segno text-ottone-testo">
                     Facebook
                   </a>
                 )}
