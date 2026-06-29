@@ -200,6 +200,31 @@ export const Settings: GlobalConfig = {
           ],
         },
         {
+          label: 'Chi siamo',
+          fields: [
+            {
+              name: 'chiSiamoFoto1',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Foto 1 — verticale (storia)',
+              admin: {
+                description:
+                  'Foto verticale per la sezione "La nostra storia". Vuoto = pannello materico.',
+              },
+            },
+            {
+              name: 'chiSiamoFoto2',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Foto 2 — orizzontale (negozio)',
+              admin: {
+                description:
+                  'Foto del negozio per la sezione "Vieni a trovarci". Vuoto = pannello materico.',
+              },
+            },
+          ],
+        },
+        {
           label: 'SEO',
           fields: [
             {

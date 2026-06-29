@@ -818,6 +818,14 @@ export interface Setting {
    * Opzionale. Foto o breve video di sfondo per la home: appare dietro al wordmark con un velo scuro (il wordmark diventa chiaro). Vuoto = hero tipografico chiaro.
    */
   heroMedia?: (number | null) | Media;
+  /**
+   * Foto verticale per la sezione "La nostra storia". Vuoto = pannello materico.
+   */
+  chiSiamoFoto1?: (number | null) | Media;
+  /**
+   * Foto del negozio per la sezione "Vieni a trovarci". Vuoto = pannello materico.
+   */
+  chiSiamoFoto2?: (number | null) | Media;
   seoDefault?: {
     titolo?: string | null;
     descrizione?: string | null;
@@ -868,6 +876,8 @@ export interface SettingsSelect<T extends boolean = true> {
         googleMapsUrl?: T;
       };
   heroMedia?: T;
+  chiSiamoFoto1?: T;
+  chiSiamoFoto2?: T;
   seoDefault?:
     | T
     | {
