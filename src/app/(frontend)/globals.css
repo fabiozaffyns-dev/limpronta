@@ -577,10 +577,10 @@
     font-family: var(--font-body);
     background-color: var(--color-inchiostro);
   }
-  /* Dark Matter ad ALTO contrasto: brightness+contrast spingono i nomi verso il
-     bianco e tengono lo sfondo nero; strade grigio chiaro leggibili. Tono caldo. */
+  /* Alidade Smooth Dark è già leggibile: solo un filo di calore verso
+     l'inchiostro del brand, niente filtri pesanti. */
   .store-map .leaflet-tile-pane {
-    filter: brightness(2.5) contrast(1.45) sepia(0.18);
+    filter: sepia(0.12);
   }
   .store-map .leaflet-control-attribution {
     background-color: color-mix(in srgb, var(--color-inchiostro) 82%, transparent);

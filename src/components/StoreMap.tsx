@@ -57,10 +57,13 @@ export function StoreMap({
         fadeAnimation: false,
       })
 
-      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-        subdomains: 'abcd',
+      // Alidade Smooth Dark (Stadia): scura e disegnata per essere leggibile.
+      // Auth per DOMINIO (limpronta.vercel.app registrato in Stadia): nessuna
+      // API key in URL. In locale "just works" da localhost.
+      L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}.png', {
         maxZoom: 20,
-        attribution: '&copy; OpenStreetMap &copy; CARTO',
+        attribution:
+          '&copy; Stadia Maps &copy; OpenMapTiles &copy; OpenStreetMap contributors',
       }).addTo(map)
 
       const icon = L.divIcon({
