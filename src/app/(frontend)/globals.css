@@ -92,8 +92,8 @@
   }
 
   ::selection {
-    background-color: var(--color-loden);
-    color: var(--color-avorio);
+    background-color: var(--color-ottone);
+    color: var(--color-inchiostro);
   }
 
   /* Focus da tastiera sempre visibile (quality floor) */
