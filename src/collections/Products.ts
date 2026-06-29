@@ -3,6 +3,7 @@ import type { CollectionConfig } from 'payload'
 import { isAdminOrEditor, publishedOrLoggedIn } from '@/access'
 import { slugField } from '@/fields/slug'
 import { ensureUniqueSku } from '@/hooks/ensureUniqueSku'
+import { revalidateAfterChange, revalidateAfterDelete } from '@/hooks/revalidate'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -23,6 +24,10 @@ export const Products: CollectionConfig = {
     create: isAdminOrEditor,
     update: isAdminOrEditor,
     delete: isAdminOrEditor,
+  },
+  hooks: {
+    afterChange: [revalidateAfterChange],
+    afterDelete: [revalidateAfterDelete],
   },
   fields: [
     { name: 'nome', type: 'text', required: true, localized: true, label: 'Nome prodotto' },

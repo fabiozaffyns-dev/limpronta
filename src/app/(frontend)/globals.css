@@ -236,7 +236,8 @@
       color 0.4s ease,
       border-color 0.4s ease;
   }
-  /* DEBOSS: il pieno si preme nella materia (niente lift) */
+  /* Pressione leggera di default (la usano gli outline); i pieni la
+     sovrascrivono con un sollevamento (più sotto). */
   .btn:hover,
   .btn:focus-visible {
     transform: scale(0.988);
@@ -248,43 +249,18 @@
     transition-duration: 0.09s;
   }
 
-  /* Lume caldo statico sul fondo dei pieni (al posto del glint debole) */
-  .btn-primario::after,
-  .btn-ottone::after,
-  .btn-loden::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
-    background: radial-gradient(
-      125% 145% at 50% 118%,
-      var(--btn-lume, rgba(242, 236, 224, 0.2)),
-      transparent 62%
-    );
-    opacity: 0;
-    transition: opacity 0.5s ease;
-  }
-  .btn-primario:hover::after,
-  .btn-primario:focus-visible::after,
-  .btn-ottone:hover::after,
-  .btn-ottone:focus-visible::after,
-  .btn-loden:hover::after,
-  .btn-loden:focus-visible::after {
-    opacity: 1;
-  }
-
+  /* Pieni (colorati): niente "deboss" (faceva un effetto sporco sul colore).
+     In hover si SOLLEVANO con ombra calda pulita + leggera schiaritura; la
+     label continua a girare (swap). Sovrascrive lo scale globale per i pieni. */
   .btn-primario {
     background-color: var(--color-inchiostro);
     color: var(--color-avorio);
   }
   .btn-primario:hover,
   .btn-primario:focus-visible {
+    transform: translateY(-3px);
     background-color: var(--color-inchiostro-tenue);
-    box-shadow:
-      inset 0 2px 6px rgba(0, 0, 0, 0.55),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.1),
-      0 10px 24px -16px rgba(28, 26, 23, 0.7);
+    box-shadow: 0 16px 30px -14px rgba(28, 26, 23, 0.65);
   }
   .btn-loden {
     background-color: var(--color-loden);
@@ -292,12 +268,9 @@
   }
   .btn-loden:hover,
   .btn-loden:focus-visible {
-    --btn-lume: rgba(242, 236, 224, 0.16);
+    transform: translateY(-3px);
     background-color: var(--color-loden-chiaro);
-    box-shadow:
-      inset 0 2px 6px rgba(0, 0, 0, 0.42),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.12),
-      0 10px 24px -16px rgba(58, 74, 44, 0.6);
+    box-shadow: 0 16px 30px -14px rgba(58, 74, 44, 0.55);
   }
   /* CTA firma: ottone brunito, testo scuro (AA su ottone). Risalta sul video. */
   .btn-ottone {
@@ -306,12 +279,9 @@
   }
   .btn-ottone:hover,
   .btn-ottone:focus-visible {
-    --btn-lume: rgba(255, 248, 232, 0.3);
+    transform: translateY(-3px);
     background-color: var(--color-ottone-chiaro);
-    box-shadow:
-      inset 0 2px 6px rgba(74, 54, 24, 0.5),
-      inset 0 -1px 0 rgba(255, 244, 222, 0.45),
-      0 12px 26px -16px rgba(110, 82, 38, 0.75);
+    box-shadow: 0 18px 34px -14px rgba(110, 82, 38, 0.65);
   }
 
   /* Outline: riempimento che sale dal basso (wipe) */
@@ -448,11 +418,6 @@
     .btn:hover .btn-swap > span[data-swap-in],
     .btn:focus-visible .btn-swap > span[data-swap-in] {
       opacity: 1;
-    }
-    .btn-primario::after,
-    .btn-ottone::after,
-    .btn-loden::after {
-      transition: none;
     }
   }
 
