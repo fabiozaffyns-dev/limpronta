@@ -35,10 +35,19 @@ const serverURL =
 // l'admin sulle anteprime.
 const deploymentURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined
 
+// Domini noti del sito, hardcoded come rete di sicurezza: le variabili di
+// sistema Vercel (VERCEL_PROJECT_PRODUCTION_URL) NON sempre sono esposte a
+// runtime, quindi non possiamo dipendere solo da quelle per la whitelist CSRF.
+// Quando si aggiunge un dominio personalizzato, va inserito qui (o in
+// NEXT_PUBLIC_SERVER_URL).
+const knownOrigins = ['https://limpronta.vercel.app']
+
 // Origini fidate per CORS e CSRF (cookie). De-duplicate.
 const trustedOrigins = Array.from(
   new Set(
-    [serverURL, deploymentURL, 'http://localhost:3000'].filter(Boolean) as string[],
+    [serverURL, deploymentURL, ...knownOrigins, 'http://localhost:3000'].filter(
+      Boolean,
+    ) as string[],
   ),
 )
 
