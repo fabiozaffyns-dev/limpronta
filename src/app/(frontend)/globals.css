@@ -575,29 +575,27 @@
   }
   .store-map .leaflet-container {
     font-family: var(--font-body);
-    background-color: var(--color-lino-scuro);
+    background-color: var(--color-inchiostro);
   }
-  /* Solo le tile ricevono il trattamento seppia/avorio: il pin resta ottone */
-  /* Voyager quasi naturale: solo leggera desaturazione (acqua/verde smorzati) e
-     un filo di calore — resta LEGGIBILE e vicino al Lino. */
+  /* Dark Matter scaldato verso l'inchiostro del brand; il pin resta ottone. */
   .store-map .leaflet-tile-pane {
-    filter: sepia(0.08) saturate(0.82) contrast(1.04);
+    filter: sepia(0.22) saturate(0.85) brightness(1.06) contrast(1.02);
   }
   .store-map .leaflet-control-attribution {
-    background-color: color-mix(in srgb, var(--color-lino) 88%, transparent);
-    color: var(--color-pietra-scura);
+    background-color: color-mix(in srgb, var(--color-inchiostro) 82%, transparent);
+    color: color-mix(in srgb, var(--color-avorio) 70%, transparent);
     font-size: 10px;
   }
   .store-map .leaflet-control-attribution a {
-    color: var(--color-ottone-testo);
+    color: var(--color-ottone-chiaro);
   }
   .store-map .leaflet-bar a {
-    background-color: var(--color-lino);
-    color: var(--color-inchiostro);
-    border-color: color-mix(in srgb, var(--color-pietra) 40%, transparent);
+    background-color: var(--color-inchiostro-tenue);
+    color: var(--color-avorio);
+    border-color: color-mix(in srgb, var(--color-avorio) 20%, transparent);
   }
   .store-map .leaflet-bar a:hover {
-    background-color: var(--color-lino-chiaro);
+    background-color: var(--color-inchiostro);
   }
   /* Pin "sigillo" in ottone */
   .store-pin {
