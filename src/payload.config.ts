@@ -21,6 +21,27 @@ import { Settings } from './globals/Settings'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// URL pubblico del sito. Su Vercel deriva automaticamente dal dominio di
+// produzione del progetto; in locale fallback a localhost. È ESSENZIALE: senza,
+// Payload (difesa CSRF) respinge ogni salvataggio dall'admin fatto via cookie
+// con "Non sei autorizzato", perché l'origine non è nella whitelist.
+const serverURL =
+  process.env.NEXT_PUBLIC_SERVER_URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : 'http://localhost:3000')
+
+// URL specifico del deployment corrente (preview/branch) per non bloccare
+// l'admin sulle anteprime.
+const deploymentURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined
+
+// Origini fidate per CORS e CSRF (cookie). De-duplicate.
+const trustedOrigins = Array.from(
+  new Set(
+    [serverURL, deploymentURL, 'http://localhost:3000'].filter(Boolean) as string[],
+  ),
+)
+
 // Cloudinary attivo solo se le credenziali sono presenti: in dev senza chiavi
 // si usa lo storage su disco (portabilità VPS/S3 = solo cambio plugin + env).
 const cloudinaryEnabled = Boolean(
@@ -41,7 +62,12 @@ export default buildConfig({
   globals: [Settings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
-  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || '',
+  serverURL,
+  // Whitelist per CORS (richieste cross-origin) e CSRF (auth via cookie
+  // dell'admin). Senza queste, i salvataggi dal browser danno "Non sei
+  // autorizzato" pur essendo loggati come admin.
+  cors: trustedOrigins,
+  csrf: trustedOrigins,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
