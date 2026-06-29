@@ -1,7 +1,7 @@
 import type { Where } from 'payload'
 import { cache } from 'react'
 
-import type { Brand, Category, Lookbook, Page, Product, Service, Setting } from '@/payload-types'
+import type { Brand, Category, Lookbook, Page, Product, Setting } from '@/payload-types'
 
 import { getPayloadClient } from './payload'
 
@@ -211,20 +211,6 @@ export async function getLookbookBySlug(slug: string): Promise<Lookbook | null> 
     depth: 2,
   })
   return res.docs[0] ?? null
-}
-
-// ─── Services ────────────────────────────────────────────────────────────────
-export async function getServices(): Promise<Service[]> {
-  const payload = await getPayloadClient()
-  const res = await payload.find({
-    collection: 'services',
-    locale: LOCALE,
-    limit: 50,
-    sort: 'ordine',
-    depth: 1,
-    pagination: false,
-  })
-  return res.docs
 }
 
 // ─── Pages ───────────────────────────────────────────────────────────────────

@@ -9,7 +9,6 @@ const NAV_ESPLORA = [
   { href: '/catalogo', label: 'Catalogo' },
   { href: '/marchi', label: 'Marchi' },
   { href: '/lookbook', label: 'Lookbook' },
-  { href: '/servizi', label: 'Servizi' },
   { href: '/chi-siamo', label: 'Chi siamo' },
 ]
 

@@ -14,7 +14,6 @@ import { Lookbooks } from './collections/Lookbooks'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Products } from './collections/Products'
-import { Services } from './collections/Services'
 import { Users } from './collections/Users'
 import { Settings } from './globals/Settings'
 
@@ -67,7 +66,7 @@ export default buildConfig({
       titleSuffix: "· L'Impronta",
     },
   },
-  collections: [Products, Brands, Categories, Lookbooks, Services, Pages, Media, Users],
+  collections: [Products, Brands, Categories, Lookbooks, Pages, Media, Users],
   globals: [Settings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

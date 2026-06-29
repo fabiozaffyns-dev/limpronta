@@ -598,23 +598,61 @@
   .store-map .leaflet-bar a:hover {
     background-color: var(--color-inchiostro);
   }
-  /* Pin "sigillo" in ottone */
+  /* Pin "sigillo" in ottone: alone caldo + anello che pulsa (radar) per risaltare */
+  .leaflet-div-icon.store-pin-wrap {
+    background: transparent;
+    border: none;
+  }
   .store-pin {
+    position: relative;
     display: block;
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     border-radius: 50%;
     background-color: var(--color-ottone);
     box-shadow:
-      0 0 0 4px color-mix(in srgb, var(--color-ottone) 28%, transparent),
-      0 6px 16px -4px rgba(0, 0, 0, 0.55);
+      0 0 0 3px color-mix(in srgb, var(--color-inchiostro) 55%, transparent),
+      0 0 18px 4px color-mix(in srgb, var(--color-ottone-chiaro) 85%, transparent),
+      0 6px 16px -4px rgba(0, 0, 0, 0.6);
+  }
+  .store-pin::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border-radius: 50%;
+    border: 2px solid var(--color-ottone-chiaro);
+    animation: store-pin-pulse 2.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+  }
+  @keyframes store-pin-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.7;
+    }
+    70% {
+      opacity: 0;
+    }
+    100% {
+      transform: scale(3.8);
+      opacity: 0;
+    }
   }
   .store-pin--lg {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     box-shadow:
-      0 0 0 6px color-mix(in srgb, var(--color-ottone) 22%, transparent),
+      0 0 0 5px color-mix(in srgb, var(--color-ottone) 24%, transparent),
+      0 0 22px 5px color-mix(in srgb, var(--color-ottone-chiaro) 70%, transparent),
       0 8px 20px -6px rgba(0, 0, 0, 0.5);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .store-pin::after {
+      animation: none;
+      opacity: 0;
+    }
   }
 
   /* Placeholder materico (in attesa delle foto reali): non stock, coerente col design */

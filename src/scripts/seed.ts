@@ -45,32 +45,6 @@ const BRANDS = [
   'AT.P.CO',
 ]
 
-const SERVICES = [
-  {
-    titolo: 'Abito su misura',
-    icona: 'forbici',
-    testo:
-      'Costruiamo l’abito attorno a te: tessuti scelti, vestibilità studiata, prove e rifiniture seguite passo dopo passo. Per la cerimonia o per il guardaroba di ogni giorno.',
-  },
-  {
-    titolo: 'Consulenza d’immagine',
-    icona: 'occhio',
-    testo:
-      'Capire cosa valorizza la tua figura e il tuo stile di vita. Un confronto sincero su colori, proporzioni e occasioni, per scegliere con criterio invece che per istinto.',
-  },
-  {
-    titolo: 'Personal shopping',
-    icona: 'borsa',
-    testo:
-      'Selezioniamo per te i capi giusti, in negozio o su appuntamento dedicato. Tempo ottimizzato, scelte mirate, nessun acquisto di troppo.',
-  },
-  {
-    titolo: 'Cerimonia',
-    icona: 'gancio',
-    testo:
-      'Dal completo allo smoking, con tutti gli accessori coordinati. Ti accompagniamo nella scelta per essere impeccabile nel giorno che conta.',
-  },
-]
 
 async function main() {
   console.log('— Seed L’Impronta: avvio —')
@@ -111,21 +85,6 @@ async function main() {
   }
   log(`Marchi: ${brandCreate} creati, ${BRANDS.length - brandCreate} già presenti`)
 
-  // Servizi
-  let svcCreate = 0
-  for (let i = 0; i < SERVICES.length; i++) {
-    const s = SERVICES[i]!
-    const exists = await payload.find({ collection: 'services', where: { titolo: { equals: s.titolo } }, limit: 1, depth: 0 })
-    if (exists.docs.length === 0) {
-      await payload.create({
-        collection: 'services',
-        locale: 'it',
-        data: { titolo: s.titolo, icona: s.icona as 'forbici', ordine: i, descrizione: paragraphs(s.testo) },
-      })
-      svcCreate++
-    }
-  }
-  log(`Servizi: ${svcCreate} creati, ${SERVICES.length - svcCreate} già presenti`)
 
   // Pagine (chi siamo + legali)
   const PAGES = [
@@ -246,7 +205,6 @@ async function main() {
   const counts = {
     categorie: (await payload.count({ collection: 'categories' })).totalDocs,
     marchi: (await payload.count({ collection: 'brands' })).totalDocs,
-    servizi: (await payload.count({ collection: 'services' })).totalDocs,
     pagine: (await payload.count({ collection: 'pages' })).totalDocs,
     utenti: (await payload.count({ collection: 'users' })).totalDocs,
   }

@@ -71,7 +71,6 @@ export interface Config {
     brands: Brand;
     categories: Category;
     lookbooks: Lookbook;
-    services: Service;
     pages: Page;
     media: Media;
     users: User;
@@ -86,7 +85,6 @@ export interface Config {
     brands: BrandsSelect<false> | BrandsSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     lookbooks: LookbooksSelect<false> | LookbooksSelect<true>;
-    services: ServicesSelect<false> | ServicesSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -352,34 +350,6 @@ export interface Lookbook {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "services".
- */
-export interface Service {
-  id: number;
-  titolo: string;
-  descrizione?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  icona?: ('forbici' | 'metro' | 'occhio' | 'borsa' | 'gancio' | 'sigillo') | null;
-  immagine?: (number | null) | Media;
-  ordine?: number | null;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
@@ -490,10 +460,6 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'lookbooks';
         value: number | Lookbook;
-      } | null)
-    | ({
-        relationTo: 'services';
-        value: number | Service;
       } | null)
     | ({
         relationTo: 'pages';
@@ -650,19 +616,6 @@ export interface LookbooksSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "services_select".
- */
-export interface ServicesSelect<T extends boolean = true> {
-  titolo?: T;
-  descrizione?: T;
-  icona?: T;
-  immagine?: T;
-  ordine?: T;
-  updatedAt?: T;
-  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

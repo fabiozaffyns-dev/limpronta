@@ -3,7 +3,6 @@ import Link from 'next/link'
 import { ProductCard } from '@/components/ProductCard'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Eyebrow } from '@/components/ui/Eyebrow'
-import { ServiceIcon } from '@/components/ui/ServiceIcon'
 import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { DebossHero } from '@/components/motion/DebossHero'
@@ -15,7 +14,6 @@ import {
   getBrands,
   getFeaturedProducts,
   getLookbooks,
-  getServices,
   getSettings,
 } from '@/lib/queries'
 import { appointmentMessage } from '@/lib/whatsapp'
@@ -24,11 +22,10 @@ import { appointmentMessage } from '@/lib/whatsapp'
 export const revalidate = 120
 
 export default async function HomePage() {
-  const [featured, brands, lookbooks, services, settings] = await Promise.all([
+  const [featured, brands, lookbooks, settings] = await Promise.all([
     getFeaturedProducts(8),
     getBrands(),
     getLookbooks(),
-    getServices(),
     getSettings(),
   ])
 
@@ -152,55 +149,6 @@ export default async function HomePage() {
           </div>
         </section>
       )}
-
-      {/* ─── Servizi ──────────────────────────────────────────────────────── */}
-      {services.length > 0 &&
-        (() => {
-          const svc = services.slice(0, 6)
-          const n = svc.length
-          // 3 box → riga unica; 4 box → wordmark riempie le celle vuote;
-          // 5 box → cella neutra (niente grigio); 6 box → due righe piene.
-          const grid =
-            n === 1
-              ? 'grid-cols-1'
-              : n === 2
-                ? 'grid-cols-1 sm:grid-cols-2'
-                : n === 3
-                  ? 'grid-cols-1 sm:grid-cols-3'
-                  : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-          return (
-            <section className="shell py-24">
-              <Reveal>
-                <Eyebrow>Il nostro servizio</Eyebrow>
-                <h2 className="mt-4 max-w-2xl text-4xl md:text-5xl">
-                  Non solo capi: un modo di vestire pensato su di te.
-                </h2>
-              </Reveal>
-              <div
-                className={`mt-14 grid gap-px overflow-hidden ${grid}`}
-                style={{ backgroundColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}
-              >
-                {svc.map((s, i) => (
-                  <Reveal key={s.id} delay={(i % 3) * 80} className="bg-lino">
-                    <div className="h-full px-7 py-10">
-                      <ServiceIcon name={s.icona} size={34} />
-                      <h3 className="mt-6 text-2xl">{s.titolo}</h3>
-                    </div>
-                  </Reveal>
-                ))}
-                {n === 4 && (
-                  <div className="flex items-center justify-center bg-lino px-7 py-10 sm:col-span-2 lg:col-span-2">
-                    <Wordmark className="text-3xl text-pietra-scura opacity-70 md:text-4xl" />
-                  </div>
-                )}
-                {n === 5 && <div aria-hidden className="bg-lino" />}
-              </div>
-              <Link href="/servizi" className="cartellino link-segno mt-10 inline-block text-ottone-testo">
-                Scopri tutti i servizi
-              </Link>
-            </section>
-          )
-        })()}
 
       {/* ─── Contatti / negozio ───────────────────────────────────────────── */}
       <section className="shell pb-12">

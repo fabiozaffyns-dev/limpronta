@@ -50,7 +50,7 @@ export function StoreMap({
 
       map = L.map(containerRef.current, {
         center: [lat, lng],
-        zoom: 16,
+        zoom: 17,
         scrollWheelZoom: false,
         zoomControl: true,
         attributionControl: true,
@@ -69,8 +69,8 @@ export function StoreMap({
       const icon = L.divIcon({
         className: 'store-pin-wrap',
         html: '<span class="store-pin"></span>',
-        iconSize: [22, 22],
-        iconAnchor: [11, 11],
+        iconSize: [18, 18],
+        iconAnchor: [9, 9],
       })
       L.marker([lat, lng], { icon, keyboard: false, title: label }).addTo(map)
 
