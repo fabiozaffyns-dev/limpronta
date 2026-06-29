@@ -19,13 +19,12 @@ export function Wordmark({ as: Tag = 'span', className, scuro = false, ...rest }
     <Tag
       {...rest}
       className={cn(
-        'font-display uppercase leading-none select-none',
+        'wordmark select-none',
         scuro ? 'text-avorio incisa-scuro' : 'text-inchiostro incisa',
         className,
       )}
-      style={{ letterSpacing: '0.05em', fontWeight: 500 }}
     >
-      L<span style={{ letterSpacing: '0.02em' }}>’</span>Impronta
+      L<span style={{ letterSpacing: '0.04em' }}>’</span>Impronta
     </Tag>
   )
 }

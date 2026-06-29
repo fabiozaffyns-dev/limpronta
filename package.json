@@ -22,7 +22,9 @@
     "migrate:status": "cross-env NODE_OPTIONS=--no-deprecation payload migrate:status",
     "seed": "cross-env NODE_OPTIONS=--no-deprecation node --env-file=.env --import tsx/esm src/scripts/seed.ts",
     "template:prodotti": "tsx src/scripts/make-template.ts",
-    "import:prodotti": "cross-env NODE_OPTIONS=--no-deprecation node --env-file=.env --import tsx/esm src/scripts/import-products.ts"
+    "import:prodotti": "cross-env NODE_OPTIONS=--no-deprecation node --env-file=.env --import tsx/esm src/scripts/import-products.ts",
+    "demo": "cross-env NODE_OPTIONS=--no-deprecation node --env-file=.env --import tsx/esm src/scripts/seed-demo.ts",
+    "demo:clear": "cross-env NODE_OPTIONS=--no-deprecation node --env-file=.env --import tsx/esm src/scripts/seed-demo.ts clear"
   },
   "dependencies": {
     "@gsap/react": "2.1.2",

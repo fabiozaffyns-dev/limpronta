@@ -35,6 +35,14 @@ const BRANDS = [
   'Canadiens',
   'Shockly',
   'SP1',
+  'Valsport',
+  'Replay',
+  'Reebok Classic',
+  'Suns',
+  'SUN68',
+  '40WEFT',
+  'Homeward',
+  'AT.P.CO',
 ]
 
 const SERVICES = [

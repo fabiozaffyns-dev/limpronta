@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Fraunces, Hanken_Grotesk } from 'next/font/google'
+import { Cinzel, Fraunces, Hanken_Grotesk } from 'next/font/google'
 
 import { ConsentBanner } from '@/components/ConsentBanner'
 import { Footer } from '@/components/layout/Footer'
@@ -22,6 +22,14 @@ const hanken = Hanken_Grotesk({
   subsets: ['latin'],
   variable: '--font-hanken',
   display: 'swap',
+})
+
+// Wordmark "L'IMPRONTA" — serif lapidaria, vicina all'insegna del negozio.
+const cinzel = Cinzel({
+  subsets: ['latin'],
+  variable: '--font-cinzel',
+  display: 'swap',
+  weight: ['400', '500', '600'],
 })
 
 const SITE = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
@@ -49,7 +57,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   const settings = await getSettings()
 
   return (
-    <html lang="it" className={`${fraunces.variable} ${hanken.variable}`}>
+    <html lang="it" className={`${fraunces.variable} ${hanken.variable} ${cinzel.variable}`}>
       <body>
         {/* Aggiunge html.js prima del paint: niente flash, reveal coerente. */}
         <script

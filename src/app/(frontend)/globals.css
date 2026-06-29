@@ -26,6 +26,7 @@
   /* Tipografia (le var --font-fraunces/--font-hanken arrivano da next/font) */
   --font-display: var(--font-fraunces), Georgia, 'Times New Roman', serif;
   --font-body: var(--font-hanken), system-ui, -apple-system, sans-serif;
+  --font-wordmark: var(--font-cinzel), 'Times New Roman', serif; /* logo, stile insegna */
 
   /* Misure editoriali */
   --tracking-cartellino: 0.2em;
@@ -176,6 +177,19 @@
     text-shadow:
       0 1px 1px rgba(0, 0, 0, 0.55),
       0 -1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  /* Wordmark "L'IMPRONTA": serif lapidaria, leggermente allungata come l'insegna.
+     --wordmark-stretch regola l'elongazione verticale (1 = neutro). */
+  .wordmark {
+    font-family: var(--font-wordmark);
+    text-transform: uppercase;
+    font-weight: 500;
+    letter-spacing: 0.11em;
+    line-height: 1;
+    display: inline-block;
+    transform: scaleY(var(--wordmark-stretch, 1.12));
+    transform-origin: center;
   }
 
   /* Pulsanti */
