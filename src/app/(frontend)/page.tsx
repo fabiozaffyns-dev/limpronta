@@ -6,6 +6,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { DebossHero } from '@/components/motion/DebossHero'
+import { CredoReveal } from '@/components/motion/CredoReveal'
 import { GridStagger } from '@/components/motion/GridStagger'
 import { Reveal } from '@/components/motion/Reveal'
 import { SplitLines } from '@/components/motion/SplitLines'
@@ -78,11 +79,11 @@ export default async function HomePage() {
         <div className="shell py-28 md:py-36">
           <Reveal>
             <Eyebrow scuro>Il nostro credo</Eyebrow>
-            <p className="mt-8 max-w-4xl font-display text-3xl leading-[1.18] text-avorio md:text-[3.25rem]">
-              <span className="italic text-ottone-chiaro">La cura</span> prima della quantità. Pochi
-              marchi, scelti uno a uno, che condividono la stessa idea di misura: tessuti veri, tagli
-              che durano, dettagli che si notano solo da vicino.
-            </p>
+            <CredoReveal className="mt-8 max-w-4xl font-display text-3xl leading-[1.18] text-avorio md:text-[3.25rem]">
+              <span className="italic">La cura</span> prima della quantità. Pochi marchi, scelti uno a
+              uno, che condividono la stessa idea di misura: tessuti veri, tagli che durano, dettagli
+              che si notano solo da vicino.
+            </CredoReveal>
             <p className="mt-10 max-w-xl text-lg text-avorio/70">
               Vestire bene è una forma di rispetto — per sé e per gli altri. Dal 2014 è il nostro
               mestiere, in Via Vittorio Emanuele II a Orbassano.

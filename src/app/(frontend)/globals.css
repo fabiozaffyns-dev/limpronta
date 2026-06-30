@@ -217,6 +217,24 @@
     inset: 16px;
   }
 
+  /* "Respiro" della Fraunces variabile: peso e optical-size crescono all'ingresso
+     in vista (riusa le @property --mk-wght/--mk-opsz già registrate in cima). */
+  .fraunces-breathe {
+    font-variation-settings: 'opsz' var(--mk-opsz, 24), 'wght' var(--mk-wght, 400);
+    transition:
+      --mk-wght 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+      --mk-opsz 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .fraunces-breathe.is-in {
+    --mk-wght: 540;
+    --mk-opsz: 40;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fraunces-breathe {
+      transition: none;
+    }
+  }
+
   /* Segno inciso/debossato su fondo chiaro: leggero rilievo "pressato" */
   .incisa {
     text-shadow:

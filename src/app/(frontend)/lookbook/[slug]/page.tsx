@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { RichText } from '@/components/ui/RichText'
+import { ParallaxMedia } from '@/components/motion/ParallaxMedia'
 import { cn } from '@/lib/cn'
 import { formatStagioneEstesa } from '@/lib/format'
 import { mediaUrl } from '@/lib/media'
@@ -55,13 +56,24 @@ export default async function LookbookPage({ params }: Params) {
             const wide = i === 0 || i % 5 === 4
             return (
               <div key={i} className={cn(wide && 'sm:col-span-2')}>
-                <CloudinaryImage
-                  media={img}
-                  alt={`${lb.titolo} — ${i + 1}`}
-                  aspect={wide ? '16 / 9' : '4 / 5'}
-                  sizes={wide ? '100vw' : '(max-width: 640px) 100vw, 50vw'}
-                  priority={i === 0}
-                />
+                {wide ? (
+                  <ParallaxMedia>
+                    <CloudinaryImage
+                      media={img}
+                      alt={`${lb.titolo} — ${i + 1}`}
+                      aspect="16 / 9"
+                      sizes="100vw"
+                      priority={i === 0}
+                    />
+                  </ParallaxMedia>
+                ) : (
+                  <CloudinaryImage
+                    media={img}
+                    alt={`${lb.titolo} — ${i + 1}`}
+                    aspect="4 / 5"
+                    sizes="(max-width: 640px) 100vw, 50vw"
+                  />
+                )}
               </div>
             )
           })}

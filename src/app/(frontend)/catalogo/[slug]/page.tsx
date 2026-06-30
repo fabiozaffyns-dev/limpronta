@@ -8,6 +8,7 @@ import { ProductGallery } from '@/components/ProductGallery'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { RichText } from '@/components/ui/RichText'
+import { Breathe } from '@/components/motion/Breathe'
 import { cn } from '@/lib/cn'
 import { formatPrice, formatStagioneEstesa } from '@/lib/format'
 import { breadcrumbLd, productLd } from '@/lib/json-ld'
@@ -97,7 +98,9 @@ export default async function ProductPage({ params }: Params) {
                 </Link>
               </Eyebrow>
             )}
-            <h1 className="mt-4 text-4xl uppercase leading-tight md:text-5xl">{product.nome}</h1>
+            <Breathe as="h1" className="mt-4 text-4xl uppercase leading-tight md:text-5xl">
+              {product.nome}
+            </Breathe>
             <p className="mt-4 font-display text-2xl text-ottone-testo">{prezzo}</p>
 
             {product.descrizione && <RichText data={product.descrizione} className="mt-8" />}
