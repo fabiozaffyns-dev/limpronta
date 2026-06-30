@@ -18,9 +18,11 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const lenis = new Lenis({
-      duration: 1.1,
+      // lerp = interpolazione continua verso il target: scroll più "setoso" e
+      // fluido di duration+easing (che riparte ad ogni tacca della rotella).
+      lerp: 0.08,
       smoothWheel: true,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      wheelMultiplier: 1,
     })
     ;(window as unknown as { __lenis?: Lenis }).__lenis = lenis
 

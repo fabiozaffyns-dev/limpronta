@@ -4,6 +4,7 @@ import { Suspense } from 'react'
 
 import { Filters } from '@/components/Filters'
 import { ProductCard } from '@/components/ProductCard'
+import { GridStagger } from '@/components/motion/GridStagger'
 import { PageIntro } from '@/components/ui/PageIntro'
 import {
   getBrands,
@@ -77,11 +78,11 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
             </Link>
           </div>
         ) : (
-          <div className="mt-6 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
+          <GridStagger className="mt-6 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
             {products.map((p, i) => (
               <ProductCard key={p.id} product={p} priority={i < 4} />
             ))}
-          </div>
+          </GridStagger>
         )}
 
         <Pagination

@@ -817,6 +817,12 @@
     html.js .split-lines {
       opacity: 0;
     }
+    /* Tessere di griglia: pre-nascoste, entrano a onda (GridStagger). */
+    html.js .grid-stagger > * {
+      opacity: 0;
+      transform: translateY(28px);
+      will-change: opacity, transform;
+    }
     /* Filetti e trattini eyebrow che si "tracciano" da sinistra allo scroll. */
     html.js .filetto,
     html.js [data-traccia] {

@@ -6,6 +6,7 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { DebossHero } from '@/components/motion/DebossHero'
+import { GridStagger } from '@/components/motion/GridStagger'
 import { Reveal } from '@/components/motion/Reveal'
 import { SplitLines } from '@/components/motion/SplitLines'
 import { formatStagioneEstesa } from '@/lib/format'
@@ -107,13 +108,11 @@ export default async function HomePage() {
             </div>
           </Reveal>
 
-          <div className="mt-12 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
+          <GridStagger className="mt-12 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
             {featured.map((p, i) => (
-              <Reveal key={p.id} delay={(i % 4) * 80}>
-                <ProductCard product={p} priority={i < 4} />
-              </Reveal>
+              <ProductCard key={p.id} product={p} priority={i < 4} />
             ))}
-          </div>
+          </GridStagger>
           <Link href="/catalogo" className="cartellino link-segno mt-10 inline-block text-ottone-testo sm:hidden">
             Tutto il catalogo →
           </Link>
