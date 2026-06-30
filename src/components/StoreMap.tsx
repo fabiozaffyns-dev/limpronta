@@ -66,13 +66,21 @@ export function StoreMap({
           '&copy; Stadia Maps &copy; OpenMapTiles &copy; OpenStreetMap contributors',
       }).addTo(map)
 
+      // Pin centrale = il wordmark "L'Impronta" in bianco (la mappa è scura),
+      // cliccabile: porta all'indirizzo su Google Maps.
       const icon = L.divIcon({
-        className: 'store-pin-wrap',
-        html: '<span class="store-pin"></span>',
-        iconSize: [18, 18],
-        iconAnchor: [9, 9],
+        className: 'store-mark-wrap',
+        html: '<span class="store-mark">L’Impronta</span>',
+        iconSize: [200, 48],
+        iconAnchor: [100, 24],
       })
-      L.marker([lat, lng], { icon, keyboard: false, title: label }).addTo(map)
+      const marker = L.marker([lat, lng], {
+        icon,
+        keyboard: false,
+        title: label,
+        riseOnHover: true,
+      }).addTo(map)
+      marker.on('click', () => window.open(mapsUrl, '_blank', 'noopener,noreferrer'))
 
       // Ricalcola la dimensione dopo il mount (evita la mappa "vuota").
       setTimeout(() => {
@@ -84,7 +92,7 @@ export function StoreMap({
       cancelled = true
       if (map) map.remove()
     }
-  }, [active, lat, lng, label])
+  }, [active, lat, lng, label, mapsUrl])
 
   return (
     <div className="relative h-[60vh] min-h-[400px] w-full overflow-hidden bg-inchiostro-tenue">

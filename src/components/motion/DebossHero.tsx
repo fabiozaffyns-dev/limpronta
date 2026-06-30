@@ -76,12 +76,59 @@ export function DebossHero({
         .from('[data-hero-cta] > *', { y: 16, autoAlpha: 0, stagger: 0.13, duration: 0.65 }, '-=0.45')
         .from('[data-hero-scroll]', { autoAlpha: 0, y: -6, duration: 0.9 }, '-=0.15')
 
-      gsap.to('[data-hero-word]', {
-        yPercent: -6,
-        autoAlpha: 0.2,
-        ease: 'none',
-        scrollTrigger: { trigger: root.current, start: 'top top', end: 'bottom top', scrub: true },
+      // ── "IL CONIO" — lo sprofondo del sigillo ──────────────────────────────
+      // Pin + scrub: l'UI si ritira, il wordmark si serra e affonda (deboss),
+      // una lama di luce ottone lo attraversa, poi una lastra di Lino sale da
+      // sotto e le STESSE lettere diventano l'impronta scura su carta chiara,
+      // consegnando senza stacco al Muro dei marchi. Solo transform/opacity/
+      // clip-path (GPU); ease 'none' (lo scrub È il tempo); ampiezze micro.
+      const conio = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: {
+          trigger: root.current,
+          start: 'top top',
+          end: '+=120%',
+          pin: true,
+          pinSpacing: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
       })
+
+      // BEAT 1 — ritiro UI: resta solo il segno.
+      conio
+        .to('[data-hero-scroll]', { autoAlpha: 0, y: -6, duration: 0.06 }, 0)
+        .to('[data-hero-eyebrow]', { autoAlpha: 0, y: -14, duration: 0.12 }, 0.02)
+        .to('[data-hero-tag]', { autoAlpha: 0, y: 16, duration: 0.12 }, 0.04)
+        .to('[data-hero-cta]', { autoAlpha: 0, y: 24, duration: 0.12 }, 0.06)
+        .to('[data-hero-veil]', { opacity: 0.9, duration: 0.18 }, 0)
+
+      // BEAT 2 — la serratura + l'affondo: il conio si arma e morde la materia.
+      conio.to(
+        '[data-hero-word]',
+        { scale: 0.965, yPercent: 3, transformOrigin: '50% 56%', duration: 0.34 },
+        0.16,
+      )
+
+      // BEAT 3 — il foglio sale DIETRO + inversione tinta: le lettere diventano
+      // impronta scura su carta chiara (stesso nodo, nessun clone da allineare).
+      conio
+        .to('[data-hero-sheet]', { clipPath: 'inset(0% 0 0 0)', duration: 0.42 }, 0.4)
+        .to('[data-hero-media]', { yPercent: -6, duration: 0.42 }, 0.4)
+        .to('[data-mark-light]', { opacity: 0, duration: 0.2 }, 0.56)
+        .to('[data-mark-dark]', { opacity: 1, duration: 0.2 }, 0.56)
+
+      // BEAT 4 — la lama di luce ottone: un solo passaggio sull'incisione.
+      conio.fromTo('[data-hero-rake]', { '--rake': '-40%' }, { '--rake': '140%', duration: 0.2 }, 0.78)
+
+      // BEAT 5 — settle: micro-rilascio, l'impronta "respira" e consegna.
+      conio
+        .to('[data-hero-word]', { scale: 0.972, yPercent: 1, duration: 0.14 }, 0.86)
+        .to('[data-mark-dark]', { opacity: 0.96, duration: 0.14 }, 0.86)
+
+      // Ricalcola le misure del pin dopo i font (evita salti d'altezza).
+      void document.fonts?.ready.then(() => ScrollTrigger.refresh())
 
       return () => split?.revert()
     },
@@ -94,47 +141,79 @@ export function DebossHero({
       className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 text-center"
     >
       {dark && heroMedia && (
-        <div aria-hidden className="absolute inset-0">
-          {heroMedia.isVideo ? (
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              className="h-full w-full object-cover"
-              src={heroMedia.url}
+        <>
+          <div data-hero-media aria-hidden className="absolute inset-0 z-0">
+            {heroMedia.isVideo ? (
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="h-full w-full object-cover"
+                src={heroMedia.url}
+              />
+            ) : (
+              <Image src={heroMedia.url} alt="" fill priority sizes="100vw" className="object-cover" />
+            )}
+            {/* Velo scuro: vignettatura (centro più chiaro, bordi scuri) + gradiente
+               verticale. Tiene il wordmark leggibile e dà profondità al media. */}
+            <div
+              data-hero-veil
+              className="absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(120% 90% at 50% 42%, rgba(20,18,16,0.35) 0%, rgba(20,18,16,0.62) 100%), linear-gradient(180deg, rgba(20,18,16,0.62) 0%, rgba(20,18,16,0.55) 45%, rgba(20,18,16,0.8) 100%)',
+              }}
             />
-          ) : (
-            <Image src={heroMedia.url} alt="" fill priority sizes="100vw" className="object-cover" />
-          )}
-          {/* Velo scuro: vignettatura (centro più chiaro, bordi scuri) + gradiente
-             verticale. Tiene il wordmark leggibile e dà profondità al media. */}
+          </div>
+          {/* La lastra di Lino: il "foglio premuto". A riposo è chiusa dal basso
+             (clip-path), sale durante il colpo e diventa il fondo chiaro della
+             pagina — stesso colore del Muro dei marchi → raccordo senza stacco. */}
           <div
-            className="absolute inset-0"
-            style={{
-              background:
-                'radial-gradient(120% 90% at 50% 42%, rgba(20,18,16,0.35) 0%, rgba(20,18,16,0.62) 100%), linear-gradient(180deg, rgba(20,18,16,0.62) 0%, rgba(20,18,16,0.55) 45%, rgba(20,18,16,0.8) 100%)',
-            }}
+            data-hero-sheet
+            aria-hidden
+            className="absolute inset-0 z-[1] bg-lino"
+            style={{ clipPath: 'inset(100% 0 0 0)', willChange: 'clip-path' }}
           />
-        </div>
+        </>
       )}
 
-      <div data-hero-eyebrow className="relative">
+      <div data-hero-eyebrow className="relative z-[2]">
         <Eyebrow as="div" scuro={dark}>
           Abbigliamento uomo · Orbassano · dal 2014
         </Eyebrow>
       </div>
 
-      <h1 className="relative mt-10">
-        <span data-hero-word className="inline-block will-change-transform">
-          <Wordmark data-hero-mark scuro={dark} className="block text-[clamp(3.75rem,17vw,13.5rem)]" />
+      <h1 className="relative z-[2] mt-10">
+        <span data-hero-word className="grid will-change-transform">
+          {/* (A) copia CHIARA — visibile a riposo (avorio su scuro). È quella che
+              l'intro anima (SplitText) e che porta il segno fino al colpo. */}
+          <Wordmark
+            data-hero-mark
+            data-mark-light
+            scuro={dark}
+            className="col-start-1 row-start-1 block text-[clamp(3.75rem,17vw,13.5rem)] [grid-area:1/1]"
+          />
+          {/* (B) copia SCURA — l'impronta (inchiostro + deboss su chiaro). A riposo
+              invisibile; appare quando la lastra di Lino la raggiunge. */}
+          <Wordmark
+            aria-hidden
+            data-mark-dark
+            className="pointer-events-none col-start-1 row-start-1 block text-[clamp(3.75rem,17vw,13.5rem)] opacity-0 [grid-area:1/1]"
+          />
+          {/* (C) copia RAKE — solo la lama di luce ottone (CSS: clip:text + screen). */}
+          <Wordmark
+            aria-hidden
+            data-hero-rake
+            className="pointer-events-none col-start-1 row-start-1 block text-[clamp(3.75rem,17vw,13.5rem)] [grid-area:1/1]"
+          />
         </span>
       </h1>
 
       <p
         data-hero-tag
         className={cn(
-          'relative mt-10 max-w-xl text-lg leading-relaxed md:text-xl',
+          'relative z-[2] mt-10 max-w-xl text-lg leading-relaxed md:text-xl',
           dark ? 'text-avorio/85' : 'text-pietra-scura',
         )}
       >
@@ -142,7 +221,7 @@ export function DebossHero({
         guarda, si tocca, si prenota in negozio.
       </p>
 
-      <div data-hero-cta className="relative mt-12 flex flex-wrap items-center justify-center gap-4">
+      <div data-hero-cta className="relative z-[2] mt-12 flex flex-wrap items-center justify-center gap-4">
         <Link href="/catalogo" className={cn('btn', dark ? 'btn-ottone' : 'btn-primario')}>
           <SwapLabel>Esplora il catalogo</SwapLabel>
         </Link>
@@ -156,7 +235,7 @@ export function DebossHero({
 
       <div
         data-hero-scroll
-        className="absolute bottom-8 left-1/2 flex -translate-x-1/2 flex-col items-center gap-3"
+        className="absolute bottom-8 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-3"
       >
         <span className={cn('cartellino', dark ? 'text-avorio/80' : 'text-pietra-scura')}>Scorri</span>
         <span
