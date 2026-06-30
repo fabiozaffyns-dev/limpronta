@@ -742,76 +742,35 @@
     }
   }
 
-  /* Pin centrale della mappa = il wordmark "L'Impronta" in bianco, cliccabile
-     (porta all'indirizzo su Maps). Un alone caldo in ottone respira dietro le
-     lettere per risaltare sulla mappa scura. */
+  /* Pin della mappa: il dot in ottone (.store-pin) resta sul punto, con SOPRA il
+     wordmark "L'Impronta" — bianco (mappa scura) e stretto come in header (eredita
+     la transform di .wordmark). Tutto cliccabile → indirizzo su Maps. */
   .leaflet-div-icon.store-mark-wrap {
     background: transparent;
     border: none;
     overflow: visible;
-    display: grid;
-    place-items: center;
-  }
-  .store-mark-wrap::before {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    width: 160px;
-    height: 64px;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    background: radial-gradient(
-      closest-side,
-      color-mix(in srgb, var(--color-ottone) 32%, transparent),
-      transparent 76%
-    );
-    animation: store-mark-breathe 3.2s ease-in-out infinite;
-    pointer-events: none;
-    z-index: -1;
-  }
-  @keyframes store-mark-breathe {
-    0%,
-    100% {
-      opacity: 0.4;
-    }
-    50% {
-      opacity: 0.78;
-    }
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
   }
   .store-mark {
-    position: relative;
-    font-family: var(--font-wordmark);
-    text-transform: uppercase;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    line-height: 1;
-    font-size: 1.7rem;
-    white-space: nowrap;
     color: #fff;
-    text-decoration: none;
+    font-size: 2rem;
+    white-space: nowrap;
     text-shadow:
-      0 2px 14px rgba(0, 0, 0, 0.8),
+      0 2px 14px rgba(0, 0, 0, 0.85),
       0 0 3px rgba(0, 0, 0, 0.9);
-    cursor: pointer;
     transition:
       color 0.35s ease,
-      text-shadow 0.35s ease,
-      transform 0.35s ease;
+      text-shadow 0.35s ease;
   }
-  .store-mark-wrap:hover .store-mark,
-  .store-mark:focus-visible {
+  .store-mark-wrap:hover .store-mark {
     color: color-mix(in srgb, var(--color-ottone-chiaro) 35%, #fff);
     text-shadow:
-      0 2px 16px rgba(0, 0, 0, 0.85),
+      0 2px 16px rgba(0, 0, 0, 0.9),
       0 0 16px color-mix(in srgb, var(--color-ottone-chiaro) 60%, transparent);
-    transform: scale(1.05);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .store-mark-wrap::before {
-      animation: none;
-      opacity: 0.5;
-    }
   }
 
   /* Placeholder materico (in attesa delle foto reali): non stock, coerente col design */
