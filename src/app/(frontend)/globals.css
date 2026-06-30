@@ -226,8 +226,8 @@
       --mk-opsz 0.9s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .fraunces-breathe.is-in {
-    --mk-wght: 540;
-    --mk-opsz: 40;
+    --mk-wght: 720;
+    --mk-opsz: 48;
   }
   @media (prefers-reduced-motion: reduce) {
     .fraunces-breathe {
