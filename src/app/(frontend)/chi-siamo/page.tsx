@@ -5,6 +5,7 @@ import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { EditorialFigure } from '@/components/ui/EditorialFigure'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { MaskReveal } from '@/components/motion/MaskReveal'
+import { SplitLines } from '@/components/motion/SplitLines'
 import { PageIntro } from '@/components/ui/PageIntro'
 import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Reveal } from '@/components/motion/Reveal'
@@ -57,7 +58,9 @@ export default async function ChiSiamoPage() {
         </MaskReveal>
         <Reveal delay={120}>
           <Eyebrow>La nostra storia</Eyebrow>
-          <h2 className="mt-4 text-3xl md:text-4xl">Nata da una passione, cresciuta con misura.</h2>
+          <SplitLines as="h2" className="mt-4 text-3xl md:text-4xl">
+            Nata da una passione, cresciuta con misura.
+          </SplitLines>
           <div className="mt-6 space-y-5 text-lg text-pietra-scura">
             <p>
               Abbiamo aperto nel 2014 con un&apos;ambizione precisa: portare a Orbassano un
@@ -96,7 +99,9 @@ export default async function ChiSiamoPage() {
       <section className="shell py-24">
         <Reveal>
           <Eyebrow>Come lavoriamo</Eyebrow>
-          <h2 className="mt-4 max-w-2xl text-3xl md:text-4xl">Tre cose a cui non rinunciamo.</h2>
+          <SplitLines as="h2" className="mt-4 max-w-2xl text-3xl md:text-4xl">
+            Tre cose a cui non rinunciamo.
+          </SplitLines>
         </Reveal>
         <div className="mt-14 grid gap-12 md:grid-cols-3">
           {VALORI.map((v, i) => (
@@ -125,7 +130,9 @@ export default async function ChiSiamoPage() {
         </MaskReveal>
         <Reveal delay={120} className="lg:order-1">
           <Eyebrow>Vieni a trovarci</Eyebrow>
-          <h2 className="mt-4 text-3xl md:text-4xl">Ti aspettiamo a Orbassano.</h2>
+          <SplitLines as="h2" className="mt-4 text-3xl md:text-4xl">
+            Ti aspettiamo a Orbassano.
+          </SplitLines>
           <p className="mt-6 text-lg text-pietra-scura">
             {via ? `In ${via}, ` : ''}nel cuore di Orbassano: uno spazio dove prendersi il tempo di
             guardare, toccare e capire. Passa quando vuoi, o prenota un momento dedicato.

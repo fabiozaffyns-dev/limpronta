@@ -7,6 +7,7 @@ import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { DebossHero } from '@/components/motion/DebossHero'
 import { Reveal } from '@/components/motion/Reveal'
+import { SplitLines } from '@/components/motion/SplitLines'
 import { formatStagioneEstesa } from '@/lib/format'
 import { mediaDoc } from '@/lib/media'
 import { safeHref } from '@/lib/sanitize'
@@ -96,7 +97,9 @@ export default async function HomePage() {
             <div className="flex items-end justify-between gap-6">
               <div>
                 <Eyebrow>Selezione</Eyebrow>
-                <h2 className="mt-4 text-4xl md:text-5xl">In evidenza</h2>
+                <SplitLines as="h2" className="mt-4 text-4xl md:text-5xl">
+                  In evidenza
+                </SplitLines>
               </div>
               <Link href="/catalogo" className="cartellino link-segno hidden text-ottone-testo sm:block">
                 Tutto il catalogo
@@ -137,7 +140,9 @@ export default async function HomePage() {
             <div className="flex items-center px-8 py-20 md:px-16">
               <Reveal>
                 <Eyebrow scuro>Lookbook</Eyebrow>
-                <h2 className="mt-4 text-4xl text-avorio md:text-5xl">{lookbook.titolo}</h2>
+                <SplitLines as="h2" className="mt-4 text-4xl text-avorio md:text-5xl">
+                  {lookbook.titolo}
+                </SplitLines>
                 <p className="mt-6 max-w-md text-avorio/70">
                   Racconti di stagione: accostamenti, materiali e dettagli che lasciano il segno.
                 </p>
