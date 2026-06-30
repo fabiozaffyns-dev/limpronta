@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { EditorialFigure } from '@/components/ui/EditorialFigure'
 import { Eyebrow } from '@/components/ui/Eyebrow'
+import { MaskReveal } from '@/components/motion/MaskReveal'
 import { PageIntro } from '@/components/ui/PageIntro'
 import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Reveal } from '@/components/motion/Reveal'
@@ -46,14 +47,14 @@ export default async function ChiSiamoPage() {
 
       {/* ─── Storia ───────────────────────────────────────────────────────── */}
       <section className="shell grid items-center gap-12 pb-24 lg:grid-cols-2 lg:gap-20">
-        <Reveal>
+        <MaskReveal>
           <EditorialFigure
             media={settings.chiSiamoFoto1}
             alt="L'Impronta — la nostra storia"
             aspect="4 / 5"
             label="Orbassano · dal 2014"
           />
-        </Reveal>
+        </MaskReveal>
         <Reveal delay={120}>
           <Eyebrow>La nostra storia</Eyebrow>
           <h2 className="mt-4 text-3xl md:text-4xl">Nata da una passione, cresciuta con misura.</h2>
@@ -114,14 +115,14 @@ export default async function ChiSiamoPage() {
 
       {/* ─── Il negozio + CTA ─────────────────────────────────────────────── */}
       <section className="shell grid items-center gap-12 pb-28 lg:grid-cols-2 lg:gap-20">
-        <Reveal className="lg:order-2">
+        <MaskReveal className="lg:order-2">
           <EditorialFigure
             media={settings.chiSiamoFoto2}
             alt="Il negozio L'Impronta a Orbassano"
             aspect="4 / 3"
             label="Il negozio"
           />
-        </Reveal>
+        </MaskReveal>
         <Reveal delay={120} className="lg:order-1">
           <Eyebrow>Vieni a trovarci</Eyebrow>
           <h2 className="mt-4 text-3xl md:text-4xl">Ti aspettiamo a Orbassano.</h2>

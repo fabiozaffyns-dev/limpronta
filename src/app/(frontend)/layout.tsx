@@ -5,6 +5,7 @@ import { ConsentBanner } from '@/components/ConsentBanner'
 import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { LenisProvider } from '@/components/motion/LenisProvider'
+import { TracciaProvider } from '@/components/motion/TracciaProvider'
 import { clothingStoreLd } from '@/lib/json-ld'
 import { mediaDoc } from '@/lib/media'
 import { getSettings } from '@/lib/queries'
@@ -87,6 +88,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         </LenisProvider>
 
         <ConsentBanner />
+        <TracciaProvider />
       </body>
     </html>
   )

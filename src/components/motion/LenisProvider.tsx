@@ -1,34 +1,45 @@
 'use client'
 
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { useEffect, type ReactNode } from 'react'
 
+gsap.registerPlugin(ScrollTrigger)
+
 /**
- * Smooth scroll Lenis. Disattivato se l'utente preferisce meno movimento.
- * Aggiunge anche html.js (ridondante con lo script inline di layout, ma sicuro).
+ * Smooth scroll Lenis AGGANCIATO a ScrollTrigger su un solo RAF (gsap.ticker):
+ * è il telaio del ritmo, così ogni effetto scrubbato (parallax) segue lo smooth
+ * scroll senza scatti. Disattivato se l'utente preferisce meno movimento.
  */
 export function LenisProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // html.js è già aggiunto dallo script inline in layout (pre-paint).
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduce) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
 
     const lenis = new Lenis({
       duration: 1.1,
       smoothWheel: true,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     })
+    ;(window as unknown as { __lenis?: Lenis }).__lenis = lenis
 
-    let rafId = 0
-    const raf = (time: number) => {
-      lenis.raf(time)
-      rafId = requestAnimationFrame(raf)
-    }
-    rafId = requestAnimationFrame(raf)
+    // Bridge: ogni scroll di Lenis aggiorna ScrollTrigger; un unico ticker guida
+    // il raf di Lenis (niente loop concorrenti).
+    lenis.on('scroll', ScrollTrigger.update)
+    const onTick = (time: number) => lenis.raf(time * 1000)
+    gsap.ticker.add(onTick)
+    gsap.ticker.lagSmoothing(0)
+
+    // Posizioni corrette con Lenis attivo.
+    ScrollTrigger.refresh()
 
     return () => {
-      cancelAnimationFrame(rafId)
+      gsap.ticker.remove(onTick)
+      lenis.off('scroll', ScrollTrigger.update)
       lenis.destroy()
+      delete (window as unknown as { __lenis?: Lenis }).__lenis
+      ScrollTrigger.refresh()
     }
   }, [])
 

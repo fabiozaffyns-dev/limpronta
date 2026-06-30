@@ -24,6 +24,7 @@ export function Eyebrow({
     >
       <span
         aria-hidden
+        data-traccia
         className={cn('inline-block h-px w-6 opacity-70', scuro ? 'bg-ottone-chiaro' : 'bg-ottone')}
       />
       {children}

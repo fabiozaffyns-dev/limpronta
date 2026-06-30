@@ -55,7 +55,6 @@
 
   html {
     -webkit-text-size-adjust: 100%;
-    scroll-behavior: smooth;
   }
 
   body {
@@ -178,6 +177,30 @@
     border: 0;
     height: 1px;
     background-color: color-mix(in srgb, var(--color-ottone) 55%, transparent);
+  }
+
+  /* Cornice-sigillo in ottone che si traccia all'hover/focus di una superficie
+     con classe .group. Generalizza l'hover di EditorialFigure alle card. */
+  .sigillo {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+  }
+  .sigillo::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px solid color-mix(in srgb, var(--color-ottone) 75%, transparent);
+    clip-path: inset(0 100% 100% 0);
+    transition:
+      clip-path 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+      inset 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .group:hover .sigillo::before,
+  .group:focus-visible .sigillo::before {
+    clip-path: inset(0 0 0 0);
+    inset: 18px;
   }
 
   /* Segno inciso/debossato su fondo chiaro: leggero rilievo "pressato" */
@@ -763,6 +786,29 @@
     html.js .reveal.is-in {
       opacity: 1;
       transform: none;
+    }
+  }
+
+  /* Velina (MaskReveal): default visibile; con JS la maschera parte chiusa così
+     non c'è flash prima dell'animazione GSAP. */
+  .reveal-mask {
+    clip-path: inset(0 0 0 0);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html.js .reveal-mask {
+      clip-path: inset(100% 0 0 0);
+    }
+    /* Filetti e trattini eyebrow che si "tracciano" da sinistra allo scroll. */
+    html.js .filetto,
+    html.js [data-traccia] {
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+    html.js .filetto.is-tracciato,
+    html.js [data-traccia].is-tracciato {
+      transform: scaleX(1);
     }
   }
 }

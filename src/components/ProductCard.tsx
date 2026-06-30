@@ -33,6 +33,8 @@ export function ProductCard({
         />
         {/* overlay sottile all'hover */}
         <span className="pointer-events-none absolute inset-0 bg-inchiostro/0 transition-colors duration-500 group-hover:bg-inchiostro/5" />
+        {/* cornice-sigillo in ottone che si traccia all'hover */}
+        <span aria-hidden className="sigillo" />
 
         {stagione && (
           <span className="cartellino absolute left-3 top-3 bg-lino/85 px-2 py-1 text-pietra-scura backdrop-blur-sm">
