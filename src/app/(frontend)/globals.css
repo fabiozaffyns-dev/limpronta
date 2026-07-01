@@ -304,7 +304,9 @@
       transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
   /* Lama di luce ottone che attraversa il nome invitato (copia sovrapposta, la
-     "firma" dell'hero — contenuta nel nome, niente pannello). A riposo invisibile. */
+     "firma" dell'hero — contenuta nel nome, niente pannello). A riposo invisibile:
+     la banda d'ottone (larga ~55%) parte fuori a sinistra e spazza a destra via
+     animazione di background-position (affidabile). */
   .indice-nome-rake {
     position: absolute;
     inset: 0;
@@ -313,17 +315,27 @@
     -webkit-text-fill-color: transparent;
     background-image: linear-gradient(
       100deg,
-      transparent calc(var(--rake) - 12%),
-      var(--color-ottone-chiaro) var(--rake),
-      transparent calc(var(--rake) + 12%)
+      transparent 0%,
+      color-mix(in srgb, var(--color-ottone-chiaro) 55%, transparent) 34%,
+      var(--color-ottone-chiaro) 50%,
+      color-mix(in srgb, var(--color-ottone-chiaro) 55%, transparent) 66%,
+      transparent 100%
     );
+    background-size: 55% 100%;
+    background-repeat: no-repeat;
+    background-position: -70% 0;
     -webkit-background-clip: text;
     background-clip: text;
-    mix-blend-mode: screen;
     opacity: 0;
-    transition:
-      opacity 0.3s ease,
-      --rake 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.25s ease;
+  }
+  @keyframes indice-rake {
+    from {
+      background-position: -70% 0;
+    }
+    to {
+      background-position: 170% 0;
+    }
   }
   .indice-meta {
     align-self: center;
@@ -366,7 +378,7 @@
   .indice-riga:hover .indice-nome-rake,
   .indice-riga:focus-visible .indice-nome-rake {
     opacity: 1;
-    --rake: 140%;
+    animation: indice-rake 0.75s cubic-bezier(0.22, 1, 0.36, 1);
   }
   /* Con reduced-motion: niente indent né lama, resta solo il cambio tinta/peso. */
   @media (prefers-reduced-motion: reduce) {
