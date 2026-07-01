@@ -17,11 +17,12 @@ export function ProductCard({
 }) {
   const brand = rel<Brand>(product.brand)
   const cover = product.immagini?.[0]
+  const coverHover = product.immagini?.[1] // se esiste: "seconda pelle" in crossfade all'hover
   const prezzo = formatPrice(product.prezzo, product.prezzoSuRichiesta)
   const stagione = formatStagione(product.stagione)
 
   return (
-    <Link href={`/catalogo/${product.slug}`} className="group block">
+    <Link href={`/catalogo/${product.slug}`} className="card-lift group relative block">
       <div className="relative overflow-hidden">
         <CloudinaryImage
           media={cover}
@@ -31,10 +32,21 @@ export function ProductCard({
           priority={priority}
           imgClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.045]"
         />
+        {/* Seconda pelle: la 2ª foto affiora all'hover (lazy, solo se esiste). */}
+        {coverHover && (
+          <CloudinaryImage
+            media={coverHover}
+            alt=""
+            fillParent
+            sizes={sizes}
+            className="card-hover-img"
+            imgClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.045]"
+          />
+        )}
         {/* overlay sottile all'hover */}
         <span className="pointer-events-none absolute inset-0 bg-inchiostro/0 transition-colors duration-500 group-hover:bg-inchiostro/5" />
-        {/* cornice-sigillo in ottone che si traccia all'hover */}
-        <span aria-hidden className="sigillo" />
+        {/* filo d'ottone che si traccia all'hover (sostituisce le crop-marks) */}
+        <span aria-hidden className="card-filo" />
 
         {stagione && (
           <span className="cartellino absolute left-3 top-3 bg-lino/85 px-2 py-1 text-pietra-scura backdrop-blur-sm">

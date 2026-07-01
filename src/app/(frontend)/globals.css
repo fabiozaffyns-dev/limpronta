@@ -185,42 +185,71 @@
     background-color: color-mix(in srgb, var(--color-ottone) 55%, transparent);
   }
 
-  /* Cornice-sigillo in ottone che si traccia all'hover/focus di una superficie
-     con classe .group. Generalizza l'hover di EditorialFigure alle card. */
-  .sigillo {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    pointer-events: none;
+  /* Card boutique "Il Sollevamento": la card si stacca dalla griglia (lift +
+     ombra calda), la foto zooma più lenta (parallax a strati), affiora la 2ª
+     foto in crossfade (seconda pelle) e un filo d'ottone si traccia sotto la
+     foto. Tutto transform/opacity (GPU); movimento gated su hover+pointer fine
+     e reduced-motion → su touch/no-JS resta la cover statica. */
+  .card-lift {
+    transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  /* Quattro segni d'angolo in ottone (crop marks da atelier): NON coprono la
-     foto, appaiono all'hover con un lieve richiamo verso l'interno. */
-  .sigillo::before {
+  /* Ombra materica calda: box-shadow statica pre-disegnata su uno pseudo, si
+     anima SOLO l'opacity (niente shadow ricalcolata per-frame). */
+  .card-lift::after {
     content: '';
     position: absolute;
-    inset: 12px;
-    --sg: color-mix(in srgb, var(--color-ottone) 90%, transparent);
-    --sg-len: 16px;
-    --sg-th: 1.5px;
-    background:
-      linear-gradient(var(--sg), var(--sg)) 0 0 / var(--sg-len) var(--sg-th),
-      linear-gradient(var(--sg), var(--sg)) 0 0 / var(--sg-th) var(--sg-len),
-      linear-gradient(var(--sg), var(--sg)) 100% 0 / var(--sg-len) var(--sg-th),
-      linear-gradient(var(--sg), var(--sg)) 100% 0 / var(--sg-th) var(--sg-len),
-      linear-gradient(var(--sg), var(--sg)) 0 100% / var(--sg-len) var(--sg-th),
-      linear-gradient(var(--sg), var(--sg)) 0 100% / var(--sg-th) var(--sg-len),
-      linear-gradient(var(--sg), var(--sg)) 100% 100% / var(--sg-len) var(--sg-th),
-      linear-gradient(var(--sg), var(--sg)) 100% 100% / var(--sg-th) var(--sg-len);
-    background-repeat: no-repeat;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: 0 18px 40px -14px color-mix(in srgb, var(--color-inchiostro) 45%, var(--color-ottone));
     opacity: 0;
-    transition:
-      opacity 0.45s ease,
-      inset 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .group:hover .sigillo::before,
-  .group:focus-visible .sigillo::before {
-    opacity: 1;
-    inset: 16px;
+  /* Filo d'ottone che firma il bordo basso della foto (rimpiazza le crop-marks). */
+  .card-filo {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 1.5px;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--color-ottone) 90%, transparent) 20%,
+      var(--color-ottone-chiaro) 50%,
+      color-mix(in srgb, var(--color-ottone) 90%, transparent) 80%,
+      transparent
+    );
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Seconda pelle: la 2ª foto affiora in crossfade sullo stesso piano. */
+  .card-hover-img {
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .card-lift:hover,
+    .card-lift:focus-within {
+      z-index: 1;
+      transform: translateY(-6px) scale(1.008);
+    }
+    .card-lift:hover::after,
+    .card-lift:focus-within::after {
+      opacity: 1;
+    }
+    .card-lift:hover .card-filo,
+    .card-lift:focus-within .card-filo {
+      transform: scaleX(1);
+    }
+    .card-lift:hover .card-hover-img,
+    .card-lift:focus-within .card-hover-img {
+      opacity: 1;
+    }
   }
 
   /* "Respiro" della Fraunces variabile: peso e optical-size crescono all'ingresso
