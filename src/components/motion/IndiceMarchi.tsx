@@ -40,7 +40,12 @@ export function IndiceMarchi({ items }: { items: BrandIndexItem[] }) {
         <li key={b.id}>
           <Link href={`/marchi/${b.slug}`} className="indice-riga">
             <span className="indice-num cartellino">{String(i + 1).padStart(2, '0')}</span>
-            <span className="indice-nome">{b.nome}</span>
+            <span className="indice-nome">
+              {b.nome}
+              <span aria-hidden className="indice-nome-rake">
+                {b.nome}
+              </span>
+            </span>
             <span className="indice-meta cartellino">
               {b.count > 0 ? `${b.count} ${b.count === 1 ? 'pezzo' : 'pezzi'}` : 'Scopri'}
             </span>

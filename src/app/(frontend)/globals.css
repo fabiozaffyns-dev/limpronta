@@ -290,6 +290,7 @@
     transition: opacity 0.4s ease;
   }
   .indice-nome {
+    position: relative;
     font-family: var(--font-display);
     font-optical-sizing: auto;
     line-height: 0.95;
@@ -299,7 +300,30 @@
     transition:
       font-variation-settings 0.5s cubic-bezier(0.16, 1, 0.3, 1),
       color 0.4s ease,
-      opacity 0.4s ease;
+      opacity 0.4s ease,
+      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Lama di luce ottone che attraversa il nome invitato (copia sovrapposta, la
+     "firma" dell'hero — contenuta nel nome, niente pannello). A riposo invisibile. */
+  .indice-nome-rake {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+    background-image: linear-gradient(
+      100deg,
+      transparent calc(var(--rake) - 12%),
+      var(--color-ottone-chiaro) var(--rake),
+      transparent calc(var(--rake) + 12%)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition:
+      opacity 0.3s ease,
+      --rake 0.65s cubic-bezier(0.22, 1, 0.36, 1);
   }
   .indice-meta {
     align-self: center;
@@ -326,16 +350,33 @@
     transform-origin: left;
     transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  /* Firma accesa (hover / focus da tastiera): peso + inchiostro pieno, filo d'ottone. */
+  /* Firma accesa (hover / focus da tastiera): scivola a destra, prende peso e
+     inchiostro pieno, un filo d'ottone si traccia e una lama di luce l'attraversa. */
   .indice-riga:hover .indice-nome,
   .indice-riga:focus-visible .indice-nome {
     color: var(--color-inchiostro);
     --mk-wght: 640;
     --mk-opsz: 48;
+    transform: translateX(1.25rem);
   }
   .indice-riga:hover .indice-filo,
   .indice-riga:focus-visible .indice-filo {
     transform: scaleX(1);
+  }
+  .indice-riga:hover .indice-nome-rake,
+  .indice-riga:focus-visible .indice-nome-rake {
+    opacity: 1;
+    --rake: 140%;
+  }
+  /* Con reduced-motion: niente indent né lama, resta solo il cambio tinta/peso. */
+  @media (prefers-reduced-motion: reduce) {
+    .indice-riga:hover .indice-nome,
+    .indice-riga:focus-visible .indice-nome {
+      transform: none;
+    }
+    .indice-nome-rake {
+      display: none;
+    }
   }
   /* Le altre firme si ritraggono quando ne inviti una (solo puntatore fine). */
   @media (hover: hover) and (pointer: fine) {
