@@ -315,10 +315,13 @@
     -webkit-text-fill-color: transparent;
     background-image: linear-gradient(
       100deg,
-      transparent calc(var(--rake) - 13%),
-      var(--color-ottone-chiaro) var(--rake),
-      transparent calc(var(--rake) + 13%)
+      transparent 42%,
+      var(--color-ottone-chiaro) 50%,
+      transparent 58%
     );
+    background-size: 250% 100%;
+    background-repeat: no-repeat;
+    background-position: 150% 0;
     -webkit-background-clip: text;
     background-clip: text;
     opacity: 0;
