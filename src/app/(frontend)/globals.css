@@ -193,16 +193,20 @@
   .card-lift {
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  /* Ombra materica calda: box-shadow statica pre-disegnata su uno pseudo, si
-     anima SOLO l'opacity (niente shadow ricalcolata per-frame). */
+  /* Il "cartoncino" (passepartout) che affiora all'hover: un fondo avorio + ombra
+     calda che si estende OLTRE il contenuto (inset negativo), così foto e testi
+     respirano dentro il bordo invece di andare a filo. Solo l'opacity anima
+     (box-shadow pre-disegnata, niente ricalcolo per-frame). Nessun CLS: è uno
+     pseudo assoluto a z-index -1, non sposta il contenuto. */
   .card-lift::after {
     content: '';
     position: absolute;
-    inset: 0;
+    inset: -14px;
     z-index: -1;
     pointer-events: none;
-    border-radius: inherit;
-    box-shadow: 0 18px 40px -14px color-mix(in srgb, var(--color-inchiostro) 45%, var(--color-ottone));
+    border-radius: 2px;
+    background: var(--color-avorio);
+    box-shadow: 0 22px 46px -16px color-mix(in srgb, var(--color-inchiostro) 45%, var(--color-ottone));
     opacity: 0;
     transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
   }
