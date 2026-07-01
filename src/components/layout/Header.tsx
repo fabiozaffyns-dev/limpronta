@@ -34,11 +34,29 @@ export function Header({
   const onDark = !solid && heroDark
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
+    // Sopra l'hero scuro della home la header resta TRASPARENTE (testo chiaro) e
+    // diventa solida (testo scuro) solo DOPO lo scroll dell'hero. L'hero "Il
+    // Conio" è pinnato per ~120%vh, quindi la soglia è ~fine hero (col
+    // reduced-motion non c'è pin → hero alto 100svh). Altrove: soglia minima.
+    const homeHero = pathname === '/' && heroDark
+    const onScroll = () => {
+      if (homeHero) {
+        const vh = window.innerHeight || 800
+        const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+        const threshold = reduce ? vh * 0.8 : vh * 0.95
+        setScrolled(window.scrollY > threshold)
+      } else {
+        setScrolled(window.scrollY > 24)
+      }
+    }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [pathname, heroDark])
 
   // Blocca lo scroll del body quando il menù mobile è aperto.
   useEffect(() => {
