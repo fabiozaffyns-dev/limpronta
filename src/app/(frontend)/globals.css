@@ -259,10 +259,11 @@
     }
   }
 
-  /* ─── Pagina Marchi — "L'Indice Vivo" ──────────────────────────────────────
-     Un sommario di firme in Fraunces; alla firma invitata (hover/focus) le altre
-     si defocalizzano, un filo d'ottone si traccia e nel palco sticky affiora la
-     foto-prodotto (clip-path dal basso). Interazione O(1): 1 riga + 1 foto. */
+  /* ─── Pagina Marchi — indice tipografico ───────────────────────────────────
+     Un sommario di firme: nomi giganti in Fraunces, uno per riga, che entrano a
+     onda allo scroll. Alla firma invitata (hover/focus) il nome si accende (peso
+     + inchiostro) e un filo d'ottone si traccia, mentre le altre si ritraggono.
+     Tutto in CSS; niente pannello. Senza JS resta un indice di link leggibile. */
   .indice {
     list-style: none;
     margin: 0;
@@ -292,7 +293,7 @@
     font-family: var(--font-display);
     font-optical-sizing: auto;
     line-height: 0.95;
-    font-size: clamp(2rem, 6.5vw, 5rem);
+    font-size: clamp(2.4rem, 8vw, 6.25rem);
     color: var(--color-inchiostro-tenue);
     font-variation-settings: 'opsz' var(--mk-opsz, 30), 'wght' var(--mk-wght, 360);
     transition:
@@ -325,102 +326,23 @@
     transform-origin: left;
     transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  /* Stato attivo (riga scelta) e defocus delle altre, pilotati da classe React. */
-  .indice-riga.is-active .indice-nome {
+  /* Firma accesa (hover / focus da tastiera): peso + inchiostro pieno, filo d'ottone. */
+  .indice-riga:hover .indice-nome,
+  .indice-riga:focus-visible .indice-nome {
     color: var(--color-inchiostro);
-    --mk-wght: 620;
-    --mk-opsz: 46;
+    --mk-wght: 640;
+    --mk-opsz: 48;
   }
-  .indice-riga.is-active .indice-filo {
+  .indice-riga:hover .indice-filo,
+  .indice-riga:focus-visible .indice-filo {
     transform: scaleX(1);
   }
-  .indice-riga.is-dim .indice-nome,
-  .indice-riga.is-dim .indice-num,
-  .indice-riga.is-dim .indice-meta {
-    opacity: 0.34;
-  }
-  /* Palco sticky (desktop): le foto impilate, solo l'attiva è visibile. */
-  .palco {
-    position: sticky;
-    top: 6rem;
-    aspect-ratio: 3 / 4;
-    display: grid;
-    overflow: hidden;
-    background-color: var(--color-lino-scuro);
-    will-change: transform;
-  }
-  .palco-foto {
-    position: relative;
-    grid-area: 1 / 1;
-    opacity: 0;
-    transition: opacity 0.45s ease;
-  }
-  .palco-foto.is-active {
-    opacity: 1;
-  }
-  /* Senza JS: mostra almeno la prima firma (React non gira → niente .is-active). */
-  html:not(.js) .palco-foto:first-child {
-    opacity: 1;
-  }
-  .palco-caption {
-    position: absolute;
-    inset: auto 0 0 0;
-    padding: clamp(1.25rem, 2.2vw, 2rem);
-    background: linear-gradient(
-      0deg,
-      rgba(20, 18, 16, 0.85) 0%,
-      rgba(20, 18, 16, 0.38) 55%,
-      transparent 100%
-    );
-  }
-  /* Nome del marchio sul palco (grande, in Fraunces) con la LAMA DI LUCE ottone
-     che lo attraversa a ogni cambio — la stessa "firma" dell'hero "Il Conio". */
-  .palco-nome-wrap {
-    position: relative;
-    display: inline-block;
-  }
-  .palco-nome,
-  .palco-nome-rake {
-    font-family: var(--font-display);
-    font-optical-sizing: auto;
-    font-weight: 500;
-    line-height: 0.95;
-    font-size: clamp(2rem, 4vw, 3.4rem);
-    letter-spacing: -0.01em;
-  }
-  .palco-nome {
-    display: block;
-    color: var(--color-avorio);
-  }
-  .palco-nome-rake {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-image: linear-gradient(
-      100deg,
-      transparent 0%,
-      transparent calc(var(--rake) - 14%),
-      color-mix(in srgb, var(--color-ottone-chiaro) 95%, transparent) var(--rake),
-      transparent calc(var(--rake) + 14%),
-      transparent 100%
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    color: transparent;
-    mix-blend-mode: screen;
-  }
-  /* Fallback CSS puro (no-JS): l'hover/focus della riga accende sé stessa. */
-  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .indice-riga:hover .indice-nome,
-    .indice-riga:focus-within .indice-nome {
-      color: var(--color-inchiostro);
-      --mk-wght: 620;
-      --mk-opsz: 46;
-    }
-    .indice-riga:hover .indice-filo,
-    .indice-riga:focus-within .indice-filo {
-      transform: scaleX(1);
+  /* Le altre firme si ritraggono quando ne inviti una (solo puntatore fine). */
+  @media (hover: hover) and (pointer: fine) {
+    .indice:hover .indice-riga:not(:hover) .indice-nome,
+    .indice:hover .indice-riga:not(:hover) .indice-num,
+    .indice:hover .indice-riga:not(:hover) .indice-meta {
+      opacity: 0.3;
     }
   }
 
