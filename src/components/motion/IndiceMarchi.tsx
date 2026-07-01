@@ -126,7 +126,7 @@ export function IndiceMarchi({ items }: { items: BrandIndexItem[] }) {
                   <div className="placeholder-materico absolute inset-0" role="img" aria-label={b.nome} />
                 )}
                 {logo?.url && (
-                  <span className="palco-logo">
+                  <span className={cn('palco-logo', b.logoChiaro && 'palco-logo--scuro')}>
                     <Image
                       src={logo.url}
                       alt={b.nome}

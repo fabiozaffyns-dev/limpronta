@@ -50,6 +50,7 @@ export type BrandIndexItem = {
   slug: string
   sito: string | null
   logo: number | Media | null
+  logoChiaro: boolean
   foto: number | Media | null
   blurb: string
   count: number
@@ -96,6 +97,7 @@ export async function getBrandsIndex(): Promise<BrandIndexItem[]> {
       slug: b.slug,
       sito: safeHref(b.sito) ?? null,
       logo: b.logo ?? null,
+      logoChiaro: Boolean(b.logoChiaro),
       foto: agg?.cover ?? null,
       blurb: firstSentence(b.descrizione),
       count: agg?.count ?? 0,
