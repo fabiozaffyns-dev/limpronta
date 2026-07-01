@@ -33,18 +33,6 @@ export const Brands: CollectionConfig = {
       admin: { position: 'sidebar' },
     },
     {
-      name: 'logoChiaro',
-      type: 'checkbox',
-      label: 'Logo chiaro / bianco',
-      defaultValue: false,
-      admin: {
-        position: 'sidebar',
-        description:
-          'Spunta se il logo è chiaro/bianco (pensato per fondi scuri): nella pagina Marchi userò un riquadro scuro così resta leggibile. Lascia vuoto per loghi scuri.',
-        condition: (data) => Boolean(data?.logo),
-      },
-    },
-    {
       name: 'descrizione',
       type: 'richText',
       localized: true,
