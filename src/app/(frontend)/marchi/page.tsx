@@ -1,10 +1,8 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
 
-import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
+import { IndiceMarchi } from '@/components/motion/IndiceMarchi'
 import { PageIntro } from '@/components/ui/PageIntro'
-import { mediaUrl } from '@/lib/media'
-import { getBrands } from '@/lib/queries'
+import { getBrandsIndex } from '@/lib/queries'
 
 export const revalidate = 120
 
@@ -15,44 +13,29 @@ export const metadata: Metadata = {
 }
 
 export default async function MarchiPage() {
-  const brands = await getBrands()
+  const items = await getBrandsIndex()
+  const totPezzi = items.reduce((sum, b) => sum + b.count, 0)
 
   return (
     <>
-      <PageIntro eyebrow="Le firme" titolo="Marchi">
-        Ogni marchio è scelto per coerenza, qualità e carattere. Non un assortimento, ma una linea di
-        gusto.
+      <PageIntro eyebrow="Le firme" titolo="La curatela">
+        Non un assortimento, ma una linea di gusto. Ogni firma è scelta per coerenza, qualità e
+        carattere — passa un nome e affiora la sua materia.
       </PageIntro>
 
       <section className="shell pb-24">
-        {brands.length === 0 ? (
+        {items.length === 0 ? (
           <p className="py-12 text-pietra-scura">
             I nostri marchi saranno presto online. Intanto, passa a trovarci in negozio.
           </p>
         ) : (
-          <div
-            className="grid grid-cols-2 gap-px overflow-hidden md:grid-cols-3 lg:grid-cols-4"
-            style={{ backgroundColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}
-          >
-          {brands.map((b) => {
-            const logo = mediaUrl(b.logo)
-            return (
-              <Link
-                key={b.id}
-                href={`/marchi/${b.slug}`}
-                className="group flex aspect-[4/3] items-center justify-center bg-lino p-8 transition-colors hover:bg-lino-chiaro"
-              >
-                {logo ? (
-                  <CloudinaryImage media={b.logo} alt={b.nome} aspect="3 / 2" sizes="280px" className="w-full" imgClassName="object-contain" />
-                ) : (
-                  <span className="font-display text-center text-2xl text-inchiostro transition-colors group-hover:text-ottone-testo">
-                    {b.nome}
-                  </span>
-                )}
-              </Link>
-            )
-          })}
-          </div>
+          <>
+            <IndiceMarchi items={items} />
+            <p className="cartellino mt-16 text-pietra-scura">
+              Selezione L&rsquo;Impronta · Orbassano — {items.length} firme
+              {totPezzi > 0 ? `, ${totPezzi} pezzi in negozio` : ''}
+            </p>
+          </>
         )}
       </section>
     </>

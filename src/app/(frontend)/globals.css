@@ -259,6 +259,134 @@
     }
   }
 
+  /* ─── Pagina Marchi — "L'Indice Vivo" ──────────────────────────────────────
+     Un sommario di firme in Fraunces; alla firma invitata (hover/focus) le altre
+     si defocalizzano, un filo d'ottone si traccia e nel palco sticky affiora la
+     foto-prodotto (clip-path dal basso). Interazione O(1): 1 riga + 1 foto. */
+  .indice {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .indice-riga {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    gap: clamp(0.75rem, 3vw, 2.5rem);
+    padding-block: clamp(1rem, 2.6vw, 1.9rem);
+    border-top: 1px solid color-mix(in srgb, var(--color-pietra) 30%, transparent);
+    text-decoration: none;
+    transition: opacity 0.4s ease;
+  }
+  .indice li:last-child .indice-riga {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-pietra) 30%, transparent);
+  }
+  .indice-num {
+    align-self: center;
+    color: var(--color-ottone-testo);
+    font-variant-numeric: tabular-nums;
+    transition: opacity 0.4s ease;
+  }
+  .indice-nome {
+    font-family: var(--font-display);
+    font-optical-sizing: auto;
+    line-height: 0.95;
+    font-size: clamp(2rem, 6.5vw, 5rem);
+    color: var(--color-inchiostro-tenue);
+    font-variation-settings: 'opsz' var(--mk-opsz, 30), 'wght' var(--mk-wght, 360);
+    transition:
+      font-variation-settings 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+      color 0.4s ease,
+      opacity 0.4s ease;
+  }
+  .indice-meta {
+    align-self: center;
+    color: var(--color-pietra-scura);
+    white-space: nowrap;
+    transition: opacity 0.4s ease;
+  }
+  .indice-filo {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1.5px;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-ottone-chiaro) 25%,
+      var(--color-ottone) 50%,
+      var(--color-ottone-chiaro) 75%,
+      transparent
+    );
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Stato attivo (riga scelta) e defocus delle altre, pilotati da classe React. */
+  .indice-riga.is-active .indice-nome {
+    color: var(--color-inchiostro);
+    --mk-wght: 620;
+    --mk-opsz: 46;
+  }
+  .indice-riga.is-active .indice-filo {
+    transform: scaleX(1);
+  }
+  .indice-riga.is-dim .indice-nome,
+  .indice-riga.is-dim .indice-num,
+  .indice-riga.is-dim .indice-meta {
+    opacity: 0.34;
+  }
+  /* Palco sticky (desktop): le foto impilate, solo l'attiva è visibile. */
+  .palco {
+    position: sticky;
+    top: 6rem;
+    aspect-ratio: 3 / 4;
+    display: grid;
+    overflow: hidden;
+    background-color: var(--color-lino-scuro);
+    will-change: transform;
+  }
+  .palco-foto {
+    position: relative;
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+  .palco-foto.is-active {
+    opacity: 1;
+  }
+  /* Senza JS: mostra almeno la prima firma (React non gira → niente .is-active). */
+  html:not(.js) .palco-foto:first-child {
+    opacity: 1;
+  }
+  .palco-caption {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: clamp(1.25rem, 2.2vw, 2rem);
+    background: linear-gradient(
+      0deg,
+      rgba(20, 18, 16, 0.85) 0%,
+      rgba(20, 18, 16, 0.38) 55%,
+      transparent 100%
+    );
+  }
+  /* Fallback CSS puro (no-JS): l'hover/focus della riga accende sé stessa. */
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .indice-riga:hover .indice-nome,
+    .indice-riga:focus-within .indice-nome {
+      color: var(--color-inchiostro);
+      --mk-wght: 620;
+      --mk-opsz: 46;
+    }
+    .indice-riga:hover .indice-filo,
+    .indice-riga:focus-within .indice-filo {
+      transform: scaleX(1);
+    }
+  }
+
   /* "Respiro" della Fraunces variabile: peso e optical-size crescono all'ingresso
      in vista (riusa le @property --mk-wght/--mk-opsz già registrate in cima). */
   .fraunces-breathe {
@@ -936,6 +1064,12 @@
     }
     /* Tessere di griglia: pre-nascoste, entrano a onda (GridStagger). */
     html.js .grid-stagger > * {
+      opacity: 0;
+      transform: translateY(28px);
+      will-change: opacity, transform;
+    }
+    /* Righe dell'indice marchi: pre-nascoste, entrano a onda (IndiceMarchi). */
+    html.js .indice-riga {
       opacity: 0;
       transform: translateY(28px);
       will-change: opacity, transform;

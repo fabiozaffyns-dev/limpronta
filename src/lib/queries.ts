@@ -1,9 +1,11 @@
 import type { Where } from 'payload'
 import { cache } from 'react'
 
-import type { Brand, Category, Lookbook, Page, Product, Setting } from '@/payload-types'
+import type { Brand, Category, Lookbook, Media, Page, Product, Setting } from '@/payload-types'
 
+import { firstSentence } from './lexical'
 import { getPayloadClient } from './payload'
+import { safeHref } from './sanitize'
 
 const LOCALE = 'it' as const
 
@@ -40,6 +42,65 @@ export async function getBrandBySlug(slug: string): Promise<Brand | null> {
     depth: 1,
   })
   return res.docs[0] ?? null
+}
+
+export type BrandIndexItem = {
+  id: number
+  nome: string
+  slug: string
+  sito: string | null
+  logo: number | Media | null
+  foto: number | Media | null
+  blurb: string
+  count: number
+}
+
+/**
+ * Indice marchi arricchito per la pagina "L'Indice Vivo": per ogni marchio una
+ * foto-prodotto rappresentativa + il conteggio pezzi + un blurb. Solo 2 query
+ * totali (brands + una find prodotti ridotta in memoria), niente N+1.
+ */
+export async function getBrandsIndex(): Promise<BrandIndexItem[]> {
+  const payload = await getPayloadClient()
+  const [brands, prods] = await Promise.all([
+    getBrands(),
+    payload.find({
+      collection: 'products',
+      locale: LOCALE,
+      where: published,
+      limit: 1000,
+      depth: 1,
+      pagination: false,
+      sort: ['brand', 'ordine', 'nome'],
+    }),
+  ])
+
+  const byBrand = new Map<number | string, { cover: number | Media | null; count: number }>()
+  for (const p of prods.docs) {
+    const brandId = typeof p.brand === 'object' && p.brand ? p.brand.id : p.brand
+    if (brandId == null) continue
+    const cover = p.immagini?.[0] ?? null
+    const entry = byBrand.get(brandId)
+    if (!entry) byBrand.set(brandId, { cover, count: 1 })
+    else {
+      entry.count += 1
+      if (!entry.cover && cover) entry.cover = cover
+    }
+  }
+
+  return brands.map((b) => {
+    const agg = byBrand.get(b.id)
+    return {
+      id: b.id,
+      nome: b.nome,
+      slug: b.slug,
+      sito: safeHref(b.sito) ?? null,
+      logo: b.logo ?? null,
+      foto: agg?.cover ?? null,
+      blurb: firstSentence(b.descrizione),
+      count: agg?.count ?? 0,
+    }
+  })
 }
 
 // ─── Categories ──────────────────────────────────────────────────────────────

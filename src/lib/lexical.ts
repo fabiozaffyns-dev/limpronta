@@ -43,3 +43,29 @@ export function paragraphs(...parts: string[]) {
     ),
   )
 }
+
+/** Concatena ricorsivamente il testo dei nodi Lexical. */
+function collectText(node: unknown): string {
+  if (!node || typeof node !== 'object') return ''
+  const n = node as { text?: unknown; children?: unknown[] }
+  if (typeof n.text === 'string') return n.text
+  if (Array.isArray(n.children)) return n.children.map(collectText).join('')
+  return ''
+}
+
+/**
+ * Estrae la prima frase (fino a . ? !) dal primo blocco di testo di uno stato
+ * Lexical — usata per i blurb dei marchi. Ritorna '' se vuoto.
+ */
+export function firstSentence(data: unknown, max = 150): string {
+  const root = (data as { root?: { children?: unknown[] } } | null | undefined)?.root
+  if (!root?.children || !Array.isArray(root.children)) return ''
+  for (const block of root.children) {
+    const text = collectText(block).replace(/\s+/g, ' ').trim()
+    if (!text) continue
+    const match = text.match(/^(.*?[.?!])(\s|$)/)
+    const sentence = match ? match[1] : text
+    return sentence.length > max ? `${sentence.slice(0, max).trimEnd()}…` : sentence
+  }
+  return ''
+}
