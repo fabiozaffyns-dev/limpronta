@@ -373,6 +373,19 @@
       transparent 100%
     );
   }
+  /* Logo del marchio in sovrimpressione (chip chiaro, alto a sinistra). */
+  .palco-logo {
+    position: absolute;
+    left: clamp(0.9rem, 2vw, 1.4rem);
+    top: clamp(0.9rem, 2vw, 1.4rem);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    padding: 7px 11px;
+    border-radius: 2px;
+    background: color-mix(in srgb, var(--color-lino) 90%, transparent);
+    backdrop-filter: blur(4px);
+  }
   /* Fallback CSS puro (no-JS): l'hover/focus della riga accende sé stessa. */
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .indice-riga:hover .indice-nome,

@@ -3,11 +3,13 @@
 import { useGSAP } from '@gsap/react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useRef, useState, type FocusEvent, type MouseEvent } from 'react'
 
 import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { cn } from '@/lib/cn'
+import { mediaDoc } from '@/lib/media'
 import { EASE_EDITORIAL, EASE_SOFT, prefersReduced } from '@/lib/motion'
 import type { BrandIndexItem } from '@/lib/queries'
 
@@ -114,20 +116,37 @@ export function IndiceMarchi({ items }: { items: BrandIndexItem[] }) {
       {/* Palco: anteprima decorativa (i dati veri sono nei link). */}
       <div aria-hidden className="hidden lg:block">
         <div className="palco">
-          {items.map((b, i) => (
-            <figure key={b.id} className={cn('palco-foto', i === active && 'is-active')}>
-              {b.foto ? (
-                <CloudinaryImage media={b.foto} alt="" fillParent sizes="520px" priority={i === 0} />
-              ) : (
-                <div className="placeholder-materico absolute inset-0" role="img" aria-label={b.nome} />
-              )}
-              <figcaption className="palco-caption">
-                <span className="font-display block text-3xl text-avorio">{b.nome}</span>
-                {b.blurb && <span className="mt-2 block max-w-sm text-sm leading-relaxed text-avorio/75">{b.blurb}</span>}
-                <span className="cartellino mt-4 block text-ottone-chiaro">Vedi il marchio →</span>
-              </figcaption>
-            </figure>
-          ))}
+          {items.map((b, i) => {
+            const logo = mediaDoc(b.logo)
+            return (
+              <figure key={b.id} className={cn('palco-foto', i === active && 'is-active')}>
+                {b.foto ? (
+                  <CloudinaryImage media={b.foto} alt="" fillParent sizes="520px" priority={i === 0} />
+                ) : (
+                  <div className="placeholder-materico absolute inset-0" role="img" aria-label={b.nome} />
+                )}
+                {logo?.url && (
+                  <span className="palco-logo">
+                    <Image
+                      src={logo.url}
+                      alt={b.nome}
+                      width={logo.width ?? 200}
+                      height={logo.height ?? 80}
+                      sizes="150px"
+                      className="h-6 w-auto object-contain md:h-7"
+                    />
+                  </span>
+                )}
+                <figcaption className="palco-caption">
+                  {!logo?.url && <span className="font-display block text-3xl text-avorio">{b.nome}</span>}
+                  {b.blurb && (
+                    <span className="mt-2 block max-w-sm text-sm leading-relaxed text-avorio/75">{b.blurb}</span>
+                  )}
+                  <span className="cartellino mt-4 block text-ottone-chiaro">Vedi il marchio →</span>
+                </figcaption>
+              </figure>
+            )
+          })}
         </div>
       </div>
     </div>
