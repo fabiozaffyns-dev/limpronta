@@ -29,7 +29,43 @@ export function IndiceMarchi({ items }: { items: BrandIndexItem[] }) {
           gsap.to(b, { autoAlpha: 1, y: 0, duration: 0.9, ease: EASE_SOFT, stagger: 0.06, overwrite: true }),
       })
       void document.fonts?.ready.then(() => ScrollTrigger.refresh())
-      return () => batch.forEach((st) => st.kill())
+
+      // Lama di luce ottone che spazza il nome invitato — pilotata da GSAP così il
+      // background-clip:text ridipinge davvero (la CSS transition non lo faceva).
+      const ol = root.current
+      let current: Element | null = null
+      const sweep = (row: Element | null | undefined) => {
+        if (!row || row === current) return
+        current = row
+        const rake = row.querySelector('.indice-nome-rake')
+        if (!rake) return
+        gsap.fromTo(
+          rake,
+          { '--rake': '-30%', autoAlpha: 1 },
+          {
+            '--rake': '130%',
+            duration: 0.7,
+            ease: 'power2.out',
+            overwrite: 'auto',
+            onComplete: () => gsap.set(rake, { autoAlpha: 0 }),
+          },
+        )
+      }
+      const onOver = (e: Event) => sweep((e.target as HTMLElement).closest?.('.indice-riga'))
+      const onFocus = (e: Event) => sweep((e.target as HTMLElement).closest?.('.indice-riga'))
+      const onLeave = () => {
+        current = null
+      }
+      ol?.addEventListener('pointerover', onOver)
+      ol?.addEventListener('focusin', onFocus)
+      ol?.addEventListener('pointerleave', onLeave)
+
+      return () => {
+        batch.forEach((st) => st.kill())
+        ol?.removeEventListener('pointerover', onOver)
+        ol?.removeEventListener('focusin', onFocus)
+        ol?.removeEventListener('pointerleave', onLeave)
+      }
     },
     { scope: root, dependencies: [] },
   )

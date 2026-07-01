@@ -315,27 +315,13 @@
     -webkit-text-fill-color: transparent;
     background-image: linear-gradient(
       100deg,
-      transparent 0%,
-      color-mix(in srgb, var(--color-ottone-chiaro) 55%, transparent) 34%,
-      var(--color-ottone-chiaro) 50%,
-      color-mix(in srgb, var(--color-ottone-chiaro) 55%, transparent) 66%,
-      transparent 100%
+      transparent calc(var(--rake) - 13%),
+      var(--color-ottone-chiaro) var(--rake),
+      transparent calc(var(--rake) + 13%)
     );
-    background-size: 55% 100%;
-    background-repeat: no-repeat;
-    background-position: -70% 0;
     -webkit-background-clip: text;
     background-clip: text;
     opacity: 0;
-    transition: opacity 0.25s ease;
-  }
-  @keyframes indice-rake {
-    from {
-      background-position: -70% 0;
-    }
-    to {
-      background-position: 170% 0;
-    }
   }
   .indice-meta {
     align-self: center;
@@ -375,11 +361,8 @@
   .indice-riga:focus-visible .indice-filo {
     transform: scaleX(1);
   }
-  .indice-riga:hover .indice-nome-rake,
-  .indice-riga:focus-visible .indice-nome-rake {
-    opacity: 1;
-    animation: indice-rake 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-  }
+  /* La lama (.indice-nome-rake) è pilotata da GSAP (--rake) per un repaint
+     affidabile con background-clip:text — vedi IndiceMarchi.tsx. */
   /* Con reduced-motion: niente indent né lama, resta solo il cambio tinta/peso. */
   @media (prefers-reduced-motion: reduce) {
     .indice-riga:hover .indice-nome,
