@@ -236,7 +236,10 @@
     .card-lift:hover,
     .card-lift:focus-within {
       z-index: 1;
-      transform: translateY(-6px) scale(1.008);
+      /* Solo sollevamento verticale: NIENTE scale sull'intera card (scalava
+         anche il testo, spingendolo a filo dei bordi). Il "movimento" di
+         profondità resta dato dallo zoom della foto dentro l'overflow-hidden. */
+      transform: translateY(-6px);
     }
     .card-lift:hover::after,
     .card-lift:focus-within::after {
