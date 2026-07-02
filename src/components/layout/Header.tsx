@@ -46,10 +46,20 @@ export function Header({
       // 'impronta:hero-fine' quando la lastra di Lino ha riempito): niente
       // euristiche sugli eventi scroll, che al 1° load emettevano transitori
       // fuorvianti (header solida in cima). In cima: trasparente, punto.
-      setScrolled(false)
+      const readFine = () =>
+        setScrolled(Boolean((window as unknown as { __heroFine?: boolean }).__heroFine))
+      readFine()
       const onFine = (e: Event) => setScrolled(Boolean((e as CustomEvent).detail))
       window.addEventListener('impronta:hero-fine', onFine)
-      return () => window.removeEventListener('impronta:hero-fine', onFine)
+      // Riallineamento nei primi secondi: copre le race del caricamento (Ctrl+R,
+      // scroll-restoration, ordine dei mount) rileggendo lo stato pubblicato.
+      const iv = window.setInterval(readFine, 300)
+      const stop = window.setTimeout(() => window.clearInterval(iv), 5000)
+      return () => {
+        window.removeEventListener('impronta:hero-fine', onFine)
+        window.clearInterval(iv)
+        window.clearTimeout(stop)
+      }
     }
 
     // Altre pagine / reduced-motion (hero non pinnato): soglia semplice.

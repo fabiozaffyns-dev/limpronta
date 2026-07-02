@@ -90,9 +90,9 @@ export function DebossHero({
           gsap.from(tagSplit.words, {
             yPercent: 120,
             autoAlpha: 0,
-            duration: 0.55,
+            duration: 0.85,
             ease: 'power3.out',
-            stagger: 0.045,
+            stagger: 0.085,
             delay: ritardo,
           })
         })
@@ -109,6 +109,9 @@ export function DebossHero({
       // eventi scroll (che al primo load emettevano transitori fuorvianti).
       let heroFine = false
       const segnala = (fine: boolean) => {
+        // Stato SEMPRE leggibile (window.__heroFine): la Header lo rilegge nei
+        // primi secondi, così nessuna race (Ctrl+R, navigazioni) può perdersi.
+        ;(window as unknown as { __heroFine?: boolean }).__heroFine = fine
         if (fine === heroFine) return
         heroFine = fine
         window.dispatchEvent(new CustomEvent('impronta:hero-fine', { detail: fine }))
@@ -172,6 +175,7 @@ export function DebossHero({
 
       return () => {
         gsap.ticker.remove(tickCheck)
+        ;(window as unknown as { __heroFine?: boolean }).__heroFine = false
         split?.revert()
         tagSplit?.revert()
       }
