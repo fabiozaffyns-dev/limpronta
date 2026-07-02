@@ -65,9 +65,16 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   return (
     <html lang="it" className={`${fraunces.variable} ${hanken.variable} ${cinzel.variable}`}>
       <body>
-        {/* Aggiunge html.js prima del paint: niente flash, reveal coerente. */}
+        {/* Aggiunge html.js prima del paint: niente flash, reveal coerente.
+           In HOME disattiva anche lo scroll-restoration del browser: col pin
+           dell'hero, il ripristino atterrava a metà scena (lino pieno + header
+           solida) facendola sembrare "l'inizio del sito, sbagliato". La home
+           riparte SEMPRE dalla cima, stile primo accesso. */}
         <script
-          dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.documentElement.classList.add('js');if(location.pathname==='/'){try{history.scrollRestoration='manual';window.scrollTo(0,0)}catch(e){}}",
+          }}
         />
         <script
           type="application/ld+json"

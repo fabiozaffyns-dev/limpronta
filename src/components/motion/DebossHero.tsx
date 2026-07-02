@@ -104,19 +104,6 @@ export function DebossHero({
       // sotto e le STESSE lettere diventano l'impronta scura su carta chiara,
       // consegnando senza stacco al Muro dei marchi. Solo transform/opacity/
       // clip-path (GPU); ease 'none' (lo scrub È il tempo); ampiezze micro.
-      // Segnala alla Header quando la lastra di Lino ha riempito lo schermo
-      // (progress > 0.8): è LO STATO REALE della scena, non un'euristica sugli
-      // eventi scroll (che al primo load emettevano transitori fuorvianti).
-      let heroFine = false
-      const segnala = (fine: boolean) => {
-        // Stato SEMPRE leggibile (window.__heroFine): la Header lo rilegge nei
-        // primi secondi, così nessuna race (Ctrl+R, navigazioni) può perdersi.
-        ;(window as unknown as { __heroFine?: boolean }).__heroFine = fine
-        if (fine === heroFine) return
-        heroFine = fine
-        window.dispatchEvent(new CustomEvent('impronta:hero-fine', { detail: fine }))
-      }
-
       const conio = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
@@ -130,12 +117,6 @@ export function DebossHero({
           invalidateOnRefresh: true,
         },
       })
-
-      // Check per-frame sul ticker già attivo (Lenis): legge il progress REALE
-      // e segnala solo al cambio. Copre ogni race (refresh, navigazioni,
-      // scrollTo del wordmark) che un singolo onUpdate può perdere.
-      const tickCheck = () => segnala((conio.scrollTrigger?.progress ?? 0) > 0.8)
-      gsap.ticker.add(tickCheck)
 
       // BEAT 1 — ritiro UI: resta solo il segno. fromTo con start esplicito +
       // immediateRender:false → il fade arriva DAVVERO a 0 (niente cattura pigra
@@ -174,8 +155,6 @@ export function DebossHero({
       void document.fonts?.ready.then(() => ScrollTrigger.refresh())
 
       return () => {
-        gsap.ticker.remove(tickCheck)
-        ;(window as unknown as { __heroFine?: boolean }).__heroFine = false
         split?.revert()
         tagSplit?.revert()
       }
@@ -184,6 +163,25 @@ export function DebossHero({
   )
 
   return (
+    <>
+      {/* Sentinello per la Header: elemento invisibile ancorato alla CIMA del
+         documento (fuori dalla section, quindi NON segue il pin). Finché è in
+         viewport (IntersectionObserver) la header resta trasparente; sparisce a
+         ~96svh di scroll ≈ quando la lastra di Lino ha riempito lo schermo.
+         Nessun evento scroll, nessno stato JS: è il browser a dire dove siamo. */}
+      <div
+        data-hero-sentinella
+        aria-hidden
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: 1,
+          height: '96svh',
+          pointerEvents: 'none',
+          visibility: 'hidden',
+        }}
+      />
     <section
       ref={root}
       className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 text-center"
@@ -293,5 +291,6 @@ export function DebossHero({
         />
       </div>
     </section>
+    </>
   )
 }

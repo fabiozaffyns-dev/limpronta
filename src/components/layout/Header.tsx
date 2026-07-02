@@ -39,30 +39,25 @@ export function Header({
     // Conio" è pinnato per ~120%vh, quindi la soglia è ~fine hero (col
     // reduced-motion non c'è pin → hero alto 100svh). Altrove: soglia minima.
     const homeHero = pathname === '/' && heroDark
-    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
-    if (homeHero && !reduce) {
-      // Col Conio pinnato lo stato arriva DALLA timeline dell'hero (evento
-      // 'impronta:hero-fine' quando la lastra di Lino ha riempito): niente
-      // euristiche sugli eventi scroll, che al 1° load emettevano transitori
-      // fuorvianti (header solida in cima). In cima: trasparente, punto.
-      const readFine = () =>
-        setScrolled(Boolean((window as unknown as { __heroFine?: boolean }).__heroFine))
-      readFine()
-      const onFine = (e: Event) => setScrolled(Boolean((e as CustomEvent).detail))
-      window.addEventListener('impronta:hero-fine', onFine)
-      // Riallineamento nei primi secondi: copre le race del caricamento (Ctrl+R,
-      // scroll-restoration, ordine dei mount) rileggendo lo stato pubblicato.
-      const iv = window.setInterval(readFine, 300)
-      const stop = window.setTimeout(() => window.clearInterval(iv), 5000)
-      return () => {
-        window.removeEventListener('impronta:hero-fine', onFine)
-        window.clearInterval(iv)
-        window.clearTimeout(stop)
+    if (homeHero) {
+      // Sentinello in cima al documento (renderizzato da DebossHero, FUORI dal
+      // pin): finché è in viewport → trasparente; sparito (~96svh di scroll,
+      // quando il Lino ha riempito) → solida. IntersectionObserver riporta
+      // SEMPRE lo stato geometrico reale — anche al reload, senza eventi
+      // scroll, senza stato JS condiviso: niente race possibili.
+      const sentinella = document.querySelector('[data-hero-sentinella]')
+      if (sentinella) {
+        const io = new IntersectionObserver(
+          ([entry]) => setScrolled(!entry.isIntersecting),
+          { threshold: 0 },
+        )
+        io.observe(sentinella)
+        return () => io.disconnect()
       }
     }
 
-    // Altre pagine / reduced-motion (hero non pinnato): soglia semplice.
+    // Altre pagine (o sentinello assente): soglia semplice.
     const onScroll = () => {
       const threshold = homeHero ? (window.innerHeight || 800) * 0.8 : 24
       setScrolled((window.scrollY || 0) > threshold)
