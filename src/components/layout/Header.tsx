@@ -39,33 +39,48 @@ export function Header({
     // Conio" è pinnato per ~120%vh, quindi la soglia è ~fine hero (col
     // reduced-motion non c'è pin → hero alto 100svh). Altrove: soglia minima.
     const homeHero = pathname === '/' && heroDark
-    const onScroll = () => {
+    // Legge lo scroll da Lenis (autorevole col pin "Il Conio"), fallback nativo.
+    const readY = () => {
+      const lenis = (window as unknown as { __lenis?: { scroll?: number } }).__lenis
+      return typeof lenis?.scroll === 'number' ? lenis.scroll : window.scrollY || 0
+    }
+    const sync = () => {
       if (homeHero) {
         const vh = window.innerHeight || 800
         const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
         const threshold = reduce ? vh * 0.8 : vh * 0.95
-        setScrolled(window.scrollY > threshold)
+        setScrolled(readY() > threshold)
       } else {
-        setScrolled(window.scrollY > 24)
+        setScrolled(readY() > 24)
       }
     }
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onScroll)
-    window.addEventListener('load', onScroll)
-    // Il setup di Lenis + il refresh del pin "Il Conio" possono emettere uno
-    // scroll transitorio al primo caricamento (header solida anche in cima).
-    // Ri-sincronizziamo sulla posizione REALE una volta assestato tutto.
-    const timers = [
-      window.setTimeout(onScroll, 300),
-      window.setTimeout(onScroll, 1000),
-      window.setTimeout(onScroll, 2200),
-    ]
+    sync()
+    window.addEventListener('scroll', sync, { passive: true })
+    window.addEventListener('resize', sync)
+
+    // Il setup di Lenis + il refresh del pin possono emettere uno scroll
+    // transitorio al primo caricamento (header solida anche in cima). Un poll
+    // rAF per i primi ~2.5s ri-sincronizza sulla posizione REALE, e appena
+    // Lenis è pronto ci agganciamo al suo evento scroll.
+    let raf = 0
+    let bound: { off?: (e: string, cb: () => void) => void } | null = null
+    const start = performance.now()
+    const tick = (t: number) => {
+      const lenis = (window as unknown as { __lenis?: { on?: (e: string, cb: () => void) => void; off?: (e: string, cb: () => void) => void } }).__lenis
+      if (lenis?.on && !bound) {
+        lenis.on('scroll', sync)
+        bound = lenis
+      }
+      sync()
+      if (t - start < 2500) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+
     return () => {
-      window.removeEventListener('scroll', onScroll)
-      window.removeEventListener('resize', onScroll)
-      window.removeEventListener('load', onScroll)
-      timers.forEach((t) => window.clearTimeout(t))
+      window.removeEventListener('scroll', sync)
+      window.removeEventListener('resize', sync)
+      cancelAnimationFrame(raf)
+      bound?.off?.('scroll', sync)
     }
   }, [pathname, heroDark])
 

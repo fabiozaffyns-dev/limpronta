@@ -52,16 +52,13 @@ export default async function ContattiPage() {
             conversazione. Da noi non trovi un camerino frettoloso, ma il tempo di capire cosa ti sta
             davvero bene: il tessuto giusto, la vestibilità giusta, il consiglio di chi lo fa dal 2014.
           </p>
-          <p className="cartellino mt-8 text-ottone-testo">
-            La famiglia de L&rsquo;Impronta — Orbassano, dal 2014
-          </p>
         </Reveal>
         <hr className="filetto mt-12" data-traccia />
       </section>
 
       {/* ─── Il cartellino del negozio + foto/modulo ──────────────────────── */}
       <section id="scrivici" className="shell grid gap-12 pb-24 lg:grid-cols-12">
-        <Reveal className="lg:col-span-7">
+        <Reveal className="lg:col-span-7 space-y-10">
           <div className="p-8 md:p-10" style={{ border: OTTONE(40) }}>
             <p className="font-display mb-10 text-xl leading-snug text-pietra-scura">
               Ti aspettiamo in Via Vittorio Emanuele II, nel cuore di Orbassano.
@@ -145,26 +142,24 @@ export default async function ContattiPage() {
               </div>
             </div>
           </div>
+          <EditorialFigure
+            media={settings.chiSiamoFoto2}
+            alt="La vetrina de L'Impronta a Orbassano"
+            aspect="16 / 10"
+            label="La vetrina · Orbassano"
+            sizes="(max-width: 1024px) 100vw, 58vw"
+          />
         </Reveal>
 
         <Reveal delay={120} className="lg:col-span-5">
-          <div className="space-y-8">
-            <EditorialFigure
-              media={settings.chiSiamoFoto2}
-              alt="La vetrina de L'Impronta a Orbassano"
-              aspect="4 / 5"
-              label="La vetrina · Orbassano"
-              sizes="(max-width: 1024px) 100vw, 40vw"
-            />
-            <div>
-              <Eyebrow>Preferisci scrivere?</Eyebrow>
-              <h2 className="font-display mt-3 mb-2 text-3xl">Scrivici due righe</h2>
-              <p className="mb-6 text-pietra-scura">
-                Raccontaci cosa cerchi — un&rsquo;occasione, un capo, un&rsquo;idea regalo — e ti
-                rispondiamo di persona, non con una risposta automatica.
-              </p>
-              <ContactForm endpoint={settings.formspreeEndpoint} />
-            </div>
+          <div className="lg:sticky lg:top-28">
+            <Eyebrow>Preferisci scrivere?</Eyebrow>
+            <h2 className="font-display mt-3 mb-2 text-3xl">Scrivici due righe</h2>
+            <p className="mb-6 text-pietra-scura">
+              Raccontaci cosa cerchi — un&rsquo;occasione, un capo, un&rsquo;idea regalo — e ti
+              rispondiamo di persona, non con una risposta automatica.
+            </p>
+            <ContactForm endpoint={settings.formspreeEndpoint} />
           </div>
         </Reveal>
       </section>

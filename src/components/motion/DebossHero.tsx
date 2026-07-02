@@ -72,9 +72,17 @@ export function DebossHero({
           { textShadow: dark ? SHADOW_DARK : SHADOW_LIGHT, duration: 0.5, ease: 'power2.out' },
           '<',
         )
-        .from('[data-hero-tag]', { y: 22, autoAlpha: 0, duration: 0.85 }, '-=0.2')
         .from('[data-hero-cta] > *', { y: 16, autoAlpha: 0, stagger: 0.13, duration: 0.65 }, '-=0.45')
         .from('[data-hero-scroll]', { autoAlpha: 0, y: -6, duration: 0.9 }, '-=0.15')
+
+      // La tagline compare DA SOLA ~1s dopo il caricamento (non al primo scroll):
+      // nascosta al load, poi fade-in ritardato. Il BEAT 1 del Conio la fa poi
+      // svanire allo scroll (fromTo, quindi combacia con questo stato pieno).
+      gsap.fromTo(
+        '[data-hero-tag]',
+        { autoAlpha: 0, y: 22 },
+        { autoAlpha: 1, y: 0, duration: 0.9, delay: 1, ease: 'power3.out' },
+      )
 
       // ── "IL CONIO" — lo sprofondo del sigillo ──────────────────────────────
       // Pin + scrub: l'UI si ritira, il wordmark si serra e affonda (deboss),
