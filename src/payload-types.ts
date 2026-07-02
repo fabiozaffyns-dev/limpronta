@@ -773,6 +773,10 @@ export interface Setting {
     googleMapsUrl?: string | null;
   };
   /**
+   * Foto per la pagina Contatti (taglio orizzontale, accanto al cartellino del negozio). Vuoto = usa la Foto 2 di Chi siamo.
+   */
+  contattiFoto?: (number | null) | Media;
+  /**
    * Opzionale. Foto o breve video di sfondo per la home: appare dietro al wordmark con un velo scuro (il wordmark diventa chiaro). Vuoto = hero tipografico chiaro.
    */
   heroMedia?: (number | null) | Media;
@@ -833,6 +837,7 @@ export interface SettingsSelect<T extends boolean = true> {
         lng?: T;
         googleMapsUrl?: T;
       };
+  contattiFoto?: T;
   heroMedia?: T;
   chiSiamoFoto1?: T;
   chiSiamoFoto2?: T;

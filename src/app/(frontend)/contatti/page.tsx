@@ -143,7 +143,7 @@ export default async function ContattiPage() {
             </div>
           </div>
           <EditorialFigure
-            media={settings.chiSiamoFoto2}
+            media={settings.contattiFoto ?? settings.chiSiamoFoto2}
             alt="Dentro L'Impronta a Orbassano"
             aspect="16 / 10"
             label="In negozio · Orbassano"

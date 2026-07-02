@@ -182,6 +182,16 @@ export const Settings: GlobalConfig = {
                 },
               ],
             },
+            {
+              name: 'contattiFoto',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Foto pagina Contatti — orizzontale',
+              admin: {
+                description:
+                  'Foto per la pagina Contatti (taglio orizzontale, accanto al cartellino del negozio). Vuoto = usa la Foto 2 di Chi siamo.',
+              },
+            },
           ],
         },
         {
@@ -219,7 +229,7 @@ export const Settings: GlobalConfig = {
               label: 'Foto 2 — verticale (dentro il negozio)',
               admin: {
                 description:
-                  'Foto verticale dell’interno del negozio: usata in "Vieni a trovarci" (Chi siamo) e in Contatti. Vuoto = pannello materico.',
+                  'Foto VERTICALE dell’interno del negozio per la sezione "Vieni a trovarci" di Chi siamo. Vuoto = pannello materico.',
               },
             },
           ],

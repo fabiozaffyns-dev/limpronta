@@ -84,15 +84,15 @@ export function DebossHero({
       if (tagEl) {
         void document.fonts.ready.then(() => {
           if (!root.current) return
-          tagSplit = new SplitText(tagEl, { type: 'lines', mask: 'lines' })
+          tagSplit = new SplitText(tagEl, { type: 'words', mask: 'words' })
           const ritardo = Math.max(0, 1 - (performance.now() - t0) / 1000)
           gsap.set(tagEl, { autoAlpha: 1 })
-          gsap.from(tagSplit.lines, {
+          gsap.from(tagSplit.words, {
             yPercent: 120,
             autoAlpha: 0,
-            duration: 0.9,
-            ease: 'expo.out',
-            stagger: 0.14,
+            duration: 0.55,
+            ease: 'power3.out',
+            stagger: 0.045,
             delay: ritardo,
           })
         })
@@ -125,9 +125,14 @@ export function DebossHero({
           scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
-          onUpdate: (self) => segnala(self.progress > 0.8),
         },
       })
+
+      // Check per-frame sul ticker già attivo (Lenis): legge il progress REALE
+      // e segnala solo al cambio. Copre ogni race (refresh, navigazioni,
+      // scrollTo del wordmark) che un singolo onUpdate può perdere.
+      const tickCheck = () => segnala((conio.scrollTrigger?.progress ?? 0) > 0.8)
+      gsap.ticker.add(tickCheck)
 
       // BEAT 1 — ritiro UI: resta solo il segno. fromTo con start esplicito +
       // immediateRender:false → il fade arriva DAVVERO a 0 (niente cattura pigra
@@ -162,14 +167,11 @@ export function DebossHero({
         .to('[data-hero-word]', { scale: 0.972, yPercent: 1, duration: 0.14 }, 0.86)
         .to('[data-mark-dark]', { opacity: 0.96, duration: 0.14 }, 0.86)
 
-      // Ricalcola le misure del pin dopo i font (evita salti d'altezza) e
-      // ri-allinea subito la Header allo stato reale (es. reload a metà pagina).
-      void document.fonts?.ready.then(() => {
-        ScrollTrigger.refresh()
-        segnala((conio.scrollTrigger?.progress ?? 0) > 0.8)
-      })
+      // Ricalcola le misure del pin dopo i font (evita salti d'altezza).
+      void document.fonts?.ready.then(() => ScrollTrigger.refresh())
 
       return () => {
+        gsap.ticker.remove(tickCheck)
         split?.revert()
         tagSplit?.revert()
       }
