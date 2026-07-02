@@ -315,11 +315,11 @@
     -webkit-text-fill-color: transparent;
     background-image: linear-gradient(
       100deg,
-      transparent 42%,
+      transparent 36%,
       var(--color-ottone-chiaro) 50%,
-      transparent 58%
+      transparent 64%
     );
-    background-size: 250% 100%;
+    background-size: 220% 100%;
     background-repeat: no-repeat;
     background-position: 150% 0;
     -webkit-background-clip: text;

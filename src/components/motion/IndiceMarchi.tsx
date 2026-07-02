@@ -44,8 +44,8 @@ export function IndiceMarchi({ items }: { items: BrandIndexItem[] }) {
           { backgroundPosition: '150% 0', autoAlpha: 1 },
           {
             backgroundPosition: '-60% 0',
-            duration: 0.7,
-            ease: 'power2.out',
+            duration: 1.2,
+            ease: 'power1.inOut',
             overwrite: 'auto',
             onComplete: () => gsap.set(rake, { autoAlpha: 0 }),
           },
