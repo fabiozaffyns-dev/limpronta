@@ -39,49 +39,27 @@ export function Header({
     // Conio" è pinnato per ~120%vh, quindi la soglia è ~fine hero (col
     // reduced-motion non c'è pin → hero alto 100svh). Altrove: soglia minima.
     const homeHero = pathname === '/' && heroDark
-    // Legge lo scroll da Lenis (autorevole col pin "Il Conio"), fallback nativo.
-    const readY = () => {
-      const lenis = (window as unknown as { __lenis?: { scroll?: number } }).__lenis
-      return typeof lenis?.scroll === 'number' ? lenis.scroll : window.scrollY || 0
-    }
-    const sync = () => {
-      if (homeHero) {
-        const vh = window.innerHeight || 800
-        const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
-        const threshold = reduce ? vh * 0.8 : vh * 0.95
-        setScrolled(readY() > threshold)
-      } else {
-        setScrolled(readY() > 24)
-      }
-    }
-    sync()
-    window.addEventListener('scroll', sync, { passive: true })
-    window.addEventListener('resize', sync)
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
-    // Il setup di Lenis + il refresh del pin possono emettere uno scroll
-    // transitorio al primo caricamento (header solida anche in cima). Un poll
-    // rAF per i primi ~2.5s ri-sincronizza sulla posizione REALE, e appena
-    // Lenis è pronto ci agganciamo al suo evento scroll.
-    let raf = 0
-    let bound: { off?: (e: string, cb: () => void) => void } | null = null
-    const start = performance.now()
-    const tick = (t: number) => {
-      const lenis = (window as unknown as { __lenis?: { on?: (e: string, cb: () => void) => void; off?: (e: string, cb: () => void) => void } }).__lenis
-      if (lenis?.on && !bound) {
-        lenis.on('scroll', sync)
-        bound = lenis
-      }
-      sync()
-      if (t - start < 2500) raf = requestAnimationFrame(tick)
+    if (homeHero && !reduce) {
+      // Col Conio pinnato lo stato arriva DALLA timeline dell'hero (evento
+      // 'impronta:hero-fine' quando la lastra di Lino ha riempito): niente
+      // euristiche sugli eventi scroll, che al 1° load emettevano transitori
+      // fuorvianti (header solida in cima). In cima: trasparente, punto.
+      setScrolled(false)
+      const onFine = (e: Event) => setScrolled(Boolean((e as CustomEvent).detail))
+      window.addEventListener('impronta:hero-fine', onFine)
+      return () => window.removeEventListener('impronta:hero-fine', onFine)
     }
-    raf = requestAnimationFrame(tick)
 
-    return () => {
-      window.removeEventListener('scroll', sync)
-      window.removeEventListener('resize', sync)
-      cancelAnimationFrame(raf)
-      bound?.off?.('scroll', sync)
+    // Altre pagine / reduced-motion (hero non pinnato): soglia semplice.
+    const onScroll = () => {
+      const threshold = homeHero ? (window.innerHeight || 800) * 0.8 : 24
+      setScrolled((window.scrollY || 0) > threshold)
     }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [pathname, heroDark])
 
   // Blocca lo scroll del body quando il menù mobile è aperto.
@@ -112,7 +90,21 @@ export function Header({
       style={solid ? { borderBottom: '1px solid color-mix(in srgb, var(--color-ottone) 30%, transparent)' } : undefined}
     >
       <div className="shell flex h-16 items-center justify-between md:h-20">
-        <Link href="/" aria-label="L'Impronta — home" className="z-10">
+        <Link
+          href="/"
+          aria-label="L'Impronta — home"
+          className="z-10"
+          onClick={(e) => {
+            // Già in home: il wordmark riporta in cima (stato "primo accesso").
+            if (pathname !== '/') return
+            e.preventDefault()
+            setOpen(false)
+            const lenis = (window as unknown as { __lenis?: { scrollTo?: (t: number, o?: object) => void } }).__lenis
+            const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+            if (lenis?.scrollTo && !reduce) lenis.scrollTo(0, { duration: 1.1 })
+            else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
+          }}
+        >
           <Wordmark scuro={onDark} className="text-xl md:text-2xl" />
         </Link>
 

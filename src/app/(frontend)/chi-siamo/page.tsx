@@ -120,13 +120,14 @@ export default async function ChiSiamoPage() {
       </section>
 
       {/* ─── Il negozio + CTA ─────────────────────────────────────────────── */}
-      <section className="shell grid items-center gap-12 pb-28 lg:grid-cols-2 lg:gap-20">
+      <section className="shell grid items-center gap-12 pb-28 lg:grid-cols-[0.55fr_0.45fr] lg:gap-20">
         <MaskReveal className="lg:order-2">
           <EditorialFigure
             media={settings.chiSiamoFoto2}
-            alt="Il negozio L'Impronta a Orbassano"
-            aspect="4 / 3"
+            alt="Dentro L'Impronta — il negozio a Orbassano"
+            aspect="3 / 4"
             label="Il negozio"
+            sizes="(max-width: 1024px) 100vw, 45vw"
           />
         </MaskReveal>
         <Reveal delay={120} className="lg:order-1">
@@ -137,6 +138,16 @@ export default async function ChiSiamoPage() {
           <p className="mt-6 text-lg text-pietra-scura">
             {via ? `In ${via}, ` : ''}nel cuore di Orbassano: uno spazio dove prendersi il tempo di
             guardare, toccare e capire. Passa quando vuoi, o prenota un momento dedicato.
+          </p>
+          <p className="mt-5 text-lg text-pietra-scura">
+            Dentro trovi la nostra selezione disposta come piace a noi — poca roba, scelta bene:
+            capispalla, maglieria, camicie, denim e calzature delle firme che seguiamo da anni. E
+            trovi soprattutto qualcuno che ti ascolta: raccontaci l&rsquo;occasione, al resto pensiamo
+            insieme.
+          </p>
+          <p className="mt-5 text-lg text-pietra-scura">
+            Se preferisci la tranquillità assoluta, fissa un momento tutto tuo: un caffè, qualche
+            capo scelto per te, nessuna fretta.
           </p>
           <div className="mt-8 flex flex-wrap gap-4">
             <WhatsAppButton

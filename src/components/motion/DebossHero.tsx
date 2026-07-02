@@ -44,6 +44,7 @@ export function DebossHero({
 
       const markEl = root.current?.querySelector<HTMLElement>('[data-hero-mark]')
       let split: SplitText | null = null
+      let tagSplit: SplitText | null = null
       const targets =
         markEl && (split = new SplitText(markEl, { type: 'chars', mask: 'chars' })).chars
 
@@ -75,14 +76,27 @@ export function DebossHero({
         .from('[data-hero-cta] > *', { y: 16, autoAlpha: 0, stagger: 0.13, duration: 0.65 }, '-=0.45')
         .from('[data-hero-scroll]', { autoAlpha: 0, y: -6, duration: 0.9 }, '-=0.15')
 
-      // La tagline compare DA SOLA ~1s dopo il caricamento (non al primo scroll):
-      // nascosta al load, poi fade-in ritardato. Il BEAT 1 del Conio la fa poi
-      // svanire allo scroll (fromTo, quindi combacia con questo stato pieno).
-      gsap.fromTo(
-        '[data-hero-tag]',
-        { autoAlpha: 0, y: 22 },
-        { autoAlpha: 1, y: 0, duration: 0.9, delay: 1, ease: 'power3.out' },
-      )
+      // La tagline si SROTOLA da sola ~1s dopo il load (non al primo scroll):
+      // righe che salgono una alla volta da dietro una maschera (SplitText).
+      // Pre-nascosta via CSS (html.js [data-hero-tag]) per evitare flash.
+      const tagEl = root.current?.querySelector<HTMLElement>('[data-hero-tag]')
+      const t0 = performance.now()
+      if (tagEl) {
+        void document.fonts.ready.then(() => {
+          if (!root.current) return
+          tagSplit = new SplitText(tagEl, { type: 'lines', mask: 'lines' })
+          const ritardo = Math.max(0, 1 - (performance.now() - t0) / 1000)
+          gsap.set(tagEl, { autoAlpha: 1 })
+          gsap.from(tagSplit.lines, {
+            yPercent: 120,
+            autoAlpha: 0,
+            duration: 0.9,
+            ease: 'expo.out',
+            stagger: 0.14,
+            delay: ritardo,
+          })
+        })
+      }
 
       // ── "IL CONIO" — lo sprofondo del sigillo ──────────────────────────────
       // Pin + scrub: l'UI si ritira, il wordmark si serra e affonda (deboss),
@@ -90,6 +104,16 @@ export function DebossHero({
       // sotto e le STESSE lettere diventano l'impronta scura su carta chiara,
       // consegnando senza stacco al Muro dei marchi. Solo transform/opacity/
       // clip-path (GPU); ease 'none' (lo scrub È il tempo); ampiezze micro.
+      // Segnala alla Header quando la lastra di Lino ha riempito lo schermo
+      // (progress > 0.8): è LO STATO REALE della scena, non un'euristica sugli
+      // eventi scroll (che al primo load emettevano transitori fuorvianti).
+      let heroFine = false
+      const segnala = (fine: boolean) => {
+        if (fine === heroFine) return
+        heroFine = fine
+        window.dispatchEvent(new CustomEvent('impronta:hero-fine', { detail: fine }))
+      }
+
       const conio = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
@@ -101,6 +125,7 @@ export function DebossHero({
           scrub: 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
+          onUpdate: (self) => segnala(self.progress > 0.8),
         },
       })
 
@@ -137,10 +162,17 @@ export function DebossHero({
         .to('[data-hero-word]', { scale: 0.972, yPercent: 1, duration: 0.14 }, 0.86)
         .to('[data-mark-dark]', { opacity: 0.96, duration: 0.14 }, 0.86)
 
-      // Ricalcola le misure del pin dopo i font (evita salti d'altezza).
-      void document.fonts?.ready.then(() => ScrollTrigger.refresh())
+      // Ricalcola le misure del pin dopo i font (evita salti d'altezza) e
+      // ri-allinea subito la Header allo stato reale (es. reload a metà pagina).
+      void document.fonts?.ready.then(() => {
+        ScrollTrigger.refresh()
+        segnala((conio.scrollTrigger?.progress ?? 0) > 0.8)
+      })
 
-      return () => split?.revert()
+      return () => {
+        split?.revert()
+        tagSplit?.revert()
+      }
     },
     { scope: root, dependencies: [dark] },
   )

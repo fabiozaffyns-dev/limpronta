@@ -1060,6 +1060,10 @@
     html.js .split-lines {
       opacity: 0;
     }
+    /* Tagline hero: pre-nascosta (solo con JS+motion), si srotola ~1s dopo il load. */
+    html.js [data-hero-tag] {
+      opacity: 0;
+    }
     /* Tessere di griglia: pre-nascoste, entrano a onda (GridStagger). */
     html.js .grid-stagger > * {
       opacity: 0;

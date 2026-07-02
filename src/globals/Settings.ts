@@ -216,10 +216,10 @@ export const Settings: GlobalConfig = {
               name: 'chiSiamoFoto2',
               type: 'upload',
               relationTo: 'media',
-              label: 'Foto 2 — orizzontale (negozio)',
+              label: 'Foto 2 — verticale (dentro il negozio)',
               admin: {
                 description:
-                  'Foto del negozio per la sezione "Vieni a trovarci". Vuoto = pannello materico.',
+                  'Foto verticale dell’interno del negozio: usata in "Vieni a trovarci" (Chi siamo) e in Contatti. Vuoto = pannello materico.',
               },
             },
           ],

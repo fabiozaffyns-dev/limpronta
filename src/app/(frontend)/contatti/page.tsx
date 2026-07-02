@@ -144,9 +144,9 @@ export default async function ContattiPage() {
           </div>
           <EditorialFigure
             media={settings.chiSiamoFoto2}
-            alt="La vetrina de L'Impronta a Orbassano"
+            alt="Dentro L'Impronta a Orbassano"
             aspect="16 / 10"
-            label="La vetrina · Orbassano"
+            label="In negozio · Orbassano"
             sizes="(max-width: 1024px) 100vw, 58vw"
           />
         </Reveal>
