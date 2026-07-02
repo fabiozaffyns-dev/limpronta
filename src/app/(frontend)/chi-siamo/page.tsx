@@ -84,7 +84,7 @@ export default async function ChiSiamoPage() {
       <section className="bg-inchiostro text-avorio">
         <div className="shell py-28 text-center md:py-36">
           <Reveal>
-            <Eyebrow scuro>La materia e il segno</Eyebrow>
+            <Eyebrow scuro>La nostra idea</Eyebrow>
             <p className="mx-auto mt-8 max-w-3xl font-display text-3xl leading-[1.2] text-avorio md:text-[2.7rem]">
               Un capo è fatto di <span className="italic text-ottone-chiaro">materia</span> — lana,
               cotone, mani che cuciono. E lascia un{' '}
