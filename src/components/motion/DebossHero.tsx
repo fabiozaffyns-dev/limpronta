@@ -96,12 +96,14 @@ export function DebossHero({
         },
       })
 
-      // BEAT 1 — ritiro UI: resta solo il segno.
+      // BEAT 1 — ritiro UI: resta solo il segno. fromTo con start esplicito +
+      // immediateRender:false → il fade arriva DAVVERO a 0 (niente cattura pigra
+      // del valore iniziale), così su lino chiaro non resta la tagline chiara.
       conio
-        .to('[data-hero-scroll]', { autoAlpha: 0, y: -6, duration: 0.06 }, 0)
-        .to('[data-hero-eyebrow]', { autoAlpha: 0, y: -14, duration: 0.12 }, 0.02)
-        .to('[data-hero-tag]', { autoAlpha: 0, y: 16, duration: 0.12 }, 0.04)
-        .to('[data-hero-cta]', { autoAlpha: 0, y: 24, duration: 0.12 }, 0.06)
+        .fromTo('[data-hero-scroll]', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -6, duration: 0.06, immediateRender: false }, 0)
+        .fromTo('[data-hero-eyebrow]', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -14, duration: 0.12, immediateRender: false }, 0.02)
+        .fromTo('[data-hero-tag]', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: 16, duration: 0.12, immediateRender: false }, 0.04)
+        .fromTo('[data-hero-cta]', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: 24, duration: 0.12, immediateRender: false }, 0.06)
         .to('[data-hero-veil]', { opacity: 0.9, duration: 0.18 }, 0)
 
       // BEAT 2 — la serratura + l'affondo: il conio si arma e morde la materia.
