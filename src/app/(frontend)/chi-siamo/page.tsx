@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { EditorialFigure } from '@/components/ui/EditorialFigure'
 import { Eyebrow } from '@/components/ui/Eyebrow'
+import { CredoReveal } from '@/components/motion/CredoReveal'
 import { MaskReveal } from '@/components/motion/MaskReveal'
 import { SplitLines } from '@/components/motion/SplitLines'
 import { PageIntro } from '@/components/ui/PageIntro'
@@ -85,12 +86,12 @@ export default async function ChiSiamoPage() {
         <div className="shell py-28 text-center md:py-36">
           <Reveal>
             <Eyebrow scuro>La nostra idea</Eyebrow>
-            <p className="mx-auto mt-8 max-w-3xl font-display text-3xl leading-[1.2] text-avorio md:text-[2.7rem]">
+            <CredoReveal className="mx-auto mt-8 max-w-3xl font-display text-3xl leading-[1.2] text-avorio md:text-[2.7rem]">
               Un capo è fatto di <span className="italic text-ottone-chiaro">materia</span> — lana,
-              cotone, mani che cuciono. E lascia un{' '}
-              <span className="italic text-ottone-chiaro">segno</span>: il modo in cui ti fa stare al
-              mondo.
-            </p>
+              cotone, mani che cuciono.
+              <br />E lascia un <span className="italic text-ottone-chiaro">segno</span>: il modo in
+              cui ti fa stare al mondo.
+            </CredoReveal>
           </Reveal>
         </div>
       </section>

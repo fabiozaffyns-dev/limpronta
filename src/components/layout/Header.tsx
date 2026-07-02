@@ -52,9 +52,20 @@ export function Header({
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
+    window.addEventListener('load', onScroll)
+    // Il setup di Lenis + il refresh del pin "Il Conio" possono emettere uno
+    // scroll transitorio al primo caricamento (header solida anche in cima).
+    // Ri-sincronizziamo sulla posizione REALE una volta assestato tutto.
+    const timers = [
+      window.setTimeout(onScroll, 300),
+      window.setTimeout(onScroll, 1000),
+      window.setTimeout(onScroll, 2200),
+    ]
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
+      window.removeEventListener('load', onScroll)
+      timers.forEach((t) => window.clearTimeout(t))
     }
   }, [pathname, heroDark])
 
