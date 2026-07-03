@@ -25,6 +25,9 @@ export const slugField = ({ source = 'nome', unique = true }: SlugOptions = {}):
     description: 'Generato dal nome se lasciato vuoto. Usato negli URL: modifica con cautela.',
   },
   hooks: {
+    // Alla duplicazione svuota lo slug: viene poi rigenerato dal nuovo nome
+    // (evita il conflitto di slug unico con l'originale).
+    beforeDuplicate: [() => ''],
     beforeValidate: [
       ({ value, data }) => {
         if (typeof value === 'string' && value.trim().length > 0) return slugify(value)

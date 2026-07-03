@@ -30,7 +30,17 @@ export const Products: CollectionConfig = {
     afterDelete: [revalidateAfterDelete],
   },
   fields: [
-    { name: 'nome', type: 'text', required: true, localized: true, label: 'Nome prodotto' },
+    {
+      name: 'nome',
+      type: 'text',
+      required: true,
+      localized: true,
+      label: 'Nome prodotto',
+      hooks: {
+        // Duplica: la copia nasce come "… (copia)".
+        beforeDuplicate: [({ value }) => (typeof value === 'string' && value ? `${value} (copia)` : value)],
+      },
+    },
     slugField({ source: 'nome' }),
     {
       name: 'sku',
@@ -43,6 +53,10 @@ export const Products: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'Codice univoco. Chiave per import e nomi file foto ({SKU}-01.jpg).',
+      },
+      hooks: {
+        // Duplica: SKU + "-COPIA" (poi da sostituire con quello reale del nuovo capo).
+        beforeDuplicate: [({ value }) => (typeof value === 'string' && value ? `${value}-COPIA` : value)],
       },
     },
     {
@@ -211,6 +225,10 @@ export const Products: CollectionConfig = {
       defaultValue: false,
       label: 'In evidenza in home',
       admin: { position: 'sidebar' },
+      hooks: {
+        // Duplica: la copia parte NON in evidenza.
+        beforeDuplicate: [() => false],
+      },
     },
     {
       name: 'disponibile',
