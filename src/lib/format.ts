@@ -10,8 +10,12 @@ const eur = (frazioni: boolean) =>
     maximumFractionDigits: frazioni ? 2 : 0,
   })
 
-export function formatPrice(prezzo?: number | null, suRichiesta?: boolean | null): string {
-  if (suRichiesta || prezzo == null) return 'Su richiesta'
+/**
+ * Prezzo formattato, oppure `null` se "su richiesta" o non impostato: in tal
+ * caso la riga prezzo va semplicemente NON mostrata (niente testo "su richiesta").
+ */
+export function formatPrice(prezzo?: number | null, suRichiesta?: boolean | null): string | null {
+  if (suRichiesta || prezzo == null) return null
   const haDecimali = prezzo % 1 !== 0
   return eur(haDecimali).format(prezzo)
 }

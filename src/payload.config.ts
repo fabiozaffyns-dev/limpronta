@@ -96,7 +96,9 @@ export default buildConfig({
     seoPlugin({
       collections: ['products', 'pages'],
       uploadsCollection: 'media',
-      tabbedUI: true,
+      // false: niente tab (che Payload "ricorda", riaprendo il prodotto su SEO);
+      // i campi SEO diventano una sezione in fondo → si parte SEMPRE dalla scheda.
+      tabbedUI: false,
       generateTitle: ({ doc }) => {
         const t = (doc as { nome?: string; titolo?: string })?.nome ?? (doc as { titolo?: string })?.titolo
         return t ? `${t} · L'Impronta` : "L'Impronta"

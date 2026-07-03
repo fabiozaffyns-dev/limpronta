@@ -1,6 +1,5 @@
 import type { Product, Setting } from '@/payload-types'
 
-import { formatPrice } from './format'
 import { mediaUrl, rel } from './media'
 
 const SITE = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
@@ -64,7 +63,7 @@ export function productLd(product: Product, settings: Setting) {
         ? 'https://schema.org/InStock'
         : 'https://schema.org/LimitedAvailability',
       availableAtOrFrom: { '@type': 'ClothingStore', name: "L'Impronta", telephone: settings.telefono ?? undefined },
-      description: product.prezzoSuRichiesta ? formatPrice(null, true) : undefined,
+      description: product.prezzoSuRichiesta ? 'Prezzo su richiesta' : undefined,
     },
   }
 }

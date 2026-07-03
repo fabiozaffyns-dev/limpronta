@@ -1,7 +1,6 @@
 import Link from 'next/link'
 
 import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
-import { cn } from '@/lib/cn'
 import { formatPrice, formatStagione } from '@/lib/format'
 import { rel } from '@/lib/media'
 import type { Brand, Product } from '@/payload-types'
@@ -65,7 +64,7 @@ export function ProductCard({
         <h3 className="font-display mt-1 line-clamp-2 min-h-[2.75em] text-lg uppercase leading-snug text-inchiostro transition-colors duration-300 group-hover:text-ottone-testo">
           {product.nome}
         </h3>
-        <p className={cn('cartellino mt-2 text-pietra-scura')}>{prezzo}</p>
+        {prezzo && <p className="cartellino mt-2 text-pietra-scura">{prezzo}</p>}
       </div>
     </Link>
   )

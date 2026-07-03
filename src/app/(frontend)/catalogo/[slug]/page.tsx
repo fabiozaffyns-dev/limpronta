@@ -28,7 +28,8 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   if (!product) return { title: 'Prodotto non trovato' }
   const brand = rel<Brand>(product.brand)
   const cover = mediaUrl(product.immagini?.[0])
-  const descr = `${brand?.nome ? `${brand.nome} · ` : ''}${product.nome} — disponibile da L'Impronta, Orbassano. ${formatPrice(product.prezzo, product.prezzoSuRichiesta)}.`
+  const prezzoMeta = formatPrice(product.prezzo, product.prezzoSuRichiesta)
+  const descr = `${brand?.nome ? `${brand.nome} · ` : ''}${product.nome} — disponibile da L'Impronta, Orbassano.${prezzoMeta ? ` ${prezzoMeta}.` : ''}`
   return {
     title: product.nome,
     description: descr,
@@ -101,7 +102,7 @@ export default async function ProductPage({ params }: Params) {
             <Breathe as="h1" className="mt-4 text-4xl uppercase leading-tight md:text-5xl">
               {product.nome}
             </Breathe>
-            <p className="mt-4 font-display text-2xl text-ottone-testo">{prezzo}</p>
+            {prezzo && <p className="mt-4 font-display text-2xl text-ottone-testo">{prezzo}</p>}
 
             {product.descrizione && <RichText data={product.descrizione} className="mt-8" />}
 
