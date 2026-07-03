@@ -1,6 +1,14 @@
 import config from '@payload-config'
 import { getPayload } from 'payload'
 
+import {
+  COOKIE_PARTS,
+  COOKIE_SOMMARIO,
+  COOKIE_TITOLO,
+  PRIVACY_PARTS,
+  PRIVACY_SOMMARIO,
+  PRIVACY_TITOLO,
+} from '../lib/legal-content'
 import { paragraphs } from '../lib/lexical'
 import { slugify } from '../lib/slugify'
 
@@ -104,39 +112,15 @@ async function main() {
     },
     {
       slug: 'privacy',
-      titolo: 'Privacy Policy',
-      sommario: 'Informativa sul trattamento dei dati personali ai sensi del Reg. UE 2016/679 (GDPR).',
-      contenuto: paragraphs(
-        'BOZZA — DA FAR VALIDARE LEGALMENTE.',
-        'Il presente documento è un modello di partenza e deve essere verificato e adattato da un consulente legale prima della pubblicazione definitiva.',
-        '## Titolare del trattamento',
-        'Titolare del trattamento è L’Impronta di Zaffino Fabio, P.IVA 11162620014, Via Vittorio Emanuele II 12/A, 10043 Orbassano (TO). Per esercitare i tuoi diritti puoi contattarci ai recapiti indicati nella pagina Contatti.',
-        '## Dati trattati e finalità',
-        'Trattiamo i dati che ci fornisci tramite il modulo di contatto (nome, email, telefono, messaggio) al solo fine di rispondere alle tue richieste. Non vendiamo né cediamo i tuoi dati a terzi per finalità di marketing.',
-        '## Destinatari e fornitori di servizi',
-        'Per il funzionamento del sito ci avvaliamo di fornitori che possono trattare dati per nostro conto: Formspree Inc. (recapito dei messaggi del modulo di contatto, USA), Vercel Inc. (hosting del sito, USA), Cloudinary Ltd. (distribuzione delle immagini) e Stadia Maps (mappa interattiva, caricata solo previo consenso). I trasferimenti verso paesi extra-UE avvengono sulla base delle garanzie previste dal GDPR (EU-US Data Privacy Framework o Clausole Contrattuali Standard).',
-        '## Base giuridica e conservazione',
-        'La base giuridica è il riscontro alla tua richiesta (misure precontrattuali) e, ove applicabile, il consenso. I dati sono conservati per il tempo necessario a gestire la richiesta e adempiere agli obblighi di legge.',
-        '## Diritti dell’interessato',
-        'Hai diritto di accesso, rettifica, cancellazione, limitazione, opposizione e portabilità dei dati, oltre al diritto di reclamo al Garante per la protezione dei dati personali.',
-      ),
+      titolo: PRIVACY_TITOLO,
+      sommario: PRIVACY_SOMMARIO,
+      contenuto: paragraphs(...PRIVACY_PARTS),
     },
     {
       slug: 'cookie-policy',
-      titolo: 'Cookie Policy',
-      sommario: 'Informativa sull’uso dei cookie e delle tecnologie di tracciamento.',
-      contenuto: paragraphs(
-        'BOZZA — DA FAR VALIDARE LEGALMENTE.',
-        'Il presente documento è un modello di partenza e deve essere verificato e adattato da un consulente legale prima della pubblicazione definitiva.',
-        '## Cosa sono i cookie',
-        'I cookie sono piccoli file salvati sul tuo dispositivo. Questo sito usa cookie tecnici necessari al funzionamento e, previo consenso, cookie statistici anonimi.',
-        '## Cookie tecnici',
-        'Sono indispensabili per la navigazione e la sicurezza del sito e non richiedono consenso.',
-        '## Cookie statistici (previo consenso)',
-        'Utilizziamo strumenti di analisi anonimi (Vercel Analytics) per capire come viene usato il sito. Questi strumenti si attivano solo dopo il tuo consenso, prestato tramite il banner. Puoi modificare la scelta in qualsiasi momento dal pulsante “Cookie” in basso a sinistra.',
-        '## Servizi di terze parti',
-        'Le immagini sono distribuite tramite Cloudinary. La mappa del negozio (Stadia Maps) viene caricata solo dopo il consenso o un tuo click esplicito: fino a quel momento nessun dato raggiunge il fornitore.',
-      ),
+      titolo: COOKIE_TITOLO,
+      sommario: COOKIE_SOMMARIO,
+      contenuto: paragraphs(...COOKIE_PARTS),
     },
   ]
 
