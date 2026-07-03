@@ -1,3 +1,4 @@
+import { unstable_cache } from 'next/cache'
 import type { Where } from 'payload'
 import { cache } from 'react'
 
@@ -9,28 +10,45 @@ import { safeHref } from './sanitize'
 
 const LOCALE = 'it' as const
 
+// Tag unico per la Data Cache: invalidato on-demand dagli hook Payload
+// (src/hooks/revalidate.ts) a ogni modifica di contenuti in admin. Serve
+// soprattutto a /catalogo, che è dinamica (searchParams) e altrimenti pagherebbe
+// brands+categorie+facets su Neon A OGNI richiesta.
+const PAYLOAD_TAG = 'payload'
+
 const published: Where = { _status: { equals: 'published' } }
 
 // ─── Settings ────────────────────────────────────────────────────────────────
-// cache(): deduplica la query nel singolo render (layout + pagina la chiamano entrambi).
-export const getSettings = cache(async (): Promise<Setting> => {
-  const payload = await getPayloadClient()
-  return payload.findGlobal({ slug: 'settings', locale: LOCALE, depth: 1 })
-})
+// cache() deduplica nel singolo render (layout + pagina); unstable_cache evita
+// il giro su Neon a ogni richiesta delle rotte dinamiche.
+export const getSettings = cache(
+  unstable_cache(
+    async (): Promise<Setting> => {
+      const payload = await getPayloadClient()
+      return payload.findGlobal({ slug: 'settings', locale: LOCALE, depth: 1 })
+    },
+    ['settings'],
+    { revalidate: 120, tags: [PAYLOAD_TAG] },
+  ),
+)
 
 // ─── Brands ──────────────────────────────────────────────────────────────────
-export async function getBrands(): Promise<Brand[]> {
-  const payload = await getPayloadClient()
-  const res = await payload.find({
-    collection: 'brands',
-    locale: LOCALE,
-    limit: 100,
-    sort: ['ordine', 'nome'],
-    depth: 1,
-    pagination: false,
-  })
-  return res.docs
-}
+export const getBrands = unstable_cache(
+  async (): Promise<Brand[]> => {
+    const payload = await getPayloadClient()
+    const res = await payload.find({
+      collection: 'brands',
+      locale: LOCALE,
+      limit: 100,
+      sort: ['ordine', 'nome'],
+      depth: 1,
+      pagination: false,
+    })
+    return res.docs
+  },
+  ['brands'],
+  { revalidate: 120, tags: [PAYLOAD_TAG] },
+)
 
 export async function getBrandBySlug(slug: string): Promise<Brand | null> {
   const payload = await getPayloadClient()
@@ -102,18 +120,22 @@ export async function getBrandsIndex(): Promise<BrandIndexItem[]> {
 }
 
 // ─── Categories ──────────────────────────────────────────────────────────────
-export async function getCategories(): Promise<Category[]> {
-  const payload = await getPayloadClient()
-  const res = await payload.find({
-    collection: 'categories',
-    locale: LOCALE,
-    limit: 100,
-    sort: 'ordine',
-    depth: 0,
-    pagination: false,
-  })
-  return res.docs
-}
+export const getCategories = unstable_cache(
+  async (): Promise<Category[]> => {
+    const payload = await getPayloadClient()
+    const res = await payload.find({
+      collection: 'categories',
+      locale: LOCALE,
+      limit: 100,
+      sort: 'ordine',
+      depth: 0,
+      pagination: false,
+    })
+    return res.docs
+  },
+  ['categories'],
+  { revalidate: 120, tags: [PAYLOAD_TAG] },
+)
 
 // ─── Products ────────────────────────────────────────────────────────────────
 export type ProductFilters = {
@@ -165,27 +187,35 @@ export async function getProducts(filters: ProductFilters = {}) {
 }
 
 /** Valori distinti di taglia e colore per i filtri del catalogo. */
-export async function getCatalogFacets(): Promise<{ taglie: string[]; colori: string[] }> {
-  const payload = await getPayloadClient()
-  const res = await payload.find({
-    collection: 'products',
-    locale: LOCALE,
-    where: published,
-    limit: 2000,
-    depth: 0,
-    pagination: false,
-  })
-  const taglie = new Set<string>()
-  const colori = new Set<string>()
-  for (const p of res.docs) {
-    for (const t of p.taglie ?? []) if (t?.taglia) taglie.add(t.taglia)
-    for (const c of p.colori ?? []) if (c?.nome) colori.add(c.nome)
-  }
-  return {
-    taglie: [...taglie].sort((a, b) => a.localeCompare(b, 'it')),
-    colori: [...colori].sort((a, b) => a.localeCompare(b, 'it')),
-  }
-}
+export const getCatalogFacets = unstable_cache(
+  async (): Promise<{ taglie: string[]; colori: string[] }> => {
+    const payload = await getPayloadClient()
+    const res = await payload.find({
+      collection: 'products',
+      locale: LOCALE,
+      where: published,
+      limit: 2000,
+      depth: 0,
+      pagination: false,
+      // Solo i campi necessari: senza select la facet-scan caricava fino a
+      // 2000 documenti prodotto INTERI a ogni richiesta del catalogo.
+      select: { taglie: true, colori: true } as never,
+    })
+    const taglie = new Set<string>()
+    const colori = new Set<string>()
+    // Il cast serve perché `select` (as never) fa perdere il tipo dei docs.
+    for (const p of res.docs as Product[]) {
+      for (const t of p.taglie ?? []) if (t?.taglia) taglie.add(t.taglia)
+      for (const c of p.colori ?? []) if (c?.nome) colori.add(c.nome)
+    }
+    return {
+      taglie: [...taglie].sort((a, b) => a.localeCompare(b, 'it')),
+      colori: [...colori].sort((a, b) => a.localeCompare(b, 'it')),
+    }
+  },
+  ['catalog-facets'],
+  { revalidate: 120, tags: [PAYLOAD_TAG] },
+)
 
 export async function getFeaturedProducts(limit = 6): Promise<Product[]> {
   const payload = await getPayloadClient()

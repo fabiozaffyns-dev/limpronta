@@ -223,10 +223,6 @@ export interface Brand {
    */
   slug: string;
   logo?: (number | null) | Media;
-  /**
-   * Spunta se il logo è chiaro/bianco (pensato per fondi scuri): nella pagina Marchi userò un riquadro scuro così resta leggibile. Lascia vuoto per loghi scuri.
-   */
-  logoChiaro?: boolean | null;
   descrizione?: {
     root: {
       type: string;
@@ -575,7 +571,6 @@ export interface BrandsSelect<T extends boolean = true> {
   nome?: T;
   slug?: T;
   logo?: T;
-  logoChiaro?: T;
   descrizione?: T;
   sito?: T;
   ordine?: T;
@@ -785,7 +780,7 @@ export interface Setting {
    */
   chiSiamoFoto1?: (number | null) | Media;
   /**
-   * Foto del negozio per la sezione "Vieni a trovarci". Vuoto = pannello materico.
+   * Foto VERTICALE dell’interno del negozio per la sezione "Vieni a trovarci" di Chi siamo. Vuoto = pannello materico.
    */
   chiSiamoFoto2?: (number | null) | Media;
   seoDefault?: {

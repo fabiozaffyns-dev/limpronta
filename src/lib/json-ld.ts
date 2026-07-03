@@ -1,8 +1,7 @@
 import type { Product, Setting } from '@/payload-types'
 
 import { mediaUrl, rel } from './media'
-
-const SITE = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+import { SITE_URL as SITE } from './site'
 
 function postalAddress(settings: Setting) {
   const a = settings.indirizzo
@@ -27,8 +26,11 @@ export function clothingStoreLd(settings: Setting) {
     legalName: settings.ragioneSociale ?? undefined,
     url: SITE,
     telephone: settings.telefono ?? undefined,
+    email: settings.email ?? undefined,
     vatID: settings.partitaIva ?? undefined,
-    image: `${SITE}/opengraph-image`,
+    // File statico in public/ (stesso disegno della route opengraph-image):
+    // la route generata ha un hash nel nome, quindi non è referenziabile qui.
+    image: `${SITE}/og.png`,
     address: postalAddress(settings),
     ...(settings.mappa?.lat && settings.mappa?.lng
       ? { geo: { '@type': 'GeoCoordinates', latitude: settings.mappa.lat, longitude: settings.mappa.lng } }
@@ -55,16 +57,22 @@ export function productLd(product: Product, settings: Setting) {
     sku: product.sku,
     ...(brand?.nome ? { brand: { '@type': 'Brand', name: brand.nome } } : {}),
     ...(img.length ? { image: img } : {}),
-    offers: {
-      '@type': 'Offer',
-      priceCurrency: 'EUR',
-      ...(offerPrice != null ? { price: offerPrice } : {}),
-      availability: product.disponibile
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/LimitedAvailability',
-      availableAtOrFrom: { '@type': 'ClothingStore', name: "L'Impronta", telephone: settings.telefono ?? undefined },
-      description: product.prezzoSuRichiesta ? 'Prezzo su richiesta' : undefined,
-    },
+    url: `${SITE}/catalogo/${product.slug}`,
+    // Un'Offer senza price è structured data invalido: per i capi "su richiesta"
+    // (o senza prezzo) si omette del tutto il blocco offers.
+    ...(offerPrice != null
+      ? {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'EUR',
+            price: offerPrice,
+            availability: product.disponibile
+              ? 'https://schema.org/InStock'
+              : 'https://schema.org/OutOfStock',
+            availableAtOrFrom: { '@type': 'ClothingStore', name: "L'Impronta", telephone: settings.telefono ?? undefined },
+          },
+        }
+      : {}),
   }
 }
 

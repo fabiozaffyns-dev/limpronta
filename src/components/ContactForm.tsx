@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { useState, type FormEvent } from 'react'
 
 type Status = 'idle' | 'sending' | 'ok' | 'error'
@@ -64,8 +65,10 @@ export function ContactForm({
     )
   }
 
+  // Validazione NATIVA del browser (niente noValidate): required e type=email
+  // sono attivi, i messaggi d'errore sono accessibili e già in italiano.
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
+    <form onSubmit={onSubmit} className="flex flex-col gap-5">
       {oggetto && <input type="hidden" name="oggetto" value={oggetto} />}
       {/* honeypot anti-spam */}
       <input
@@ -107,6 +110,15 @@ export function ContactForm({
           {status === 'error' ? 'Invio non riuscito. Riprova o scrivici su WhatsApp.' : ''}
         </p>
       </div>
+
+      {/* Informativa al punto di raccolta (art. 13 GDPR). */}
+      <p className="text-xs text-pietra-scura">
+        Inviando il modulo dichiari di aver letto l&apos;
+        <Link href="/privacy" className="underline underline-offset-2 hover:text-ottone-testo">
+          Informativa Privacy
+        </Link>
+        . I dati servono solo a risponderti.
+      </p>
     </form>
   )
 }

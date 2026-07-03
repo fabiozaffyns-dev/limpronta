@@ -113,6 +113,8 @@ async function main() {
         'Titolare del trattamento è L’Impronta di Zaffino Fabio, P.IVA 11162620014, Via Vittorio Emanuele II 12/A, 10043 Orbassano (TO). Per esercitare i tuoi diritti puoi contattarci ai recapiti indicati nella pagina Contatti.',
         '## Dati trattati e finalità',
         'Trattiamo i dati che ci fornisci tramite il modulo di contatto (nome, email, telefono, messaggio) al solo fine di rispondere alle tue richieste. Non vendiamo né cediamo i tuoi dati a terzi per finalità di marketing.',
+        '## Destinatari e fornitori di servizi',
+        'Per il funzionamento del sito ci avvaliamo di fornitori che possono trattare dati per nostro conto: Formspree Inc. (recapito dei messaggi del modulo di contatto, USA), Vercel Inc. (hosting del sito, USA), Cloudinary Ltd. (distribuzione delle immagini) e Stadia Maps (mappa interattiva, caricata solo previo consenso). I trasferimenti verso paesi extra-UE avvengono sulla base delle garanzie previste dal GDPR (EU-US Data Privacy Framework o Clausole Contrattuali Standard).',
         '## Base giuridica e conservazione',
         'La base giuridica è il riscontro alla tua richiesta (misure precontrattuali) e, ove applicabile, il consenso. I dati sono conservati per il tempo necessario a gestire la richiesta e adempiere agli obblighi di legge.',
         '## Diritti dell’interessato',
@@ -133,7 +135,7 @@ async function main() {
         '## Cookie statistici (previo consenso)',
         'Utilizziamo strumenti di analisi anonimi (Vercel Analytics) per capire come viene usato il sito. Questi strumenti si attivano solo dopo il tuo consenso, prestato tramite il banner. Puoi modificare la scelta in qualsiasi momento dal pulsante “Cookie” in basso a sinistra.',
         '## Servizi di terze parti',
-        'Le immagini sono distribuite tramite Cloudinary. I contenuti incorporati eventuali (es. mappe, social) vengono caricati solo dopo il consenso.',
+        'Le immagini sono distribuite tramite Cloudinary. La mappa del negozio (Stadia Maps) viene caricata solo dopo il consenso o un tuo click esplicito: fino a quel momento nessun dato raggiunge il fornitore.',
       ),
     },
   ]
@@ -176,8 +178,8 @@ async function main() {
           facebook: 'https://www.facebook.com/limprontaabbigliamento.uomo',
         },
         orari: [
-          { giorni: 'Lun', orario: '15:30 – 19:30' },
-          { giorni: 'Mar – Sab', orario: '9:30 – 13:00 / 15:30 – 19:30' },
+          { giorni: 'Lun', orario: '', chiuso: true },
+          { giorni: 'Mar – Sab', orario: '9:30 – 12:30 / 16:00 – 19:30' },
           { giorni: 'Dom', orario: '', chiuso: true },
         ],
       },
@@ -187,16 +189,22 @@ async function main() {
     log('Impostazioni: già configurate, nessuna modifica')
   }
 
-  // Primo amministratore
+  // Primo amministratore. NIENTE password di default scritta nel repo:
+  // senza SEED_ADMIN_PASSWORD il seed si ferma con un errore chiaro.
   const users = await payload.find({ collection: 'users', limit: 1, depth: 0 })
   if (users.docs.length === 0) {
     const email = process.env.SEED_ADMIN_EMAIL || 'admin@limpronta.it'
-    const password = process.env.SEED_ADMIN_PASSWORD || 'CambiaQuestaPassword!'
+    const password = process.env.SEED_ADMIN_PASSWORD
+    if (!password) {
+      throw new Error(
+        'SEED_ADMIN_PASSWORD mancante: imposta una password nel .env prima di creare il primo admin.',
+      )
+    }
     await payload.create({
       collection: 'users',
       data: { email, password, name: 'Fabio', role: 'admin' },
     })
-    log(`Admin creato: ${email} (cambia la password al primo accesso)`)
+    log(`Admin creato: ${email}`)
   } else {
     log('Utenti: già presenti, nessun admin creato')
   }

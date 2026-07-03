@@ -24,6 +24,8 @@ export function GridStagger({ children, className }: { children: ReactNode; clas
       if (!el) return
       const items = Array.from(el.children) as HTMLElement[]
       if (!items.length) return
+      // GSAP prende il controllo: disinnesca la rivelazione CSS di scorta.
+      items.forEach((item) => (item.style.animation = 'none'))
       const triggers = ScrollTrigger.batch(items, {
         start: 'top 92%',
         onEnter: (batch) =>

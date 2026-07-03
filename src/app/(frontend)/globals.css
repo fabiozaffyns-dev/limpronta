@@ -1076,6 +1076,25 @@
       transform: translateY(28px);
       will-change: opacity, transform;
     }
+    /* RIVELAZIONE DI SCORTA: il pre-hide sopra lega la prima pittura (LCP)
+       all'idratazione JS. Se GSAP tarda o non parte, questa animazione rivela
+       comunque i contenuti a tempo limitato. Ogni componente motion la
+       disinnesca (style.animation='none') nel momento in cui prende il
+       controllo, quindi nel caso normale non cambia nulla. */
+    html.js .split-lines,
+    html.js [data-hero-tag] {
+      animation: rivelazione-scorta 0.8s ease 2.2s forwards;
+    }
+    html.js .grid-stagger > *,
+    html.js .indice-riga {
+      animation: rivelazione-scorta 0.8s ease 3s forwards;
+    }
+    @keyframes rivelazione-scorta {
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
     /* Filetti e trattini eyebrow che si "tracciano" da sinistra allo scroll. */
     html.js .filetto,
     html.js [data-traccia] {

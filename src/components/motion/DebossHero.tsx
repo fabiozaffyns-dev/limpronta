@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Eyebrow } from '@/components/ui/Eyebrow'
@@ -23,6 +23,25 @@ const SHADOW_DARK = '0 1px 1px rgba(0,0,0,0.55), 0 -1px 0 rgba(255,255,255,0.06)
 export type HeroMedia = { url: string; isVideo: boolean } | null
 
 /**
+ * Trasformazioni Cloudinary per il VIDEO hero (il loader custom copre solo le
+ * immagini): qualità/codec automatici + larghezza limitata invece del file
+ * originale intero, e un poster (primo frame) che dipinge subito l'hero senza
+ * aspettare il download del video.
+ */
+function cloudinaryVideo(url: string): { src: string; poster?: string } {
+  const marker = '/upload/'
+  const i = url.indexOf(marker)
+  if (!url.includes('res.cloudinary.com') || i === -1) return { src: url }
+  const head = url.slice(0, i + marker.length)
+  const tail = url.slice(i + marker.length)
+  if (tail.startsWith('q_auto')) return { src: url }
+  return {
+    src: `${head}q_auto,vc_auto,w_1600/${tail}`,
+    poster: `${head}so_0,q_auto,f_auto,w_1600/${tail.replace(/\.[a-z0-9]+$/i, '.jpg')}`,
+  }
+}
+
+/**
  * Hero "momento orchestrato": le lettere del wordmark salgono una a una da
  * dietro una maschera, poi il segno si imprime. Se è impostato uno sfondo
  * (foto/video) passa in modalità scura: media + velo + wordmark chiaro, così
@@ -37,6 +56,33 @@ export function DebossHero({
 }) {
   const root = useRef<HTMLElement>(null)
   const dark = Boolean(heroMedia?.url)
+  const video = heroMedia?.isVideo ? cloudinaryVideo(heroMedia.url) : null
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [videoFermo, setVideoFermo] = useState(false)
+
+  // WCAG 2.2.2: il video in loop parte fermo per chi preferisce meno movimento
+  // (resta il poster), e ha comunque un controllo pausa/riproduci esplicito.
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      v.pause()
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync una tantum con matchMedia: nello useState iniziale creerebbe un mismatch di idratazione
+      setVideoFermo(true)
+    }
+  }, [])
+
+  const toggleVideo = () => {
+    const v = videoRef.current
+    if (!v) return
+    if (v.paused) {
+      void v.play()
+      setVideoFermo(false)
+    } else {
+      v.pause()
+      setVideoFermo(true)
+    }
+  }
 
   useGSAP(
     () => {
@@ -84,6 +130,7 @@ export function DebossHero({
       if (tagEl) {
         void document.fonts.ready.then(() => {
           if (!root.current) return
+          tagEl.style.animation = 'none' // disinnesca la rivelazione CSS di scorta
           tagSplit = new SplitText(tagEl, { type: 'words', mask: 'words' })
           const ritardo = Math.max(0, 1 - (performance.now() - t0) / 1000)
           gsap.set(tagEl, { autoAlpha: 1 })
@@ -121,6 +168,9 @@ export function DebossHero({
       // BEAT 1 — ritiro UI: resta solo il segno. fromTo con start esplicito +
       // immediateRender:false → il fade arriva DAVVERO a 0 (niente cattura pigra
       // del valore iniziale), così su lino chiaro non resta la tagline chiara.
+      if (root.current?.querySelector('[data-hero-videoctl]')) {
+        conio.fromTo('[data-hero-videoctl]', { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.08, immediateRender: false }, 0)
+      }
       conio
         .fromTo('[data-hero-scroll]', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -6, duration: 0.06, immediateRender: false }, 0)
         .fromTo('[data-hero-eyebrow]', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -14, duration: 0.12, immediateRender: false }, 0.02)
@@ -189,14 +239,16 @@ export function DebossHero({
       {dark && heroMedia && (
         <>
           <div data-hero-media aria-hidden className="absolute inset-0 z-0">
-            {heroMedia.isVideo ? (
+            {video ? (
               <video
+                ref={videoRef}
                 autoPlay
                 muted
                 loop
                 playsInline
+                poster={video.poster}
                 className="h-full w-full object-cover"
-                src={heroMedia.url}
+                src={video.src}
               />
             ) : (
               <Image src={heroMedia.url} alt="" fill priority sizes="100vw" className="object-cover" />
@@ -290,6 +342,28 @@ export function DebossHero({
           style={{ backgroundColor: 'color-mix(in srgb, var(--color-ottone) 55%, transparent)' }}
         />
       </div>
+
+      {/* Controllo pausa/riproduci del video di sfondo (WCAG 2.2.2): discreto,
+         in basso a destra, si ritira col resto della UI durante il Conio. */}
+      {video && (
+        <button
+          type="button"
+          data-hero-videoctl
+          onClick={toggleVideo}
+          aria-label={videoFermo ? 'Riproduci il video di sfondo' : 'Metti in pausa il video di sfondo'}
+          className="absolute bottom-8 right-6 z-[3] flex h-10 w-10 items-center justify-center rounded-full border border-avorio/35 text-avorio/85 transition-colors hover:border-ottone hover:text-avorio focus-visible:border-ottone"
+        >
+          {videoFermo ? (
+            <svg aria-hidden focusable="false" width="12" height="12" viewBox="0 0 12 12">
+              <path d="M2.5 1.2 10.5 6 2.5 10.8Z" fill="currentColor" />
+            </svg>
+          ) : (
+            <svg aria-hidden focusable="false" width="12" height="12" viewBox="0 0 12 12">
+              <path d="M2.5 1h2.4v10H2.5Zm4.6 0h2.4v10H7.1Z" fill="currentColor" />
+            </svg>
+          )}
+        </button>
+      )}
     </section>
     </>
   )

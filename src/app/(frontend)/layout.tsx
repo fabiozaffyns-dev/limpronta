@@ -10,6 +10,7 @@ import { clothingStoreLd } from '@/lib/json-ld'
 import { mediaDoc } from '@/lib/media'
 import { getSettings } from '@/lib/queries'
 import { jsonLdSafe } from '@/lib/sanitize'
+import { SITE_URL } from '@/lib/site'
 
 import './globals.css'
 
@@ -30,17 +31,16 @@ const hanken = Hanken_Grotesk({
 })
 
 // Wordmark "L'IMPRONTA" — serif lapidaria, vicina all'insegna del negozio.
+// Solo il peso 500: è l'unico usato (.wordmark), gli altri erano preload inutili.
 const cinzel = Cinzel({
   subsets: ['latin'],
   variable: '--font-cinzel',
   display: 'swap',
-  weight: ['400', '500', '600'],
+  weight: ['500'],
 })
 
-const SITE = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
-
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "L'Impronta — Abbigliamento uomo a Orbassano",
     template: "%s · L'Impronta",

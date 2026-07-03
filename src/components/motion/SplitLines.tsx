@@ -40,6 +40,7 @@ export function SplitLines({
 
       document.fonts.ready.then(() => {
         if (cancelled || !ref.current) return
+        el.style.animation = 'none' // disinnesca la rivelazione CSS di scorta
         split = new SplitText(el, { type: 'lines', mask: 'lines' })
         gsap.set(el, { autoAlpha: 1 }) // rivela il titolo pre-nascosto dal CSS
         tween = gsap.from(split.lines, {

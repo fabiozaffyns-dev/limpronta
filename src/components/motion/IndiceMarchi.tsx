@@ -23,6 +23,10 @@ export function IndiceMarchi({ items }: { items: BrandIndexItem[] }) {
   useGSAP(
     () => {
       if (prefersReduced()) return
+      // GSAP prende il controllo: disinnesca la rivelazione CSS di scorta.
+      root.current
+        ?.querySelectorAll<HTMLElement>('.indice-riga')
+        .forEach((riga) => (riga.style.animation = 'none'))
       const batch = ScrollTrigger.batch('.indice-riga', {
         start: 'top 92%',
         onEnter: (b) =>

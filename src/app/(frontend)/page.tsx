@@ -110,8 +110,10 @@ export default async function HomePage() {
           </Reveal>
 
           <GridStagger className="mt-12 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
-            {featured.map((p, i) => (
-              <ProductCard key={p.id} product={p} priority={i < 4} />
+            {/* niente priority: la sezione è ~3 viewport sotto la piega, i preload
+               ad alta priorità competevano con il vero LCP (l'hero). */}
+            {featured.map((p) => (
+              <ProductCard key={p.id} product={p} />
             ))}
           </GridStagger>
           <Link href="/catalogo" className="cartellino link-segno mt-10 inline-block text-ottone-testo sm:hidden">

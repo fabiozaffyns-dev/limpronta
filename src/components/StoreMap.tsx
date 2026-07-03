@@ -27,9 +27,12 @@ export function StoreMap({
   const containerRef = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(false)
 
-  // Se l'utente ha già accettato i cookie, mostra subito la mappa.
+  // Se l'utente ha già accettato i cookie, mostra subito la mappa. La lettura
+  // DEVE stare in un effect (localStorage non esiste in SSR: leggerlo nello
+  // useState iniziale creerebbe un mismatch di idratazione).
   useEffect(() => {
     try {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync una tantum col valore persistito, nessuna cascata
       if (localStorage.getItem(CONSENT_KEY) === 'accepted') setActive(true)
     } catch {
       /* localStorage non disponibile: resta il placeholder */

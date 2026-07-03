@@ -1,4 +1,4 @@
-import { revalidatePath } from 'next/cache'
+import { revalidatePath, revalidateTag } from 'next/cache'
 import { after } from 'next/server'
 import type {
   CollectionAfterChangeHook,
@@ -22,6 +22,10 @@ function revalidateSite(): void {
   const run = () => {
     try {
       revalidatePath('/', 'layout')
+      // Invalida anche la Data Cache (brands/categorie/facets/settings in
+      // src/lib/queries.ts): /catalogo è dinamica e non passa da revalidatePath.
+      // 'max' = scadenza immediata (Next 16 richiede il profilo esplicito).
+      revalidateTag('payload', 'max')
     } catch {
       /* fuori da una richiesta Next (CLI/seed): nessuna pagina da rigenerare */
     }

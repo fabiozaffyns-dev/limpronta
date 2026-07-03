@@ -1,8 +1,11 @@
 import type { MetadataRoute } from 'next'
 
 import { getAllSlugs } from '@/lib/queries'
+import { SITE_URL as SITE } from '@/lib/site'
 
-const SITE = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'
+// Le metadata route NON vengono invalidate da revalidatePath: senza questa ISR
+// i contenuti creati dopo il deploy non entrerebbero mai in sitemap.
+export const revalidate = 3600
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [products, brands, lookbooks, pages] = await Promise.all([
@@ -19,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     '/catalogo',
     '/marchi',
     '/lookbook',
+    '/chi-siamo',
     '/contatti',
   ].map((path) => ({ url: `${SITE}${path}`, lastModified: now, changeFrequency: 'weekly', priority: path === '' ? 1 : 0.8 }))
 
@@ -32,6 +36,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...products.filter((d) => d.slug).map((d) => toEntry('/catalogo', d)),
     ...brands.filter((d) => d.slug).map((d) => toEntry('/marchi', d)),
     ...lookbooks.filter((d) => d.slug).map((d) => toEntry('/lookbook', d)),
-    ...pages.filter((d) => d.slug).map((d) => ({ url: `${SITE}/${d.slug}`, lastModified: d.updatedAt ? new Date(d.updatedAt) : now })),
+    // 'chi-siamo' è servita dalla rotta statica dedicata (già tra le staticRoutes).
+    ...pages.filter((d) => d.slug && d.slug !== 'chi-siamo').map((d) => ({ url: `${SITE}/${d.slug}`, lastModified: d.updatedAt ? new Date(d.updatedAt) : now })),
   ]
 }

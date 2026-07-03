@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   title: 'Catalogo',
   description:
     "Il catalogo uomo de L'Impronta: capispalla, giacche, camicie, maglieria, calzature e accessori dei migliori marchi. Filtra per marchio, categoria, taglia e stagione.",
+  // I filtri generano infinite varianti di query string: per Google è UNA pagina.
+  alternates: { canonical: '/catalogo' },
 }
 
 type SP = Record<string, string | string[] | undefined>
