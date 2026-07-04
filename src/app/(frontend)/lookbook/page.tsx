@@ -35,6 +35,10 @@ export default async function LookbookIndexPage() {
               const stagione = formatStagioneEstesa(lb.stagione)
               return (
                 <Link key={lb.id} href={`/lookbook/${lb.slug}`} className="group block">
+                  <div className="mb-5">
+                    {stagione && <Eyebrow>{stagione}</Eyebrow>}
+                    <h2 className="mt-2 text-3xl transition-colors group-hover:text-ottone-testo">{lb.titolo}</h2>
+                  </div>
                   <div className="overflow-hidden">
                     <CloudinaryImage
                       media={cover}
@@ -43,10 +47,6 @@ export default async function LookbookIndexPage() {
                       sizes="(max-width: 768px) 100vw, 50vw"
                       imgClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
                     />
-                  </div>
-                  <div className="mt-5">
-                    {stagione && <Eyebrow>{stagione}</Eyebrow>}
-                    <h2 className="mt-2 text-3xl transition-colors group-hover:text-ottone-testo">{lb.titolo}</h2>
                   </div>
                 </Link>
               )
