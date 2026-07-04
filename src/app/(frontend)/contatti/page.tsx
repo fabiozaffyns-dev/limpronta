@@ -50,8 +50,9 @@ export default async function ContattiPage() {
           <p className="font-display max-w-3xl text-[clamp(1.7rem,4vw,2.7rem)] leading-[1.18]">
             {/* ottone-testo, non ottone-chiaro: su fondo lino serve il contrasto AA */}
             <span className="italic text-ottone-testo">Caro cliente,</span> vestire bene comincia da una
-            conversazione. Da noi non trovi un camerino frettoloso, ma il tempo di capire cosa ti sta
-            davvero bene: il tessuto giusto, la vestibilità giusta, il consiglio di chi lo fa dal 2014.
+            conversazione. Da noi non trovi un camerino frettoloso, ma{' '}
+            <span className="text-ottone-testo">il tempo</span> di capire cosa ti sta davvero bene: il
+            tessuto giusto, la vestibilità giusta, il consiglio di chi lo fa dal 2014.
           </p>
         </Reveal>
         <hr className="filetto mt-12" data-traccia />
