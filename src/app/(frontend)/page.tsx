@@ -145,19 +145,7 @@ export default async function HomePage() {
       {lookbook && (
         <section className="relative bg-inchiostro text-avorio">
           <div className="grid lg:grid-cols-2">
-            <div className="relative flex min-h-[52vh] items-center justify-center overflow-hidden px-8 py-20">
-              <span
-                aria-hidden
-                className="absolute inset-6 border"
-                style={{ borderColor: 'color-mix(in srgb, var(--color-ottone) 22%, transparent)' }}
-              />
-              <div className="relative text-center">
-                {lookbookStagione && (
-                  <span className="cartellino text-ottone-chiaro">{lookbookStagione}</span>
-                )}
-                <Wordmark scuro className="mt-6 block text-5xl md:text-6xl" />
-              </div>
-            </div>
+            {/* Titolo e CTA a sinistra */}
             <div className="flex items-center px-8 py-20 md:px-16">
               <Reveal>
                 <Eyebrow scuro>Lookbook</Eyebrow>
@@ -171,6 +159,21 @@ export default async function HomePage() {
                   <SwapLabel>Sfoglia il lookbook</SwapLabel>
                 </Link>
               </Reveal>
+            </div>
+            {/* Wordmark incorniciato a destra: container query → il segno scala
+               con la larghezza REALE del box (non del viewport), centrato. */}
+            <div className="@container relative flex min-h-[52vh] items-center justify-center overflow-hidden px-8 py-20">
+              <span
+                aria-hidden
+                className="absolute inset-6 border"
+                style={{ borderColor: 'color-mix(in srgb, var(--color-ottone) 22%, transparent)' }}
+              />
+              <div className="relative text-center">
+                {lookbookStagione && (
+                  <span className="cartellino text-ottone-chiaro">{lookbookStagione}</span>
+                )}
+                <Wordmark scuro className="mt-6 block text-[clamp(3rem,11.5cqw,9rem)]" />
+              </div>
             </div>
           </div>
 
