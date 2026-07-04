@@ -32,7 +32,9 @@ export function EditorialFigure({
     <figure className="group relative overflow-hidden">
       {hasImg ? (
         parallax ? (
-          <ParallaxMedia>
+          // amount 14: sulle foto-racconto il parallax deve VEDERSI (l'8 di
+          // default, pensato per le orizzontali dei lookbook, era impercettibile).
+          <ParallaxMedia amount={14}>
             {/* zoom hover sull'involucro: l'<img> resta a GSAP (parallax) */}
             <div className="transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]">
               <CloudinaryImage media={media} alt={alt} aspect={aspect} sizes={sizes} className="w-full" />

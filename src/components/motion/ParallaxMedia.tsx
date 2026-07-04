@@ -12,7 +12,8 @@ gsap.registerPlugin(useGSAP, ScrollTrigger)
 /**
  * Parallax disciplinato: l'immagine interna scorre di pochi punti percentuali
  * più lenta del flusso, dando profondità editoriale. L'immagine è sovradimensionata
- * (scale 1.12) così lo spostamento non scopre mai bordi vuoti (zero CLS).
+ * in proporzione all'ampiezza (overscan = 1 + amount×1.5%) così lo spostamento
+ * non scopre mai bordi vuoti (zero CLS).
  * Da usare SOLO su media-racconto, MAI su card di catalogo (lì serve nitidezza).
  */
 export function ParallaxMedia({
@@ -21,6 +22,7 @@ export function ParallaxMedia({
   className,
 }: {
   children: ReactNode
+  /** Escursione in % dell'altezza dell'immagine (±amount lungo la traversata). */
   amount?: number
   className?: string
 }) {
@@ -33,7 +35,7 @@ export function ParallaxMedia({
       if (!el) return
       const img = el.querySelector('img')
       if (!img) return
-      gsap.set(img, { scale: 1.12, willChange: 'transform' })
+      gsap.set(img, { scale: 1 + amount * 0.015, willChange: 'transform' })
       gsap.fromTo(
         img,
         { yPercent: -amount },

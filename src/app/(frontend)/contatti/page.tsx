@@ -149,6 +149,7 @@ export default async function ContattiPage() {
             aspect="16 / 10"
             label="In negozio · Orbassano"
             sizes="(max-width: 1024px) 100vw, 58vw"
+            parallax
           />
         </Reveal>
 
