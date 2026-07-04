@@ -336,11 +336,14 @@ export function DebossHero({
         className="absolute bottom-8 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-3"
       >
         <span className={cn('cartellino', dark ? 'text-avorio/80' : 'text-pietra-scura')}>Scorri</span>
-        <span
-          aria-hidden
-          className="block h-12 w-px"
-          style={{ backgroundColor: 'color-mix(in srgb, var(--color-ottone) 55%, transparent)' }}
-        />
+        {/* Traccia tenue + "seme" di luce ottone che scende in loop (il cue di
+           scroll). Statico e pieno con reduced-motion (vedi globals.css). */}
+        <span aria-hidden className="hero-scroll-line relative block h-12 w-px overflow-hidden">
+          <span
+            className="hero-scroll-bead absolute inset-x-0 top-0 block h-4"
+            style={{ backgroundColor: dark ? 'var(--color-ottone-chiaro)' : 'var(--color-ottone)' }}
+          />
+        </span>
       </div>
 
       {/* Controllo pausa/riproduci del video di sfondo (WCAG 2.2.2): discreto,
