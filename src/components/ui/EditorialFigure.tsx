@@ -1,10 +1,13 @@
+import { ParallaxMedia } from '@/components/motion/ParallaxMedia'
 import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { mediaDoc, type MediaLike } from '@/lib/media'
 
 /**
  * Immagine editoriale con hover "wow": zoom lento e cinematografico e un velo
  * caldo. Funziona sia con una foto reale (CloudinaryImage) sia col pannello
- * materico di fallback. Tutto CSS (group-hover), nessun JS.
+ * materico di fallback. Con `parallax` la foto scorre più lenta del flusso
+ * (ParallaxMedia): il parallax vive sull'<img> (GSAP), lo zoom hover su un
+ * involucro separato — due transform su elementi diversi, niente conflitti.
  */
 export function EditorialFigure({
   media,
@@ -12,12 +15,14 @@ export function EditorialFigure({
   aspect,
   label,
   sizes = '(max-width: 1024px) 100vw, 50vw',
+  parallax = false,
 }: {
   media: MediaLike
   alt: string
   aspect: string
   label?: string
   sizes?: string
+  parallax?: boolean
 }) {
   const hasImg = Boolean(mediaDoc(media))
   const zoom =
@@ -26,14 +31,23 @@ export function EditorialFigure({
   return (
     <figure className="group relative overflow-hidden">
       {hasImg ? (
-        <CloudinaryImage
-          media={media}
-          alt={alt}
-          aspect={aspect}
-          sizes={sizes}
-          className="w-full"
-          imgClassName={zoom}
-        />
+        parallax ? (
+          <ParallaxMedia>
+            {/* zoom hover sull'involucro: l'<img> resta a GSAP (parallax) */}
+            <div className="transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]">
+              <CloudinaryImage media={media} alt={alt} aspect={aspect} sizes={sizes} className="w-full" />
+            </div>
+          </ParallaxMedia>
+        ) : (
+          <CloudinaryImage
+            media={media}
+            alt={alt}
+            aspect={aspect}
+            sizes={sizes}
+            className="w-full"
+            imgClassName={zoom}
+          />
+        )
       ) : (
         <div className={`placeholder-materico w-full ${zoom}`} style={{ aspectRatio: aspect }} />
       )}

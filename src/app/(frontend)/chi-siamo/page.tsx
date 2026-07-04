@@ -55,6 +55,7 @@ export default async function ChiSiamoPage() {
             alt="L'Impronta — la nostra storia"
             aspect="4 / 5"
             label="Orbassano · dal 2014"
+            parallax
           />
         </MaskReveal>
         <Reveal delay={120}>
@@ -128,6 +129,7 @@ export default async function ChiSiamoPage() {
             aspect="3 / 4"
             label="Il negozio"
             sizes="(max-width: 1024px) 100vw, 45vw"
+            parallax
           />
         </MaskReveal>
         <Reveal delay={120} className="lg:order-1">

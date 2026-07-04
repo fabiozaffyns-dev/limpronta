@@ -48,7 +48,9 @@ export function ParallaxMedia({
   )
 
   return (
-    <div ref={root} className={className ? `overflow-hidden ${className}` : 'overflow-hidden'}>
+    // data-parallax: segnala ai reveal esterni (MaskReveal) che l'<img> è già
+    // gestita qui — il loro contro-scale azzererebbe l'overscan (bordi scoperti).
+    <div ref={root} data-parallax className={className ? `overflow-hidden ${className}` : 'overflow-hidden'}>
       {children}
     </div>
   )

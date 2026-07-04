@@ -28,8 +28,10 @@ export function MaskReveal({ children, className }: { children: ReactNode; class
         defaults: { ease: EASE_EDITORIAL },
       })
       tl.fromTo(el, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.1 }, 0)
+      // Contro-scale SOLO se l'immagine non è già gestita da un ParallaxMedia:
+      // il suo settle a scale 1 azzererebbe l'overscan del parallax (bordi scoperti).
       const img = el.querySelector('img')
-      if (img) tl.fromTo(img, { scale: 1.12 }, { scale: 1, duration: 1.2 }, 0)
+      if (img && !img.closest('[data-parallax]')) tl.fromTo(img, { scale: 1.12 }, { scale: 1, duration: 1.2 }, 0)
     },
     { scope: root },
   )
