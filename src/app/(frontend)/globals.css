@@ -749,6 +749,17 @@
     background-size: 100% 1px;
   }
 
+  /* Muro "Le firme principali" (home): all'hover di un nome gli altri si
+     ritraggono — stessa grammatica dell'indice Marchi. La regola vive sugli
+     <a> interni (i wrapper figli di GridStagger portano l'opacity inline di
+     GSAP, che vincerebbe sul CSS). */
+  .muro-firme:hover a:not(:hover) {
+    opacity: 0.35;
+  }
+  .muro-firme a {
+    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   /* Link "marchio": SWAP verticale — il nome gira e torna più inciso in ottone
      (peso + optical-size della Fraunces variabile). Niente filetto/underline.
      Il colore vive nelle .swap-line, non in utility Tailwind: vince il cascade. */

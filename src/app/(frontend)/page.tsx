@@ -52,29 +52,36 @@ export default async function HomePage() {
       {/* ─── Hero (momento orchestrato) ───────────────────────────────────── */}
       <DebossHero whatsappNumber={settings.whatsappNumber} heroMedia={heroMedia} />
 
-      {/* ─── Muro dei marchi ──────────────────────────────────────────────── */}
+      {/* ─── Le firme principali ──────────────────────────────────────────── */}
       {brands.length > 0 && (
         <section className="border-y" style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}>
-          <div className="shell py-12">
-            <Eyebrow className="mb-6">Le firme principali</Eyebrow>
-            <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
+          <div className="shell py-16 text-center md:py-20">
+            <Eyebrow className="justify-center">Le firme principali</Eyebrow>
+            {/* Nomi grandi, CENTRATI (qualunque numero ne sia in evidenza),
+               entrata a onda; all'hover un nome si incide (swap ottone) e gli
+               altri si ritraggono (stessa grammatica dell'indice Marchi). */}
+            <GridStagger className="muro-firme mt-10 flex flex-wrap items-baseline justify-center gap-x-12 gap-y-5">
               {brandsMuro.map((b) => {
                 // Click sul marchio in home → sito ufficiale del brand (nuova scheda).
                 // Senza sito impostato, fallback alla pagina marchio interna.
                 const sito = safeHref(b.sito)
-                const cls = 'font-display link-marchio text-xl md:text-2xl'
-                return sito ? (
-                  <a key={b.id} href={sito} target="_blank" rel="noopener noreferrer" className={cls}>
-                    <SwapLabel as="link">{b.nome}</SwapLabel>
-                  </a>
-                ) : (
-                  <Link key={b.id} href={`/marchi/${b.slug}`} className={cls}>
-                    <SwapLabel as="link">{b.nome}</SwapLabel>
-                  </Link>
+                const cls = 'font-display link-marchio text-[clamp(1.5rem,3vw,2.5rem)]'
+                return (
+                  <div key={b.id}>
+                    {sito ? (
+                      <a href={sito} target="_blank" rel="noopener noreferrer" className={cls}>
+                        <SwapLabel as="link">{b.nome}</SwapLabel>
+                      </a>
+                    ) : (
+                      <Link href={`/marchi/${b.slug}`} className={cls}>
+                        <SwapLabel as="link">{b.nome}</SwapLabel>
+                      </Link>
+                    )}
+                  </div>
                 )
               })}
-            </div>
-            <Link href="/marchi" className="btn btn-ghost mt-10">
+            </GridStagger>
+            <Link href="/marchi" className="btn btn-ghost mt-12">
               <SwapLabel>Tutti i marchi</SwapLabel>
             </Link>
           </div>
