@@ -25,11 +25,19 @@ export function Header({
   heroDark?: boolean
 }) {
   const pathname = usePathname()
-  const [scrolled, setScrolled] = useState(false)
+  // Su Vercel la rigenerazione ISR della home usa il percorso interno "/index":
+  // usePathname() lo restituisce sia nel prerender sia nello stato idratato del
+  // router. Senza questo alias l'HTML della home nasceva con la header SOLIDA.
+  const isHome = pathname === '/' || pathname === '/index'
+  // null = "non ancora misurato": la PRIMA misura (IO o scroll) è sempre un
+  // cambio di stato → re-render garantito. Serve perché React all'idratazione
+  // NON corregge gli attributi divergenti: se il server ha reso la classe
+  // sbagliata e lo stato non cambia mai, la classe sbagliata resta per sempre.
+  const [scrolled, setScrolled] = useState<boolean | null>(null)
   const [open, setOpen] = useState(false)
   const drawerRef = useRef<HTMLDivElement>(null)
 
-  const solid = scrolled || pathname !== '/'
+  const solid = scrolled === true || !isHome
   // Header trasparente sopra un hero con sfondo scuro → testo chiaro.
   const onDark = !solid && heroDark
 
@@ -38,7 +46,7 @@ export function Header({
     // diventa solida (testo scuro) solo DOPO lo scroll dell'hero. L'hero "Il
     // Conio" è pinnato per ~120%vh, quindi la soglia è ~fine hero (col
     // reduced-motion non c'è pin → hero alto 100svh). Altrove: soglia minima.
-    const homeHero = pathname === '/' && heroDark
+    const homeHero = isHome && heroDark
 
     if (homeHero) {
       // Sentinello in cima al documento (renderizzato da DebossHero, FUORI dal
@@ -65,7 +73,7 @@ export function Header({
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [pathname, heroDark])
+  }, [pathname, isHome, heroDark])
 
   // Blocca lo scroll del body quando il menù mobile è aperto.
   useEffect(() => {
@@ -101,7 +109,7 @@ export function Header({
           className="z-10"
           onClick={(e) => {
             // Già in home: il wordmark riporta in cima (stato "primo accesso").
-            if (pathname !== '/') return
+            if (!isHome) return
             e.preventDefault()
             setOpen(false)
             const lenis = (window as unknown as { __lenis?: { scrollTo?: (t: number, o?: object) => void } }).__lenis
