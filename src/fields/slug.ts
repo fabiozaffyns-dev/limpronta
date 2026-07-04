@@ -23,6 +23,14 @@ export const slugField = ({ source = 'nome', unique = true }: SlugOptions = {}):
   admin: {
     position: 'sidebar',
     description: 'Generato dal nome se lasciato vuoto. Usato negli URL: modifica con cautela.',
+    components: {
+      // Campo custom con bottone "Genera dal nome/titolo" (vale ovunque:
+      // la factory è usata da Prodotti, Marchi, Categorie, Lookbook e Pagine).
+      Field: {
+        path: '@/fields/SlugInput#SlugInput',
+        clientProps: { sourcePath: source },
+      },
+    },
   },
   hooks: {
     // Alla duplicazione svuota lo slug: viene poi rigenerato dal nuovo nome
