@@ -2,6 +2,7 @@ import Link from 'next/link'
 
 import { ProductCard } from '@/components/ProductCard'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
+import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Wordmark } from '@/components/ui/Wordmark'
@@ -10,6 +11,7 @@ import { CredoReveal } from '@/components/motion/CredoReveal'
 import { GridStagger } from '@/components/motion/GridStagger'
 import { Reveal } from '@/components/motion/Reveal'
 import { SplitLines } from '@/components/motion/SplitLines'
+import { cn } from '@/lib/cn'
 import { formatStagioneEstesa } from '@/lib/format'
 import { mediaDoc } from '@/lib/media'
 import { safeHref } from '@/lib/sanitize'
@@ -154,6 +156,35 @@ export default async function HomePage() {
               </Reveal>
             </div>
           </div>
+
+          {/* Filmstrip: una sola riga di provini dalla galleria — MAI a capo.
+             3 su mobile, 4 su tablet, 6 su desktop (gli extra sono nascosti
+             dai breakpoint). Ogni provino porta al lookbook. */}
+          {(lookbook.immagini ?? []).length >= 3 && (
+            <GridStagger className="grid grid-cols-3 gap-2 px-2 pb-2 sm:grid-cols-4 lg:grid-cols-6">
+              {(lookbook.immagini ?? []).slice(0, 6).map((img, i) => (
+                <Link
+                  key={i}
+                  href={`/lookbook/${lookbook.slug}`}
+                  aria-label={`Sfoglia il lookbook ${lookbook.titolo}`}
+                  className={cn(
+                    'group relative block overflow-hidden',
+                    i === 3 && 'hidden sm:block',
+                    i >= 4 && 'hidden lg:block',
+                  )}
+                >
+                  <CloudinaryImage
+                    media={img}
+                    alt=""
+                    aspect="1 / 1"
+                    sizes="(max-width: 640px) 33vw, (max-width: 1024px) 25vw, 17vw"
+                    imgClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+                  />
+                  <span className="pointer-events-none absolute inset-0 bg-inchiostro/25 transition-colors duration-500 group-hover:bg-inchiostro/0" />
+                </Link>
+              ))}
+            </GridStagger>
+          )}
         </section>
       )}
 
