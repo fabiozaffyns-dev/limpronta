@@ -8,7 +8,7 @@ import { RichText } from '@/components/ui/RichText'
 import { ParallaxMedia } from '@/components/motion/ParallaxMedia'
 import { cn } from '@/lib/cn'
 import { formatStagioneEstesa } from '@/lib/format'
-import { mediaUrl } from '@/lib/media'
+import { mediaDoc, mediaUrl } from '@/lib/media'
 import { getLookbookBySlug } from '@/lib/queries'
 
 type Params = { params: Promise<{ slug: string }> }
@@ -50,10 +50,14 @@ export default async function LookbookPage({ params }: Params) {
       </header>
 
       <section className="shell pb-24">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        {/* Mosaico guidato dal FORMATO reale delle foto: le orizzontali occupano
+           l'intera larghezza (con parallasse), le verticali si affiancano a
+           coppie. grid-auto-flow:dense ricompatta i buchi quando un'orizzontale
+           segue un numero dispari di verticali. */}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:[grid-auto-flow:dense]">
           {images.map((img, i) => {
-            // Ritmo editoriale: la prima immagine e ogni quinta occupano l'intera larghezza.
-            const wide = i === 0 || i % 5 === 4
+            const doc = mediaDoc(img)
+            const wide = Boolean(doc?.width && doc?.height && doc.width > doc.height)
             return (
               <div key={i} className={cn(wide && 'sm:col-span-2')}>
                 {wide ? (
@@ -61,7 +65,7 @@ export default async function LookbookPage({ params }: Params) {
                     <CloudinaryImage
                       media={img}
                       alt={`${lb.titolo} — ${i + 1}`}
-                      aspect="16 / 9"
+                      aspect="3 / 2"
                       sizes="100vw"
                       priority={i === 0}
                     />
@@ -72,6 +76,7 @@ export default async function LookbookPage({ params }: Params) {
                     alt={`${lb.titolo} — ${i + 1}`}
                     aspect="4 / 5"
                     sizes="(max-width: 640px) 100vw, 50vw"
+                    priority={i === 0}
                   />
                 )}
               </div>

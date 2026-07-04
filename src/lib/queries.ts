@@ -287,7 +287,17 @@ export async function getLookbooks(): Promise<Lookbook[]> {
     depth: 1,
     sort: '-createdAt',
   })
-  return res.docs
+  // Ordine per STAGIONE, non per data di creazione: la più recente prima
+  // (PE 2026 > AI 2025 > PE 2025 …). Chiave anno*2 + (AI=1, PE=0): l'AI di un
+  // anno è cronologicamente successiva alla PE dello stesso anno. I lookbook
+  // senza stagione vanno in coda; a parità, vince il creato più di recente.
+  const chiave = (l: Lookbook) =>
+    l.stagione?.anno ? l.stagione.anno * 2 + (l.stagione.tipo === 'AI' ? 1 : 0) : 0
+  return res.docs.sort(
+    (a, b) =>
+      chiave(b) - chiave(a) ||
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  )
 }
 
 export async function getLookbookBySlug(slug: string): Promise<Lookbook | null> {
