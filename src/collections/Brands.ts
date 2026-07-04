@@ -9,7 +9,7 @@ export const Brands: CollectionConfig = {
   labels: { singular: 'Marchio', plural: 'Marchi' },
   admin: {
     useAsTitle: 'nome',
-    defaultColumns: ['nome', 'ordine'],
+    defaultColumns: ['nome', 'inEvidenzaHome', 'ordine'],
     group: 'Catalogo',
   },
   access: {
@@ -52,6 +52,17 @@ export const Brands: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'Numero più basso = mostrato prima. Lascia 0 per l’ordine alfabetico.',
+      },
+    },
+    {
+      name: 'inEvidenzaHome',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'In evidenza in home',
+      admin: {
+        position: 'sidebar',
+        description:
+          'Mostra il marchio nel “muro dei marchi” della homepage. Se nessun marchio è spuntato, la home li mostra tutti.',
       },
     },
   ],

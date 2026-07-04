@@ -37,6 +37,11 @@ export default async function HomePage() {
   const lookbook = lookbooks[0] ?? null
   const lookbookStagione = lookbook ? formatStagioneEstesa(lookbook.stagione) : null
 
+  // Muro dei marchi: solo quelli spuntati "In evidenza in home" in admin.
+  // Finché nessuno è spuntato, si mostrano tutti (niente sezione vuota).
+  const brandsEvidenza = brands.filter((b) => b.inEvidenzaHome)
+  const brandsMuro = brandsEvidenza.length > 0 ? brandsEvidenza : brands
+
   const heroDoc = mediaDoc(settings.heroMedia)
   const heroMedia = heroDoc?.url
     ? { url: heroDoc.url, isVideo: Boolean(heroDoc.mimeType?.startsWith('video')) }
@@ -51,9 +56,9 @@ export default async function HomePage() {
       {brands.length > 0 && (
         <section className="border-y" style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}>
           <div className="shell py-12">
-            <Eyebrow className="mb-6">I nostri marchi</Eyebrow>
+            <Eyebrow className="mb-6">Le firme principali</Eyebrow>
             <div className="flex flex-wrap items-center gap-x-10 gap-y-4">
-              {brands.map((b) => {
+              {brandsMuro.map((b) => {
                 // Click sul marchio in home → sito ufficiale del brand (nuova scheda).
                 // Senza sito impostato, fallback alla pagina marchio interna.
                 const sito = safeHref(b.sito)
@@ -70,7 +75,7 @@ export default async function HomePage() {
               })}
             </div>
             <Link href="/marchi" className="btn btn-ghost mt-10">
-              <SwapLabel>Scopri i marchi</SwapLabel>
+              <SwapLabel>Tutti i marchi</SwapLabel>
             </Link>
           </div>
         </section>

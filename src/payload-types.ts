@@ -243,6 +243,10 @@ export interface Brand {
    * Numero più basso = mostrato prima. Lascia 0 per l’ordine alfabetico.
    */
   ordine?: number | null;
+  /**
+   * Mostra il marchio nel “muro dei marchi” della homepage. Se nessun marchio è spuntato, la home li mostra tutti.
+   */
+  inEvidenzaHome?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -574,6 +578,7 @@ export interface BrandsSelect<T extends boolean = true> {
   descrizione?: T;
   sito?: T;
   ordine?: T;
+  inEvidenzaHome?: T;
   updatedAt?: T;
   createdAt?: T;
 }
