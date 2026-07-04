@@ -28,7 +28,7 @@ const VALORI = [
   },
   {
     t: 'La materia',
-    d: 'Tessuti veri, costruzioni oneste, dettagli che si notano da vicino. La sostanza prima del rumore.',
+    d: 'Tessuti veri, costruzioni oneste, dettagli che si notano da vicino. La sostanza viene prima del rumore.',
   },
   {
     t: 'La persona',
