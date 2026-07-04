@@ -751,13 +751,34 @@
 
   /* Muro "Le firme principali" (home): all'hover di un nome gli altri si
      ritraggono — stessa grammatica dell'indice Marchi. La regola vive sugli
-     <a> interni (i wrapper figli di GridStagger portano l'opacity inline di
-     GSAP, che vincerebbe sul CSS). */
+     <a> interni (i wrapper [data-firma] portano l'opacity inline di GSAP,
+     che vincerebbe sul CSS). */
   .muro-firme:hover a:not(:hover) {
     opacity: 0.35;
   }
   .muro-firme a {
     transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* La lama di luce che spazza le firme (pilotata da MuroFirme, un passaggio). */
+  .muro-lama {
+    position: absolute;
+    top: -12%;
+    bottom: -12%;
+    left: 0;
+    width: 34%;
+    transform: skewX(-16deg);
+    background: linear-gradient(
+      100deg,
+      transparent 0%,
+      color-mix(in srgb, var(--color-ottone) 38%, transparent) 42%,
+      rgba(255, 249, 238, 0.85) 50%,
+      color-mix(in srgb, var(--color-ottone) 38%, transparent) 58%,
+      transparent 100%
+    );
+    mix-blend-mode: overlay;
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform;
   }
 
   /* Link "marchio": SWAP verticale — il nome gira e torna più inciso in ottone
@@ -1087,6 +1108,10 @@
       transform: translateY(28px);
       will-change: opacity, transform;
     }
+    /* Firme in home: pre-nascoste, "si imprimono" (MuroFirme). */
+    html.js .muro-firme [data-firma] {
+      opacity: 0;
+    }
     /* RIVELAZIONE DI SCORTA: il pre-hide sopra lega la prima pittura (LCP)
        all'idratazione JS. Se GSAP tarda o non parte, questa animazione rivela
        comunque i contenuti a tempo limitato. Ogni componente motion la
@@ -1097,7 +1122,8 @@
       animation: rivelazione-scorta 0.8s ease 2.2s forwards;
     }
     html.js .grid-stagger > *,
-    html.js .indice-riga {
+    html.js .indice-riga,
+    html.js .muro-firme [data-firma] {
       animation: rivelazione-scorta 0.8s ease 3s forwards;
     }
     @keyframes rivelazione-scorta {

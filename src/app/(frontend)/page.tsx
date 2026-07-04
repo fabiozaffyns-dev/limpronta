@@ -9,6 +9,7 @@ import { Wordmark } from '@/components/ui/Wordmark'
 import { DebossHero } from '@/components/motion/DebossHero'
 import { CredoReveal } from '@/components/motion/CredoReveal'
 import { GridStagger } from '@/components/motion/GridStagger'
+import { MuroFirme } from '@/components/motion/MuroFirme'
 import { Reveal } from '@/components/motion/Reveal'
 import { SplitLines } from '@/components/motion/SplitLines'
 import { cn } from '@/lib/cn'
@@ -57,30 +58,34 @@ export default async function HomePage() {
         <section className="border-y" style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}>
           <div className="shell py-16 text-center md:py-20">
             <Eyebrow className="justify-center">Le firme principali</Eyebrow>
-            {/* Nomi grandi, CENTRATI (qualunque numero ne sia in evidenza),
-               entrata a onda; all'hover un nome si incide (swap ottone) e gli
-               altri si ritraggono (stessa grammatica dell'indice Marchi). */}
-            <GridStagger className="muro-firme mt-10 flex flex-wrap items-baseline justify-center gap-x-12 gap-y-5">
+            {/* Nomi grandi, CENTRATI (qualunque numero ne sia in evidenza).
+               "Le firme si imprimono": salgono da dietro la maschera a onda
+               dal centro, ricevono il colpo di deboss, e una lama di luce
+               ottone spazza la fila (MuroFirme). All'hover un nome si incide
+               e gli altri si ritraggono (stessa grammatica dell'indice). */}
+            <MuroFirme className="mt-10 flex flex-wrap items-baseline justify-center gap-x-12 gap-y-5">
               {brandsMuro.map((b) => {
                 // Click sul marchio in home → sito ufficiale del brand (nuova scheda).
                 // Senza sito impostato, fallback alla pagina marchio interna.
                 const sito = safeHref(b.sito)
                 const cls = 'font-display link-marchio text-[clamp(1.5rem,3vw,2.5rem)]'
                 return (
-                  <div key={b.id}>
-                    {sito ? (
-                      <a href={sito} target="_blank" rel="noopener noreferrer" className={cls}>
-                        <SwapLabel as="link">{b.nome}</SwapLabel>
-                      </a>
-                    ) : (
-                      <Link href={`/marchi/${b.slug}`} className={cls}>
-                        <SwapLabel as="link">{b.nome}</SwapLabel>
-                      </Link>
-                    )}
+                  <div key={b.id} data-firma className="overflow-hidden pb-[0.08em]">
+                    <div>
+                      {sito ? (
+                        <a href={sito} target="_blank" rel="noopener noreferrer" className={cls}>
+                          <SwapLabel as="link">{b.nome}</SwapLabel>
+                        </a>
+                      ) : (
+                        <Link href={`/marchi/${b.slug}`} className={cls}>
+                          <SwapLabel as="link">{b.nome}</SwapLabel>
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 )
               })}
-            </GridStagger>
+            </MuroFirme>
             <Link href="/marchi" className="btn btn-ghost mt-12">
               <SwapLabel>Tutti i marchi</SwapLabel>
             </Link>
