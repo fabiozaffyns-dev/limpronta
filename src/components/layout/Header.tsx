@@ -119,7 +119,9 @@ export function Header({
             else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' })
           }}
         >
-          <Wordmark scuro={onDark} className="text-xl md:text-2xl" />
+          {/* A menu aperto il drawer è chiaro (lino): forza il wordmark scuro,
+             come già fa il burger (dark={onDark && !open}). */}
+          <Wordmark scuro={onDark && !open} className="text-xl md:text-2xl" />
         </Link>
 
         <nav aria-label="Navigazione principale" className="hidden items-center gap-7 lg:flex">
