@@ -430,6 +430,16 @@
     transform-origin: center;
   }
 
+  /* Wordmark dell'hero: SEMPRE su una riga, dimensionato sullo spazio reale.
+     "L'IMPRONTA" reso (con lo scaleX 0.78) è ~5.33em di larghezza; il padding
+     dell'hero è px-6 (3rem totali). font-size = (100vw − 3rem) / 5.7 lascia un
+     margine di sicurezza e non va mai a capo su nessun telefono; capato a
+     13.5rem così su desktop resta identico a prima. */
+  .wordmark-hero {
+    white-space: nowrap;
+    font-size: min(13.5rem, calc((100vw - 3rem) / 5.7));
+  }
+
   /* "Il Conio" — lama di luce ottone che attraversa l'impronta UNA volta sola.
      Layer tipografico trasparente sopra il wordmark scuro: il gradiente brilla
      dentro le lettere (background-clip:text) e schiarisce l'incisione (screen).

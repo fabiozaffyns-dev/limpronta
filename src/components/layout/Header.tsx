@@ -95,6 +95,7 @@ export function Header({
   const waLink = buildWhatsAppLink({ number: whatsappNumber, message: appointmentMessage() })
 
   return (
+    <>
     <header
       className={cn(
         'fixed inset-x-0 top-0 z-50 transition-colors duration-500',
@@ -160,15 +161,20 @@ export function Header({
           <Burger open={open} dark={onDark && !open} />
         </button>
       </div>
+    </header>
 
-      {/* Drawer mobile */}
+      {/* Drawer mobile — FUORI dall'<header>: l'header ha backdrop-blur sulle
+         pagine interne, che crea un containing block e ancorerebbe il fixed alla
+         sola barra (64px), lasciando trasparire la pagina sotto. Come sibling,
+         `fixed inset-0` copre il viewport. z-40 < 50: la barra con la X resta
+         sopra e cliccabile. */}
       <div
         ref={drawerRef}
         role="dialog"
         aria-modal={open || undefined}
         aria-label="Menù di navigazione"
         className={cn(
-          'fixed inset-0 z-0 flex flex-col bg-lino transition-[opacity,visibility] duration-400 lg:hidden',
+          'fixed inset-0 z-40 flex flex-col bg-lino transition-[opacity,visibility] duration-400 lg:hidden',
           open ? 'visible opacity-100' : 'invisible opacity-0',
         )}
       >
@@ -198,7 +204,7 @@ export function Header({
           </a>
         </nav>
       </div>
-    </header>
+    </>
   )
 }
 

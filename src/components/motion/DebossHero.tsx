@@ -290,20 +290,20 @@ export function DebossHero({
             data-hero-mark
             data-mark-light
             scuro={dark}
-            className="col-start-1 row-start-1 block text-[clamp(3.75rem,17vw,13.5rem)] [grid-area:1/1]"
+            className="col-start-1 row-start-1 block wordmark-hero [grid-area:1/1]"
           />
           {/* (B) copia SCURA — l'impronta (inchiostro + deboss su chiaro). A riposo
               invisibile; appare quando la lastra di Lino la raggiunge. */}
           <Wordmark
             aria-hidden
             data-mark-dark
-            className="pointer-events-none col-start-1 row-start-1 block text-[clamp(3.75rem,17vw,13.5rem)] opacity-0 [grid-area:1/1]"
+            className="pointer-events-none col-start-1 row-start-1 block wordmark-hero opacity-0 [grid-area:1/1]"
           />
           {/* (C) copia RAKE — solo la lama di luce ottone (CSS: clip:text + screen). */}
           <Wordmark
             aria-hidden
             data-hero-rake
-            className="pointer-events-none col-start-1 row-start-1 block text-[clamp(3.75rem,17vw,13.5rem)] [grid-area:1/1]"
+            className="pointer-events-none col-start-1 row-start-1 block wordmark-hero [grid-area:1/1]"
           />
         </span>
       </h1>
