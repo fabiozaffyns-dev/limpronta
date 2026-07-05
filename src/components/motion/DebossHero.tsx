@@ -6,7 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SplitText } from 'gsap/SplitText'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Eyebrow } from '@/components/ui/Eyebrow'
@@ -58,31 +58,14 @@ export function DebossHero({
   const dark = Boolean(heroMedia?.url)
   const video = heroMedia?.isVideo ? cloudinaryVideo(heroMedia.url) : null
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [videoFermo, setVideoFermo] = useState(false)
 
-  // WCAG 2.2.2: il video in loop parte fermo per chi preferisce meno movimento
-  // (resta il poster), e ha comunque un controllo pausa/riproduci esplicito.
+  // Il video di sfondo va SEMPRE in loop (nessun controllo pausa/play). Unica
+  // eccezione: chi ha attivo prefers-reduced-motion vede il poster fermo —
+  // invisibile per tutti gli altri, non intacca l'esperienza normale.
   useEffect(() => {
     const v = videoRef.current
-    if (!v) return
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      v.pause()
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- sync una tantum con matchMedia: nello useState iniziale creerebbe un mismatch di idratazione
-      setVideoFermo(true)
-    }
+    if (v && window.matchMedia('(prefers-reduced-motion: reduce)').matches) v.pause()
   }, [])
-
-  const toggleVideo = () => {
-    const v = videoRef.current
-    if (!v) return
-    if (v.paused) {
-      void v.play()
-      setVideoFermo(false)
-    } else {
-      v.pause()
-      setVideoFermo(true)
-    }
-  }
 
   useGSAP(
     () => {
@@ -168,9 +151,6 @@ export function DebossHero({
       // BEAT 1 — ritiro UI: resta solo il segno. fromTo con start esplicito +
       // immediateRender:false → il fade arriva DAVVERO a 0 (niente cattura pigra
       // del valore iniziale), così su lino chiaro non resta la tagline chiara.
-      if (root.current?.querySelector('[data-hero-videoctl]')) {
-        conio.fromTo('[data-hero-videoctl]', { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.08, immediateRender: false }, 0)
-      }
       conio
         .fromTo('[data-hero-scroll]', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -6, duration: 0.06, immediateRender: false }, 0)
         .fromTo('[data-hero-eyebrow]', { autoAlpha: 1, y: 0 }, { autoAlpha: 0, y: -14, duration: 0.12, immediateRender: false }, 0.02)
@@ -345,28 +325,6 @@ export function DebossHero({
           />
         </span>
       </div>
-
-      {/* Controllo pausa/riproduci del video di sfondo (WCAG 2.2.2): discreto,
-         in basso a destra, si ritira col resto della UI durante il Conio. */}
-      {video && (
-        <button
-          type="button"
-          data-hero-videoctl
-          onClick={toggleVideo}
-          aria-label={videoFermo ? 'Riproduci il video di sfondo' : 'Metti in pausa il video di sfondo'}
-          className="absolute bottom-8 right-6 z-[3] flex h-10 w-10 items-center justify-center rounded-full border border-avorio/35 text-avorio/85 transition-colors hover:border-ottone hover:text-avorio focus-visible:border-ottone"
-        >
-          {videoFermo ? (
-            <svg aria-hidden focusable="false" width="12" height="12" viewBox="0 0 12 12">
-              <path d="M2.5 1.2 10.5 6 2.5 10.8Z" fill="currentColor" />
-            </svg>
-          ) : (
-            <svg aria-hidden focusable="false" width="12" height="12" viewBox="0 0 12 12">
-              <path d="M2.5 1h2.4v10H2.5Zm4.6 0h2.4v10H7.1Z" fill="currentColor" />
-            </svg>
-          )}
-        </button>
-      )}
     </section>
     </>
   )

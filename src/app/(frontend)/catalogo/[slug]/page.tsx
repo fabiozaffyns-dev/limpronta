@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation'
 import { ContactForm } from '@/components/ContactForm'
 import { ProductCard } from '@/components/ProductCard'
 import { ProductGallery } from '@/components/ProductGallery'
+import { ProductStickyCta } from '@/components/ProductStickyCta'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { RichText } from '@/components/ui/RichText'
@@ -151,7 +152,7 @@ export default async function ProductPage({ params }: Params) {
             )}
 
             {/* CTA */}
-            <div className="mt-10 flex flex-col gap-3">
+            <div data-primary-cta className="mt-10 flex flex-col gap-3">
               <WhatsAppButton
                 number={settings.whatsappNumber}
                 message={productInquiryMessage({ nome: product.nome, sku: product.sku })}
@@ -179,7 +180,7 @@ export default async function ProductPage({ params }: Params) {
         </div>
 
         {/* Form di backup */}
-        <section className="mt-24 border-t pt-16" style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}>
+        <section data-contact-section className="mt-24 border-t pt-16" style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 30%, transparent)' }}>
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
               <Eyebrow>Preferisci scrivere?</Eyebrow>
@@ -204,6 +205,14 @@ export default async function ProductPage({ params }: Params) {
           </section>
         )}
       </div>
+
+      {/* CTA WhatsApp sticky — solo mobile, compare scorrendo il corpo scheda */}
+      <ProductStickyCta
+        number={settings.whatsappNumber}
+        message={productInquiryMessage({ nome: product.nome, sku: product.sku })}
+        nome={product.nome}
+        prezzo={prezzo}
+      />
     </article>
   )
 }
