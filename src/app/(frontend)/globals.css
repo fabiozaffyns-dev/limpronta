@@ -71,6 +71,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    /* Barriera anti scroll orizzontale: elementi larghi per DESIGN (es. il
+       wordmark hero, il cui box di layout supera il viewport a causa dello
+       scaleX di condensa) non devono mai far "ballare" la pagina in orizzontale
+       su mobile. `clip` non crea uno scroll container e non tocca lo scroll
+       verticale gestito da Lenis (a differenza di overflow-x:hidden). */
+    overflow-x: clip;
   }
 
   /* Grana di carta/tessuto su tutto il fondo (sottile, non un campo piatto) */

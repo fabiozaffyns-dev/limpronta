@@ -134,15 +134,20 @@ export function DebossHero({
       // sotto e le STESSE lettere diventano l'impronta scura su carta chiara,
       // consegnando senza stacco al Muro dei marchi. Solo transform/opacity/
       // clip-path (GPU); ease 'none' (lo scrub È il tempo); ampiezze micro.
+      // Su mobile lo scrub lungo (1s) + pin lungo (120%) rendeva lo scorrimento
+      // "legnoso": l'animazione insegue il dito con troppo ritardo e la pagina
+      // resta trattenuta a lungo. Su touch: scrub più corto (tracking più vicino)
+      // e pin più breve (il Conio si chiude prima). Desktop invariato.
+      const touch = window.matchMedia('(max-width: 1023px)').matches
       const conio = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
           trigger: root.current,
           start: 'top top',
-          end: '+=120%',
+          end: touch ? '+=75%' : '+=120%',
           pin: true,
           pinSpacing: true,
-          scrub: 1,
+          scrub: touch ? 0.35 : 1,
           anticipatePin: 1,
           invalidateOnRefresh: true,
         },
