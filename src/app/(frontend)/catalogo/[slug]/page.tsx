@@ -72,7 +72,7 @@ export default async function ProductPage({ params }: Params) {
 
       <div className="shell">
         {/* breadcrumb */}
-        <nav aria-label="Percorso" className="cartellino mb-8 flex gap-2 text-pietra-scura">
+        <nav aria-label="Percorso" className="cartellino mb-8 flex flex-wrap gap-x-2 gap-y-1 text-pietra-scura">
           <Link href="/catalogo" className="link-segno">
             Catalogo
           </Link>

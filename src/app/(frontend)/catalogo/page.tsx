@@ -80,7 +80,7 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
             </Link>
           </div>
         ) : (
-          <GridStagger className="mt-6 grid grid-cols-2 gap-x-6 gap-y-12 md:grid-cols-3 lg:grid-cols-4">
+          <GridStagger className="mt-6 grid grid-cols-2 gap-x-3 gap-y-10 sm:gap-x-6 sm:gap-y-12 md:grid-cols-3 lg:grid-cols-4">
             {products.map((p, i) => (
               <ProductCard key={p.id} product={p} priority={i < 4} />
             ))}
@@ -126,21 +126,21 @@ function Pagination({
   return (
     <nav aria-label="Paginazione" className="mt-16 flex items-center justify-center gap-6">
       {hasPrev ? (
-        <Link href={build(page - 1)} className="cartellino link-segno text-ottone-testo" scroll>
+        <Link href={build(page - 1)} className="cartellino link-segno inline-flex min-h-[44px] items-center px-2 text-ottone-testo" scroll>
           ← Precedente
         </Link>
       ) : (
-        <span className="cartellino text-pietra">← Precedente</span>
+        <span className="cartellino inline-flex min-h-[44px] items-center px-2 text-pietra">← Precedente</span>
       )}
       <span className="cartellino text-pietra-scura">
         {page} / {totalPages}
       </span>
       {hasNext ? (
-        <Link href={build(page + 1)} className="cartellino link-segno text-ottone-testo" scroll>
+        <Link href={build(page + 1)} className="cartellino link-segno inline-flex min-h-[44px] items-center px-2 text-ottone-testo" scroll>
           Successiva →
         </Link>
       ) : (
-        <span className="cartellino text-pietra">Successiva →</span>
+        <span className="cartellino inline-flex min-h-[44px] items-center px-2 text-pietra">Successiva →</span>
       )}
     </nav>
   )

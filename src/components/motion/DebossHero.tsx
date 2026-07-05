@@ -278,11 +278,11 @@ export function DebossHero({
 
       <div data-hero-eyebrow className="relative z-[2]">
         <Eyebrow as="div" scuro={dark}>
-          Abbigliamento uomo · Orbassano · dal 2014
+          Abbigliamento uomo · Orbassano · dal{' '}2014
         </Eyebrow>
       </div>
 
-      <h1 className="relative z-[2] mt-10">
+      <h1 className="relative z-[2] mt-6 sm:mt-10">
         <span data-hero-word className="grid will-change-transform">
           {/* (A) copia CHIARA — visibile a riposo (avorio su scuro). È quella che
               l'intro anima (SplitText) e che porta il segno fino al colpo. */}
@@ -311,7 +311,7 @@ export function DebossHero({
       <p
         data-hero-tag
         className={cn(
-          'relative z-[2] mt-10 max-w-xl text-lg leading-relaxed md:text-xl',
+          'relative z-[2] mt-6 max-w-xl text-lg leading-relaxed sm:mt-10 md:text-xl',
           dark ? 'text-avorio/85' : 'text-pietra-scura',
         )}
       >
@@ -319,7 +319,7 @@ export function DebossHero({
         guarda, si tocca, si prenota in negozio.
       </p>
 
-      <div data-hero-cta className="relative z-[2] mt-12 flex flex-wrap items-center justify-center gap-4">
+      <div data-hero-cta className="relative z-[2] mt-8 flex flex-wrap items-center justify-center gap-4 sm:mt-12">
         <Link href="/catalogo" className={cn('btn', dark ? 'btn-ottone' : 'btn-primario')}>
           <SwapLabel>Esplora il catalogo</SwapLabel>
         </Link>
@@ -333,7 +333,7 @@ export function DebossHero({
 
       <div
         data-hero-scroll
-        className="absolute bottom-8 left-1/2 z-[2] flex -translate-x-1/2 flex-col items-center gap-3"
+        className="absolute bottom-8 left-1/2 z-[2] hidden -translate-x-1/2 flex-col items-center gap-3 sm:flex"
       >
         <span className={cn('cartellino', dark ? 'text-avorio/80' : 'text-pietra-scura')}>Scorri</span>
         {/* Traccia tenue + "seme" di luce ottone che scende in loop (il cue di

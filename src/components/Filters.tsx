@@ -63,11 +63,11 @@ export function Filters({
             name="q"
             defaultValue={sp.get('q') ?? ''}
             placeholder="Nome o codice…"
-            className="w-full border bg-lino-chiaro/40 px-3 py-2 text-inchiostro outline-none transition-colors focus:border-ottone"
+            className="min-h-[44px] w-full border bg-lino-chiaro/40 px-3 py-2.5 text-inchiostro outline-none transition-colors focus:border-ottone"
             style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 45%, transparent)' }}
           />
         </label>
-        <button type="submit" className="btn btn-ghost" style={{ padding: '0.6rem 1rem' }}>
+        <button type="submit" className="btn btn-ghost min-h-[44px]" style={{ padding: '0.7rem 1.1rem' }}>
           Cerca
         </button>
       </form>
@@ -113,7 +113,7 @@ function Select({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full border bg-lino-chiaro/40 px-3 py-2 text-sm text-inchiostro outline-none transition-colors focus:border-ottone"
+        className="min-h-[44px] w-full border bg-lino-chiaro/40 px-3 py-2.5 text-sm text-inchiostro outline-none transition-colors focus:border-ottone"
         style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 45%, transparent)' }}
       >
         <option value="">{placeholderLabel}</option>

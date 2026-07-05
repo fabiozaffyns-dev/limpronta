@@ -162,7 +162,7 @@ export default async function HomePage() {
             </div>
             {/* Wordmark incorniciato a destra: container query → il segno scala
                con la larghezza REALE del box (non del viewport), centrato. */}
-            <div className="@container relative flex min-h-[52vh] items-center justify-center overflow-hidden px-8 py-20">
+            <div className="@container relative flex min-h-[34vh] items-center justify-center overflow-hidden px-8 py-16 md:min-h-[52vh] md:py-20">
               <span
                 aria-hidden
                 className="absolute inset-6 border"
@@ -215,7 +215,7 @@ export default async function HomePage() {
             <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
               <div>
                 <Eyebrow>Vieni a trovarci</Eyebrow>
-                <p className="mt-5 font-display text-3xl leading-tight md:text-4xl">
+                <p className="mt-5 font-display text-2xl leading-tight sm:text-3xl md:text-4xl">
                   {[settings.indirizzo?.via, settings.indirizzo?.civico].filter(Boolean).join(' ') ||
                     'Via Vittorio Emanuele II 12/A'}
                   <br />

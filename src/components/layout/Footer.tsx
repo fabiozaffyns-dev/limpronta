@@ -37,7 +37,7 @@ export function Footer({ settings }: { settings: Setting }) {
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <FooterCol titolo="Esplora">
             {NAV_ESPLORA.map((item) => (
-              <Link key={item.href} href={item.href} className="link-segno block text-avorio/80 hover:text-avorio">
+              <Link key={item.href} href={item.href} className="link-segno block py-1.5 text-avorio/80 hover:text-avorio">
                 {item.label}
               </Link>
             ))}
@@ -69,26 +69,26 @@ export function Footer({ settings }: { settings: Setting }) {
 
           <FooterCol titolo="Contatti">
             {settings.telefono && (
-              <a href={`tel:${settings.telefono.replace(/\s/g, '')}`} className="link-segno block text-avorio/80 hover:text-avorio">
+              <a href={`tel:${settings.telefono.replace(/\s/g, '')}`} className="link-segno block py-1.5 text-avorio/80 hover:text-avorio">
                 {settings.telefono}
               </a>
             )}
-            <a href={waLink} target="_blank" rel="noopener noreferrer" className="link-segno block text-avorio/80 hover:text-avorio">
+            <a href={waLink} target="_blank" rel="noopener noreferrer" className="link-segno block py-1.5 text-avorio/80 hover:text-avorio">
               WhatsApp
             </a>
             {settings.email && (
-              <a href={`mailto:${settings.email}`} className="link-segno block text-avorio/80 hover:text-avorio">
+              <a href={`mailto:${settings.email}`} className="link-segno block py-1.5 text-avorio/80 hover:text-avorio">
                 {settings.email}
               </a>
             )}
-            <div className="mt-3 flex gap-4">
+            <div className="mt-2 flex gap-5">
               {instagram && (
-                <a href={instagram} target="_blank" rel="noopener noreferrer" className="cartellino text-ottone-chiaro hover:text-avorio">
+                <a href={instagram} target="_blank" rel="noopener noreferrer" className="cartellino inline-flex min-h-[44px] items-center text-ottone-chiaro hover:text-avorio">
                   Instagram
                 </a>
               )}
               {facebook && (
-                <a href={facebook} target="_blank" rel="noopener noreferrer" className="cartellino text-ottone-chiaro hover:text-avorio">
+                <a href={facebook} target="_blank" rel="noopener noreferrer" className="cartellino inline-flex min-h-[44px] items-center text-ottone-chiaro hover:text-avorio">
                   Facebook
                 </a>
               )}
@@ -103,11 +103,11 @@ export function Footer({ settings }: { settings: Setting }) {
             {settings.ragioneSociale ?? "L'Impronta di Zaffino Fabio"}
             {settings.partitaIva ? ` — P.IVA ${settings.partitaIva}` : ''}
           </p>
-          <div className="flex flex-wrap gap-x-6 gap-y-2">
-            <Link href="/privacy" className="hover:text-avorio">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
+            <Link href="/privacy" className="inline-flex min-h-[40px] items-center hover:text-avorio">
               Privacy Policy
             </Link>
-            <Link href="/cookie-policy" className="hover:text-avorio">
+            <Link href="/cookie-policy" className="inline-flex min-h-[40px] items-center hover:text-avorio">
               Cookie Policy
             </Link>
             <span>© {new Date().getFullYear()} L&rsquo;Impronta</span>

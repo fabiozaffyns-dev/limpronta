@@ -157,7 +157,7 @@ export function Header({
           aria-label={open ? 'Chiudi menù' : 'Apri menù'}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="z-10 flex h-10 w-10 items-center justify-center lg:hidden"
+          className="z-10 flex h-11 w-11 items-center justify-center lg:hidden"
         >
           <span className="sr-only">{open ? 'Chiudi menù' : 'Apri menù'}</span>
           <Burger open={open} dark={onDark && !open} />
@@ -176,11 +176,11 @@ export function Header({
         aria-modal={open || undefined}
         aria-label="Menù di navigazione"
         className={cn(
-          'fixed inset-0 z-40 flex flex-col bg-lino transition-[opacity,visibility] duration-400 lg:hidden',
+          'fixed inset-0 z-40 flex flex-col overflow-y-auto bg-lino transition-[opacity,visibility] duration-400 lg:hidden',
           open ? 'visible opacity-100' : 'invisible opacity-0',
         )}
       >
-        <nav aria-label="Navigazione mobile" className="shell mt-24 flex flex-col gap-1">
+        <nav aria-label="Navigazione mobile" className="shell mt-24 flex flex-col gap-1 pb-16">
           {NAV.map((item, i) => (
             <Link
               key={item.href}
@@ -200,7 +200,7 @@ export function Header({
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => setOpen(false)}
-            className="btn btn-ottone mt-8 self-start"
+            className="btn btn-ottone mt-8 w-full justify-center sm:w-auto sm:self-start"
           >
             <SwapLabel>Prenota in negozio</SwapLabel>
           </a>

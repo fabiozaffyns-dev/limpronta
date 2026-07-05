@@ -115,14 +115,19 @@ export function StoreMap({
         </button>
       )}
 
-      <a
-        href={mapsUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="cartellino absolute bottom-4 left-4 z-[500] bg-lino/90 px-3 py-2 text-inchiostro backdrop-blur-sm transition-colors hover:bg-lino"
-      >
-        Apri in mappe →
-      </a>
+      {/* Il pill "Apri in mappe" solo quando la mappa è attiva: nello stato
+         placeholder si sovrapporrebbe al bottone "Mostra la mappa" (che occupa
+         tutta l'area), rendendo ambigua l'azione al tocco. */}
+      {active && (
+        <a
+          href={mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="cartellino absolute bottom-4 left-4 z-[500] bg-lino/90 px-3 py-2 text-inchiostro backdrop-blur-sm transition-colors hover:bg-lino"
+        >
+          Apri in mappe →
+        </a>
+      )}
     </div>
   )
 }

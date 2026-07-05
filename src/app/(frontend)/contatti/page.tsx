@@ -126,7 +126,7 @@ export default async function ContattiPage() {
                     href={instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cartellino link-segno text-ottone-testo"
+                    className="cartellino link-segno inline-flex min-h-[44px] items-center text-ottone-testo"
                   >
                     Instagram
                   </a>
@@ -136,7 +136,7 @@ export default async function ContattiPage() {
                     href={facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="cartellino link-segno text-ottone-testo"
+                    className="cartellino link-segno inline-flex min-h-[44px] items-center text-ottone-testo"
                   >
                     Facebook
                   </a>

@@ -151,13 +151,14 @@ export default async function ChiSiamoPage() {
             Se preferisci la tranquillità assoluta, fissa un momento tutto tuo: un caffè, qualche
             capo scelto per te, nessuna fretta.
           </p>
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:flex-wrap">
             <WhatsAppButton
               number={settings.whatsappNumber}
               message={appointmentMessage()}
               label="Prenota una visita"
+              className="w-full justify-center sm:w-auto"
             />
-            <Link href="/contatti" className="btn btn-ghost">
+            <Link href="/contatti" className="btn btn-ghost w-full justify-center sm:w-auto">
               <SwapLabel>Dove siamo</SwapLabel>
             </Link>
           </div>

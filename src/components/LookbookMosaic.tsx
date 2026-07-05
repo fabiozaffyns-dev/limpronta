@@ -134,8 +134,9 @@ export function LookbookMosaic({
               </Reveal>
             )
           case 'sbilanciata': {
-            // Grande 7/12 (4:5) + piccola 5/12 ritagliata 4:7 → stessa altezza:
-            // 7u × 5/4 = 8.75u = 5u × 7/4.
+            // Grande 7/12 + piccola 5/12: a schermo largo affiancate (la piccola
+            // più stretta), su mobile impilate a tutta larghezza. Entrambe 4:5:
+            // su mobile un 4:7 diventava altissimo (single column, ~700px).
             const [a, b] = row.imgs
             const grande = row.grandeADestra ? b : a
             const piccola = row.grandeADestra ? a : b
@@ -146,7 +147,7 @@ export function LookbookMosaic({
                     <Foto img={grande} aspect="4 / 5" sizes="(max-width: 640px) 100vw, 58vw" />
                   </div>
                   <div className={cn(row.grandeADestra ? 'sm:order-1 sm:col-span-5' : 'sm:col-span-5')}>
-                    <Foto img={piccola} aspect="4 / 7" sizes="(max-width: 640px) 100vw, 42vw" />
+                    <Foto img={piccola} aspect="4 / 5" sizes="(max-width: 640px) 100vw, 42vw" />
                   </div>
                 </div>
               </Reveal>

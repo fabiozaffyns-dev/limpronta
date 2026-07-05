@@ -97,12 +97,12 @@ export function ContactForm({
         />
       </label>
 
-      <div className="flex items-center gap-4">
+      <div className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
         <button
           type="submit"
           disabled={status === 'sending'}
           aria-busy={status === 'sending'}
-          className="btn btn-primario disabled:opacity-60"
+          className="btn btn-primario w-full justify-center disabled:opacity-60 sm:w-auto"
         >
           {status === 'sending' ? 'Invio…' : 'Invia richiesta'}
         </button>
