@@ -30,8 +30,11 @@ export function MaskReveal({ children, className }: { children: ReactNode; class
       tl.fromTo(el, { clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)', duration: 1.1 }, 0)
       // Contro-scale SOLO se l'immagine non è già gestita da un ParallaxMedia:
       // il suo settle a scale 1 azzererebbe l'overscan del parallax (bordi scoperti).
+      // Assestamento a 1.015 (non 1): a scale esatto 1 il bordo del box (overflow
+      // hidden) lasciava una cucitura di ~1px — visibile come striscia chiara dove
+      // la foto è chiara. Un filo di overscan tiene i bordi sempre tagliati puliti.
       const img = el.querySelector('img')
-      if (img && !img.closest('[data-parallax]')) tl.fromTo(img, { scale: 1.12 }, { scale: 1, duration: 1.2 }, 0)
+      if (img && !img.closest('[data-parallax]')) tl.fromTo(img, { scale: 1.12 }, { scale: 1.015, duration: 1.2 }, 0)
     },
     { scope: root },
   )
