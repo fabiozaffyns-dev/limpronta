@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 
 import { ContactForm } from '@/components/ContactForm'
+import { StatoNegozio } from '@/components/StatoNegozio'
 import { StoreMap } from '@/components/StoreMap'
 import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Reveal } from '@/components/motion/Reveal'
@@ -100,13 +101,14 @@ export default async function ContattiPage() {
 
                 <div>
                   <Eyebrow>Orari</Eyebrow>
-                  <div className="mt-3 space-y-1 text-sm">
+                  <div className="mt-3">
+                    <StatoNegozio orari={settings.orari ?? []} />
+                  </div>
+                  <div className="mt-2 space-y-1 text-sm">
                     {(settings.orari ?? []).map((r, i) => (
                       <p key={i} className="flex items-baseline justify-between gap-4">
                         <span className="text-inchiostro">{r.giorni}</span>
-                        <span className={r.chiuso ? 'text-pietra-scura' : 'text-pietra-scura'}>
-                          {r.chiuso ? 'Chiuso' : r.orario}
-                        </span>
+                        <span className="text-pietra-scura">{r.chiuso ? 'Chiuso' : r.orario}</span>
                       </p>
                     ))}
                   </div>

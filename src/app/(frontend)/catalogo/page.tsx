@@ -68,7 +68,7 @@ export default async function CatalogoPage({ searchParams }: { searchParams: Pro
           />
         </Suspense>
 
-        <p className="cartellino mt-10 text-pietra-scura">
+        <p className="cartellino mt-10 text-pietra-scura" aria-live="polite" role="status">
           {result.totalDocs} {result.totalDocs === 1 ? 'capo' : 'capi'}
         </p>
 

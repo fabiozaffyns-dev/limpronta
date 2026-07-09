@@ -80,6 +80,10 @@ export default async function ChiSiamoPage() {
               il capo, prendendosi il tempo. Per questo il nostro mestiere si fa qui, in negozio.
             </p>
           </div>
+          {/* La firma del titolare: una boutique che vende relazione e consiglio
+             ha un nome e un volto. La foto la carica Fabio in un secondo momento. */}
+          <p className="font-display mt-8 text-2xl text-ottone-testo">Fabio Zaffino</p>
+          <p className="cartellino mt-1 text-pietra-scura">Titolare · L&rsquo;Impronta</p>
         </Reveal>
       </section>
 

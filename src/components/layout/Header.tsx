@@ -152,16 +152,29 @@ export function Header({
           </a>
         </nav>
 
-        <button
-          type="button"
-          aria-label={open ? 'Chiudi menù' : 'Apri menù'}
-          aria-expanded={open}
-          onClick={() => setOpen((v) => !v)}
-          className="z-10 flex h-11 w-11 items-center justify-center lg:hidden"
-        >
-          <span className="sr-only">{open ? 'Chiudi menù' : 'Apri menù'}</span>
-          <Burger open={open} dark={onDark && !open} />
-        </button>
+        {/* Su tablet (md–lg) la nav completa e' nel drawer: la CTA di conversione
+           resta comunque raggiungibile dalla barra, non solo dall'hamburger. */}
+        <div className="flex items-center gap-2 lg:hidden">
+          <a
+            href={waLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-ottone hidden md:inline-flex"
+            style={{ padding: '0.55rem 1rem' }}
+          >
+            Prenota in negozio
+          </a>
+          <button
+            type="button"
+            aria-label={open ? 'Chiudi menù' : 'Apri menù'}
+            aria-expanded={open}
+            onClick={() => setOpen((v) => !v)}
+            className="z-10 flex h-11 w-11 items-center justify-center"
+          >
+            <span className="sr-only">{open ? 'Chiudi menù' : 'Apri menù'}</span>
+            <Burger open={open} dark={onDark && !open} />
+          </button>
+        </div>
       </div>
     </header>
 

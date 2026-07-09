@@ -29,6 +29,16 @@ export function ContactForm({
     const form = e.currentTarget
     const data = new FormData(form)
     if (data.get('_gotcha')) return // honeypot
+    // Serve almeno un recapito (email O telefono): la promessa è "ti
+    // ricontattiamo di persona", spesso al telefono. Messaggio nativo accessibile.
+    const email = form.elements.namedItem('email') as HTMLInputElement | null
+    const telefono = form.elements.namedItem('telefono') as HTMLInputElement | null
+    if (email && telefono && !email.value.trim() && !telefono.value.trim()) {
+      email.setCustomValidity('Lascia almeno un recapito: email o telefono.')
+      email.reportValidity()
+      return
+    }
+    email?.setCustomValidity('')
     setStatus('sending')
     try {
       const res = await fetch(endpoint, {
@@ -82,9 +92,12 @@ export function ContactForm({
 
       <Field label="Nome e cognome" name="nome" required />
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Email" name="email" type="email" required />
+        {/* Email O telefono: nessuno dei due obbligatorio da solo, ma almeno uno
+           (controllato in onSubmit). type=email valida comunque il formato. */}
+        <Field label="Email" name="email" type="email" />
         <Field label="Telefono" name="telefono" type="tel" />
       </div>
+      <p className="-mt-2 text-xs text-pietra-scura">Lasciaci almeno un recapito: email o telefono.</p>
 
       <label className="flex flex-col gap-2">
         <span className="cartellino text-pietra-scura">Messaggio</span>

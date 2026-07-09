@@ -19,3 +19,8 @@ export function productInquiryMessage(p: { nome: string; sku: string }): string 
 export function appointmentMessage(): string {
   return "Buongiorno, vorrei fissare un appuntamento da L'Impronta."
 }
+
+/** Messaggio di richiesta per un marchio (pagina /marchi/[slug]). */
+export function brandInquiryMessage(brand: string): string {
+  return `Buongiorno, sono interessato ai capi ${brand}. Cosa avete disponibile in negozio?`
+}

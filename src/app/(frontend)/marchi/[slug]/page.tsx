@@ -3,12 +3,14 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { ProductCard } from '@/components/ProductCard'
+import { WhatsAppButton } from '@/components/WhatsAppButton'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { RichText } from '@/components/ui/RichText'
 import { brandItemListLd, breadcrumbLd } from '@/lib/json-ld'
 import { firstSentence } from '@/lib/lexical'
-import { getAllSlugs, getBrandBySlug, getProductsByBrand } from '@/lib/queries'
+import { getAllSlugs, getBrandBySlug, getProductsByBrand, getSettings } from '@/lib/queries'
 import { jsonLdSafe, safeHref } from '@/lib/sanitize'
+import { brandInquiryMessage } from '@/lib/whatsapp'
 
 type Params = { params: Promise<{ slug: string }> }
 
@@ -42,7 +44,7 @@ export default async function BrandPage({ params }: Params) {
   const brand = await getBrandBySlug(slug)
   if (!brand) notFound()
 
-  const products = await getProductsByBrand(brand.id)
+  const [products, settings] = await Promise.all([getProductsByBrand(brand.id), getSettings()])
   const sito = safeHref(brand.sito)
 
   return (
@@ -125,6 +127,27 @@ export default async function BrandPage({ params }: Params) {
             </div>
           </>
         )}
+      </section>
+
+      {/* CTA: anche con prodotti a catalogo, un modo per chiedere disponibilità
+         e novità del marchio senza dover entrare in una scheda. */}
+      <section className="shell pb-28">
+        <div
+          className="flex flex-col items-start gap-6 border p-8 md:flex-row md:items-center md:justify-between md:p-10"
+          style={{ borderColor: 'color-mix(in srgb, var(--color-ottone) 40%, transparent)' }}
+        >
+          <div>
+            <Eyebrow>Interessato a {brand.nome}?</Eyebrow>
+            <p className="font-display mt-3 max-w-md text-2xl leading-snug">
+              Chiedici disponibilità, taglie e novità in arrivo.
+            </p>
+          </div>
+          <WhatsAppButton
+            number={settings.whatsappNumber}
+            message={brandInquiryMessage(brand.nome)}
+            label="Scrivici su WhatsApp"
+          />
+        </div>
       </section>
     </>
   )

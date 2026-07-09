@@ -1,5 +1,6 @@
 import Link from 'next/link'
 
+import { StatoNegozio } from '@/components/StatoNegozio'
 import { Wordmark } from '@/components/ui/Wordmark'
 import type { Setting } from '@/payload-types'
 import { safeHref } from '@/lib/sanitize'
@@ -59,6 +60,9 @@ export function Footer({ settings }: { settings: Setting }) {
           </FooterCol>
 
           <FooterCol titolo="Orari">
+            <div className="mb-2">
+              <StatoNegozio orari={settings.orari ?? []} scuro />
+            </div>
             {(settings.orari ?? []).map((riga, i) => (
               <p key={i} className="flex justify-between gap-4 text-avorio/80">
                 <span>{riga.giorni}</span>
