@@ -93,10 +93,10 @@ export default async function ChiSiamoPage() {
             <Reveal>
               <Eyebrow scuro>La nostra idea</Eyebrow>
               <CredoReveal className="mt-8 max-w-2xl font-display text-3xl leading-[1.2] text-avorio md:text-[2.6rem]">
-                Un capo è fatto di <span className="italic text-ottone-chiaro">materia</span> — lana,
-                cotone, mani che cuciono.
-                <br />E lascia un <span className="italic text-ottone-chiaro">segno</span>: il modo in
-                cui ti fa stare al mondo.
+                Un capo è fatto di <span className="italic text-ottone-chiaro">materia</span>:
+                <br />lana, cotone, mani che cuciono.
+                <br />E lascia un <span className="italic text-ottone-chiaro">segno</span> importante:
+                <br />il modo in cui ti fa stare al mondo.
               </CredoReveal>
             </Reveal>
             <MaskReveal className="lg:justify-self-end">
@@ -119,10 +119,10 @@ export default async function ChiSiamoPage() {
             <Reveal>
               <Eyebrow scuro>La nostra idea</Eyebrow>
               <CredoReveal className="mx-auto mt-8 max-w-3xl font-display text-3xl leading-[1.2] text-avorio md:text-[2.7rem]">
-                Un capo è fatto di <span className="italic text-ottone-chiaro">materia</span> — lana,
-                cotone, mani che cuciono.
-                <br />E lascia un <span className="italic text-ottone-chiaro">segno</span>: il modo in
-                cui ti fa stare al mondo.
+                Un capo è fatto di <span className="italic text-ottone-chiaro">materia</span>:
+                <br />lana, cotone, mani che cuciono.
+                <br />E lascia un <span className="italic text-ottone-chiaro">segno</span> importante:
+                <br />il modo in cui ti fa stare al mondo.
               </CredoReveal>
             </Reveal>
           </div>
