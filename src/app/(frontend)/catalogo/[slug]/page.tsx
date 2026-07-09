@@ -183,7 +183,7 @@ export default async function ProductPage({ params }: Params) {
               style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 40%, transparent)' }}
             >
               <MetaRow label="Codice" value={product.sku} />
-              {brand?.nome && <MetaRow label="Marchio" value={brand.nome} />}
+              {brand?.nome && <MetaRow label="Brand" value={brand.nome} />}
               {categoria?.nome && <MetaRow label="Categoria" value={categoria.nome} />}
               {stagione && <MetaRow label="Stagione" value={stagione} />}
             </dl>

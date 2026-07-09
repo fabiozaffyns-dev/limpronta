@@ -83,7 +83,7 @@ export default async function HomePage() {
               })}
             </MuroFirme>
             <Link href="/marchi" className="btn btn-ghost mt-12">
-              <SwapLabel>Tutti i marchi</SwapLabel>
+              <SwapLabel>Tutti i brand</SwapLabel>
             </Link>
           </div>
         </section>
@@ -95,7 +95,7 @@ export default async function HomePage() {
           <Reveal>
             <Eyebrow scuro>Il nostro credo</Eyebrow>
             <CredoReveal className="mt-8 max-w-4xl font-display text-3xl leading-[1.18] text-avorio md:text-[3.25rem]">
-              <span className="italic text-ottone-chiaro">La cura</span> prima della quantità. Pochi marchi, scelti uno a
+              <span className="italic text-ottone-chiaro">La cura</span> prima della quantità. Pochi brand, scelti uno a
               uno, che condividono la stessa idea di misura: tessuti veri, tagli che durano, dettagli
               che si notano solo da vicino.
             </CredoReveal>

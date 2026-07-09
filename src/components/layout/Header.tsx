@@ -11,7 +11,7 @@ import { appointmentMessage, buildWhatsAppLink } from '@/lib/whatsapp'
 
 const NAV = [
   { href: '/catalogo', label: 'Catalogo' },
-  { href: '/marchi', label: 'Marchi' },
+  { href: '/marchi', label: 'Brand' },
   { href: '/lookbook', label: 'Lookbook' },
   { href: '/chi-siamo', label: 'Chi siamo' },
   { href: '/contatti', label: 'Contatti' },

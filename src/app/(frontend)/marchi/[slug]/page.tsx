@@ -26,7 +26,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params
   const brand = await getBrandBySlug(slug)
-  if (!brand) return { title: 'Marchio non trovato' }
+  if (!brand) return { title: 'Brand non trovato' }
   // Description variabile: prima frase della scheda brand (dal CMS) se c'è,
   // così ogni marchio ha una description propria e non clonata.
   const descr =
@@ -55,7 +55,7 @@ export default async function BrandPage({ params }: Params) {
           __html: jsonLdSafe(
             breadcrumbLd([
               { name: 'Home', path: '/' },
-              { name: 'Marchi', path: '/marchi' },
+              { name: 'Brand', path: '/marchi' },
               { name: brand.nome, path: `/marchi/${brand.slug}` },
             ]),
           ),
@@ -71,7 +71,7 @@ export default async function BrandPage({ params }: Params) {
       <header className="shell pt-36 pb-10 md:pt-44">
         <Eyebrow>
           <Link href="/marchi" className="link-segno">
-            Marchi
+            Brand
           </Link>
         </Eyebrow>
         <h1 className="mt-5 text-[clamp(2.5rem,7vw,5rem)] leading-none">{brand.nome}</h1>
@@ -91,7 +91,7 @@ export default async function BrandPage({ params }: Params) {
       <section className="shell pb-8 md:pb-12">
         <hr className="filetto" />
         <div className="mt-10 grid gap-4 md:grid-cols-[0.32fr_0.68fr] md:gap-12">
-          <Eyebrow>Il marchio</Eyebrow>
+          <Eyebrow>Il brand</Eyebrow>
           <div className="max-w-2xl">
             {brand.descrizione ? (
               <RichText
@@ -112,7 +112,7 @@ export default async function BrandPage({ params }: Params) {
         <hr className="filetto mb-10" />
         {products.length === 0 ? (
           <p className="py-6 text-pietra-scura">
-            Al momento non ci sono capi a catalogo per questo marchio. Scrivici per disponibilità e
+            Al momento non ci sono capi a catalogo per questo brand. Scrivici per disponibilità e
             novità.
           </p>
         ) : (

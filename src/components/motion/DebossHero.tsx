@@ -311,7 +311,7 @@ export function DebossHero({
           dark ? 'text-avorio/90' : 'text-pietra-scura',
         )}
       >
-        Il segno lasciato nella materia pregiata. Una selezione di marchi scelti — si
+        Il segno lasciato nella materia pregiata. Una selezione di brand scelti — si
         guarda, si tocca, si prenota in negozio.
       </p>
 

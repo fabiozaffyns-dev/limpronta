@@ -20,14 +20,14 @@ export const revalidate = 120
 export const metadata: Metadata = {
   title: 'Chi siamo',
   description:
-    "L'Impronta: abbigliamento uomo a Orbassano. La materia e il segno — pochi marchi scelti, qualità vera e consiglio sartoriale.",
+    "L'Impronta: abbigliamento uomo a Orbassano. La materia e il segno — pochi brand scelti, qualità vera e consiglio sartoriale.",
   alternates: { canonical: '/chi-siamo' },
 }
 
 const VALORI = [
   {
     t: 'La selezione',
-    d: 'Pochi marchi, scelti per coerenza e qualità. Niente muri di capi: solo ciò in cui crediamo davvero.',
+    d: 'Pochi brand, scelti per coerenza e qualità. Niente muri di capi: solo ciò in cui crediamo davvero.',
   },
   {
     t: 'La materia',
@@ -70,7 +70,7 @@ export default async function ChiSiamoPage() {
           <div className="mt-6 space-y-5 text-lg text-pietra-scura">
             <p>
               Abbiamo aperto con un&apos;ambizione precisa: portare a Orbassano un
-              guardaroba maschile fatto di marchi veri, tessuti che durano e tagli che non passano di
+              guardaroba maschile fatto di brand veri, tessuti che durano e tagli che non passano di
               moda.
             </p>
             <p>

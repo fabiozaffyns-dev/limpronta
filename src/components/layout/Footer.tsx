@@ -8,7 +8,7 @@ import { buildWhatsAppLink, appointmentMessage } from '@/lib/whatsapp'
 
 const NAV_ESPLORA = [
   { href: '/catalogo', label: 'Catalogo' },
-  { href: '/marchi', label: 'Marchi' },
+  { href: '/marchi', label: 'Brand' },
   { href: '/lookbook', label: 'Lookbook' },
   { href: '/chi-siamo', label: 'Chi siamo' },
 ]
@@ -28,7 +28,7 @@ export function Footer({ settings }: { settings: Setting }) {
         <div>
           <Wordmark as="p" scuro className="text-4xl md:text-5xl" />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-avorio/70">
-            Abbigliamento uomo a Orbassano. Selezione sartoriale, marchi scelti, consiglio su
+            Abbigliamento uomo a Orbassano. Selezione sartoriale, brand scelti, consiglio su
             misura.
           </p>
         </div>

@@ -7,9 +7,9 @@ import { getBrandsIndex } from '@/lib/queries'
 export const revalidate = 120
 
 export const metadata: Metadata = {
-  title: 'Marchi',
+  title: 'Brand',
   description:
-    "I marchi selezionati da L'Impronta: sartoria italiana e firme contemporanee per l'uomo, scelte una a una.",
+    "I brand selezionati da L'Impronta: sartoria italiana e firme contemporanee per l'uomo, scelte una a una.",
   alternates: { canonical: '/marchi' },
 }
 
@@ -19,7 +19,7 @@ export default async function MarchiPage() {
 
   return (
     <>
-      <PageIntro eyebrow="Marchi" titolo="La curatela">
+      <PageIntro eyebrow="Brand" titolo="La curatela">
         Non un assortimento, ma una linea di gusto. Ogni firma è scelta per coerenza, qualità e
         carattere — passa un nome e affiora la sua materia.
       </PageIntro>
@@ -27,7 +27,7 @@ export default async function MarchiPage() {
       <section className="shell pb-24">
         {items.length === 0 ? (
           <p className="py-12 text-pietra-scura">
-            I nostri marchi saranno presto online. Intanto, passa a trovarci in negozio.
+            I nostri brand saranno presto online. Intanto, passa a trovarci in negozio.
           </p>
         ) : (
           <>

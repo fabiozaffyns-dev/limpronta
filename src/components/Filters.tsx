@@ -73,7 +73,7 @@ export function Filters({
       </form>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
-        <Select label="Marchio" value={sp.get('brand') ?? ''} options={brands} onChange={(v) => update('brand', v)} />
+        <Select label="Brand" value={sp.get('brand') ?? ''} options={brands} onChange={(v) => update('brand', v)} />
         <Select label="Categoria" value={sp.get('categoria') ?? ''} options={categories} onChange={(v) => update('categoria', v)} />
         <Select label="Stagione" value={sp.get('stagione') ?? ''} options={STAGIONI} onChange={(v) => update('stagione', v)} />
         <Select label="Taglia" value={sp.get('taglia') ?? ''} options={taglie} onChange={(v) => update('taglia', v)} />
