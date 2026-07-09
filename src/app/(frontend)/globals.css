@@ -307,8 +307,8 @@
     position: relative;
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    line-height: 0.95;
-    font-size: clamp(2.4rem, 8vw, 6.25rem);
+    line-height: 0.98;
+    font-size: clamp(1.85rem, 5.4vw, 4.5rem);
     color: var(--color-inchiostro-tenue);
     font-variation-settings: 'opsz' var(--mk-opsz, 30), 'wght' var(--mk-wght, 360);
     transition:
