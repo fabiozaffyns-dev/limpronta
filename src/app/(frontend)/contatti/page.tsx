@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: 'Contatti',
   description:
     "Dove siamo e come raggiungerci: L'Impronta, Via Vittorio Emanuele II 12/A, Orbassano (TO). Telefono, WhatsApp, appuntamento e modulo contatti.",
+  alternates: { canonical: '/contatti' },
 }
 
 const OTTONE = (pct: number) => `1px solid color-mix(in srgb, var(--color-ottone) ${pct}%, transparent)`

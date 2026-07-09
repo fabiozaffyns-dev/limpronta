@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: 'Lookbook',
   description:
     "I lookbook stagionali de L'Impronta: accostamenti, materiali e dettagli dell'uomo contemporaneo.",
+  alternates: { canonical: '/lookbook' },
 }
 
 export default async function LookbookIndexPage() {

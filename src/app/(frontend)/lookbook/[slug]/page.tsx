@@ -27,6 +27,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: lb.titolo,
     description: `Lookbook ${lb.titolo} — L'Impronta, Orbassano.`,
+    alternates: { canonical: `/lookbook/${lb.slug}` },
     openGraph: { title: lb.titolo, images: cover ? [cover] : undefined },
   }
 }

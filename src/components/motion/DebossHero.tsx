@@ -273,7 +273,10 @@ export function DebossHero({
       </div>
 
       <h1 className="relative z-[2] mt-6 sm:mt-10">
-        <span data-hero-word className="grid will-change-transform">
+        {/* Keyword locale nell'h1 per l'indicizzazione (il wordmark è resa
+           visiva): la home targetizza "abbigliamento uomo Orbassano". */}
+        <span className="sr-only">L&apos;Impronta — Abbigliamento uomo a Orbassano</span>
+        <span data-hero-word aria-hidden className="grid will-change-transform">
           {/* (A) copia CHIARA — visibile a riposo (avorio su scuro). È quella che
               l'intro anima (SplitText) e che porta il segno fino al colpo. */}
           <Wordmark

@@ -2,13 +2,15 @@
  * Skeleton del catalogo: la rotta è dinamica (filtri via searchParams) e la
  * prima query può pagare il cold start del database — meglio una griglia in
  * attesa che una pagina bianca.
+ * NB: lo skeleton fa da fallback ANCHE per /catalogo/[slug]; niente <h1> qui,
+ * altrimenti nell'HTML iniziale della scheda prodotto ci sarebbero due h1.
  */
 export default function CatalogoLoading() {
   return (
     <>
       <header className="shell pt-36 pb-12 md:pt-44">
         <p className="cartellino text-ottone-testo">Collezione</p>
-        <h1 className="mt-5 max-w-3xl text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05]">Catalogo</h1>
+        <p className="mt-5 max-w-3xl text-[clamp(2.5rem,6vw,4.5rem)] leading-[1.05]">Catalogo</p>
         <p className="cartellino mt-6 text-pietra-scura" role="status">
           Prepariamo il catalogo…
         </p>

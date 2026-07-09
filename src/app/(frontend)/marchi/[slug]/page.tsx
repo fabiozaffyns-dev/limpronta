@@ -5,7 +5,8 @@ import { notFound } from 'next/navigation'
 import { ProductCard } from '@/components/ProductCard'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { RichText } from '@/components/ui/RichText'
-import { breadcrumbLd } from '@/lib/json-ld'
+import { brandItemListLd, breadcrumbLd } from '@/lib/json-ld'
+import { firstSentence } from '@/lib/lexical'
 import { getAllSlugs, getBrandBySlug, getProductsByBrand } from '@/lib/queries'
 import { jsonLdSafe, safeHref } from '@/lib/sanitize'
 
@@ -24,9 +25,15 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params
   const brand = await getBrandBySlug(slug)
   if (!brand) return { title: 'Marchio non trovato' }
+  // Description variabile: prima frase della scheda brand (dal CMS) se c'è,
+  // così ogni marchio ha una description propria e non clonata.
+  const descr =
+    firstSentence(brand.descrizione) ||
+    `Capi ${brand.nome} uomo selezionati da L'Impronta, Orbassano: qualità e disponibilità in negozio.`
   return {
-    title: brand.nome,
-    description: `${brand.nome} da L'Impronta a Orbassano: capi selezionati e disponibili in negozio.`,
+    title: `${brand.nome} uomo`,
+    description: descr,
+    alternates: { canonical: `/marchi/${brand.slug}` },
   }
 }
 
@@ -52,6 +59,12 @@ export default async function BrandPage({ params }: Params) {
           ),
         }}
       />
+      {products.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdSafe(brandItemListLd(brand, products)) }}
+        />
+      )}
 
       <header className="shell pt-36 pb-10 md:pt-44">
         <Eyebrow>

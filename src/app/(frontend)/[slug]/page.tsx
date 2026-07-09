@@ -26,6 +26,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   return {
     title: page.titolo,
     description: page.sommario ?? undefined,
+    alternates: { canonical: `/${page.slug}` },
     openGraph: { title: page.titolo, images: mediaUrl(page.immagine) ? [mediaUrl(page.immagine)!] : undefined },
   }
 }

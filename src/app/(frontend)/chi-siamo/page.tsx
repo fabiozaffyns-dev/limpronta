@@ -19,6 +19,7 @@ export const metadata: Metadata = {
   title: 'Chi siamo',
   description:
     "L'Impronta: abbigliamento uomo a Orbassano dal 2014. La materia e il segno — pochi marchi scelti, qualità vera e consiglio sartoriale.",
+  alternates: { canonical: '/chi-siamo' },
 }
 
 const VALORI = [

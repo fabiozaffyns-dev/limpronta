@@ -10,6 +10,7 @@ export const metadata: Metadata = {
   title: 'Marchi',
   description:
     "I marchi selezionati da L'Impronta: sartoria italiana e firme contemporanee per l'uomo, scelte una a una.",
+  alternates: { canonical: '/marchi' },
 }
 
 export default async function MarchiPage() {

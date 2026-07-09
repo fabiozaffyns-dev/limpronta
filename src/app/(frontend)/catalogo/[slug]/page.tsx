@@ -37,11 +37,15 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const brand = rel<Brand>(product.brand)
   const cover = mediaUrl(product.immagini?.[0])
   const prezzoMeta = formatPrice(product.prezzo, product.prezzoSuRichiesta)
+  // Marca nel title: intercetta le ricerche "marca + capo", leva di ranking
+  // principale per un multimarca.
+  const titolo = brand?.nome ? `${brand.nome} ${product.nome}` : product.nome
   const descr = `${brand?.nome ? `${brand.nome} · ` : ''}${product.nome} — disponibile da L'Impronta, Orbassano.${prezzoMeta ? ` ${prezzoMeta}.` : ''}`
   return {
-    title: product.nome,
+    title: titolo,
     description: descr,
-    openGraph: { title: product.nome, description: descr, images: cover ? [cover] : undefined },
+    alternates: { canonical: `/catalogo/${product.slug}` },
+    openGraph: { title: titolo, description: descr, images: cover ? [cover] : undefined },
   }
 }
 

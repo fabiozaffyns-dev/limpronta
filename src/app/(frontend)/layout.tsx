@@ -6,8 +6,8 @@ import { Footer } from '@/components/layout/Footer'
 import { Header } from '@/components/layout/Header'
 import { LenisProvider } from '@/components/motion/LenisProvider'
 import { TracciaProvider } from '@/components/motion/TracciaProvider'
-import { clothingStoreLd } from '@/lib/json-ld'
-import { mediaDoc } from '@/lib/media'
+import { clothingStoreLd, websiteLd } from '@/lib/json-ld'
+import { mediaDoc, mediaUrl } from '@/lib/media'
 import { getSettings } from '@/lib/queries'
 import { jsonLdSafe } from '@/lib/sanitize'
 import { SITE_URL } from '@/lib/site'
@@ -39,23 +39,32 @@ const cinzel = Cinzel({
   weight: ['500'],
 })
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: "L'Impronta — Abbigliamento uomo a Orbassano",
-    template: "%s · L'Impronta",
-  },
-  description:
-    "Abbigliamento uomo multimarca a Orbassano (Torino). Selezione sartoriale di fascia medio-alta, consulenza su misura e prenotazione in negozio.",
-  openGraph: {
-    type: 'website',
-    locale: 'it_IT',
-    siteName: "L'Impronta",
-    title: "L'Impronta — Abbigliamento uomo a Orbassano",
-    description:
-      "Selezione sartoriale di abbigliamento uomo a Orbassano (Torino). Marchi scelti, consiglio su misura, prenotazione in negozio.",
-  },
-  robots: { index: true, follow: true },
+const TITLE_DEFAULT = "L'Impronta — Abbigliamento uomo a Orbassano"
+const DESC_DEFAULT =
+  "Abbigliamento uomo multimarca a Orbassano (Torino). Selezione sartoriale di fascia medio-alta, consulenza su misura e prenotazione in negozio."
+
+// generateMetadata (non const) per leggere i valori SEO di default dal CMS
+// (Impostazioni → SEO) come fallback: se l'editor li compila, vincono.
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings()
+  const seo = settings.seoDefault
+  const titolo = seo?.titolo?.trim() || TITLE_DEFAULT
+  const descrizione = seo?.descrizione?.trim() || DESC_DEFAULT
+  const ogImg = mediaUrl(seo?.immagine)
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: { default: titolo, template: "%s · L'Impronta" },
+    description: descrizione,
+    openGraph: {
+      type: 'website',
+      locale: 'it_IT',
+      siteName: "L'Impronta",
+      title: titolo,
+      description: descrizione,
+      ...(ogImg ? { images: [ogImg] } : {}),
+    },
+    robots: { index: true, follow: true },
+  }
 }
 
 export default async function FrontendLayout({ children }: { children: React.ReactNode }) {
@@ -79,6 +88,10 @@ export default async function FrontendLayout({ children }: { children: React.Rea
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: jsonLdSafe(clothingStoreLd(settings)) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: jsonLdSafe(websiteLd()) }}
         />
 
         <a

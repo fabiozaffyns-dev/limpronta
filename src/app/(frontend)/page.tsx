@@ -27,6 +27,8 @@ import { appointmentMessage } from '@/lib/whatsapp'
 // ISR: rigenera dal CMS ogni 2 minuti (le modifiche in admin compaiono da sole).
 export const revalidate = 120
 
+export const metadata = { alternates: { canonical: '/' } }
+
 export default async function HomePage() {
   const [featured, brands, lookbooks, settings] = await Promise.all([
     getFeaturedProducts(8),
