@@ -303,9 +303,12 @@ export function DebossHero({
 
       <p
         data-hero-tag
+        // Scrim testuale su hero scuro: la leggibilità del sottotitolo non
+        // dipende più dal punto della foto sotto (dove il velo è più tenue).
+        style={dark ? { textShadow: '0 1px 16px rgba(20,18,16,0.65)' } : undefined}
         className={cn(
           'relative z-[2] mt-6 max-w-xl text-lg leading-relaxed sm:mt-10 md:text-xl',
-          dark ? 'text-avorio/85' : 'text-pietra-scura',
+          dark ? 'text-avorio/90' : 'text-pietra-scura',
         )}
       >
         Il segno lasciato nella materia pregiata. Una selezione di marchi scelti — si

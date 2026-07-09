@@ -123,7 +123,7 @@ export function StoreMap({
           href={mapsUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="cartellino absolute bottom-4 left-4 z-[500] bg-lino/90 px-3 py-2 text-inchiostro backdrop-blur-sm transition-colors hover:bg-lino"
+          className="cartellino absolute bottom-10 left-4 z-[500] bg-lino/90 px-3 py-2 text-inchiostro backdrop-blur-sm transition-colors hover:bg-lino"
         >
           Apri in mappe →
         </a>

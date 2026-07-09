@@ -17,7 +17,25 @@ type Consent = 'accepted' | 'rejected'
 export function ConsentBanner() {
   const [consent, setConsent] = useState<Consent | null>(null)
   const [showBanner, setShowBanner] = useState(false)
+  const [scrolling, setScrolling] = useState(false)
   const dialogRef = useRef<HTMLDivElement>(null)
+
+  // Il pulsante "Cookie" fisso in basso a sx sporca i contenuti (badge card,
+  // righe marchi): lo dissolviamo durante lo scroll attivo e lo riportiamo da
+  // fermi. Resta sempre raggiungibile, ma non galleggia mentre si sfoglia.
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout>
+    const onScroll = () => {
+      setScrolling(true)
+      clearTimeout(t)
+      t = setTimeout(() => setScrolling(false), 550)
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      clearTimeout(t)
+    }
+  }, [])
 
   useEffect(() => {
     // Lettura una-tantum del consenso da localStorage (disponibile solo lato client).
@@ -88,7 +106,9 @@ export function ConsentBanner() {
           type="button"
           onClick={() => setShowBanner(true)}
           aria-label="Preferenze cookie"
-          className="fixed bottom-4 left-4 z-[80] flex h-9 w-9 items-center justify-center rounded-full border bg-lino/90 text-[10px] text-pietra-scura backdrop-blur-sm transition-colors hover:text-ottone-testo"
+          className={`fixed bottom-4 left-4 z-[80] flex h-9 w-9 items-center justify-center rounded-full border bg-lino/90 text-[10px] text-pietra-scura shadow-sm backdrop-blur-sm transition-[color,opacity] duration-300 hover:text-ottone-testo ${
+            scrolling ? 'pointer-events-none opacity-0' : 'opacity-100'
+          }`}
           style={{ borderColor: 'color-mix(in srgb, var(--color-pietra) 50%, transparent)' }}
         >
           <span className="cartellino" style={{ fontSize: '0.5rem' }}>

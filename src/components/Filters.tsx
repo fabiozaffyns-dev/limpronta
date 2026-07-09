@@ -85,7 +85,7 @@ export function Filters({
         <button
           type="button"
           onClick={() => router.push(pathname, { scroll: false })}
-          className="cartellino self-start text-ottone-testo link-segno"
+          className="cartellino link-segno inline-flex min-h-[44px] items-center self-start text-ottone-testo"
         >
           Azzera filtri
         </button>

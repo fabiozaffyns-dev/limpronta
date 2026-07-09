@@ -22,7 +22,12 @@ export function ProductCard({
 
   return (
     <Link href={`/catalogo/${product.slug}`} className="card-lift group relative block">
-      <div className="relative overflow-hidden">
+      {/* bg + filetto hairline: i packshot su bianco non si fondono col lino
+         della pagina, ogni card ha un perimetro definito. */}
+      <div
+        className="relative overflow-hidden bg-white"
+        style={{ boxShadow: 'inset 0 0 0 1px color-mix(in srgb, var(--color-pietra) 22%, transparent)' }}
+      >
         <CloudinaryImage
           media={cover}
           alt={product.nome}
