@@ -12,7 +12,13 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   access: {
-    read: ({ req }) => Boolean(req.user),
+    // Gli admin vedono tutti gli utenti; un redattore vede solo il proprio
+    // record (niente elenco email di tutti). Non loggati: nessun accesso.
+    read: ({ req }) => {
+      if (!req.user) return false
+      if (req.user.role === 'admin') return true
+      return { id: { equals: req.user.id } }
+    },
     create: isAdmin,
     update: ({ req, id }) => req.user?.role === 'admin' || String(req.user?.id) === String(id),
     delete: isAdmin,

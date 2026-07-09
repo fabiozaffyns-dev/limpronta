@@ -41,10 +41,21 @@ const deploymentURL = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL
 // NEXT_PUBLIC_SERVER_URL).
 const knownOrigins = ['https://limpronta.vercel.app']
 
-// Origini fidate per CORS e CSRF (cookie). De-duplicate.
+const isProd = process.env.NODE_ENV === 'production'
+
+// Fail-fast in produzione: un secret vuoto comprometterebbe la firma di
+// JWT/cookie di sessione; una connection string vuota rompe tutto in silenzio.
+// Meglio un errore esplicito al boot che un deploy insicuro/degradato.
+if (isProd) {
+  if (!process.env.PAYLOAD_SECRET) throw new Error('PAYLOAD_SECRET mancante in produzione.')
+  if (!process.env.DATABASE_URI) throw new Error('DATABASE_URI mancante in produzione.')
+}
+
+// Origini fidate per CORS e CSRF (cookie). De-duplicate. localhost SOLO fuori
+// produzione: in prod non deve stare nella whitelist.
 const trustedOrigins = Array.from(
   new Set(
-    [serverURL, deploymentURL, ...knownOrigins, 'http://localhost:3000'].filter(
+    [serverURL, deploymentURL, ...knownOrigins, isProd ? null : 'http://localhost:3000'].filter(
       Boolean,
     ) as string[],
   ),
@@ -57,6 +68,13 @@ const cloudinaryEnabled = Boolean(
     process.env.CLOUDINARY_API_KEY &&
     process.env.CLOUDINARY_API_SECRET,
 )
+
+// In produzione lo storage su disco NON esiste (FS Vercel effimero/read-only):
+// se Cloudinary non è configurato gli upload andrebbero persi in silenzio.
+// Meglio fallire subito che degradare in modo insicuro.
+if (isProd && !cloudinaryEnabled) {
+  throw new Error('Credenziali Cloudinary mancanti in produzione (storage su disco non disponibile).')
+}
 
 export default buildConfig({
   admin: {

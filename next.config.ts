@@ -15,7 +15,7 @@ const contentSecurityPolicy = [
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'self'",
-  "img-src 'self' data: blob: https://res.cloudinary.com https://*.basemaps.cartocdn.com https://tiles.stadiamaps.com",
+  "img-src 'self' data: blob: https://res.cloudinary.com https://tiles.stadiamaps.com",
   "media-src 'self' https://res.cloudinary.com",
   "font-src 'self' data:",
   "style-src 'self' 'unsafe-inline'",
@@ -38,12 +38,14 @@ const securityHeaders = [
   },
   {
     key: 'Permissions-Policy',
-    value: 'camera=(self), microphone=(), geolocation=(), browsing-topics=()',
+    value: 'camera=(), microphone=(), geolocation=(), browsing-topics=()',
   },
   ...(isProd ? [{ key: 'Content-Security-Policy', value: contentSecurityPolicy }] : []),
 ]
 
 const nextConfig: NextConfig = {
+  // Non esporre lo stack nell'header (X-Powered-By: Next.js) — fingerprinting.
+  poweredByHeader: false,
   images: {
     // Transform Cloudinary lato CDN; loader pass-through per immagini locali/dev.
     loader: 'custom',

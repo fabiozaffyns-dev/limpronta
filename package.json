@@ -47,8 +47,7 @@
     "payload-storage-cloudinary": "1.2.1",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "sharp": "0.34.2",
-    "xlsx": "0.18.5"
+    "sharp": "0.34.2"
   },
   "devDependencies": {
     "@fontsource/cinzel": "^5.2.8",
@@ -64,7 +63,8 @@
     "puppeteer-core": "^25.3.0",
     "tailwindcss": "4.3.1",
     "tsx": "4.22.4",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "xlsx": "0.18.5"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
