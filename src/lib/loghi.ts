@@ -6,9 +6,10 @@
  * il colore segue la palette del sito, qualunque colore abbia il file originale.
  * I badge "in negativo" (Ciesse, Canadiens: testo chiaro su forma scura) sono
  * stati convertiti in PNG con alpha invertita (forma opaca, glifi forati), così
- * la mask li rende fedeli. Chiave = slug del brand a CMS: un brand senza voce
- * qui semplicemente non mostra il logo (es. Minoronzoni 1953, il cui "logo" è
- * solo testo HTML sul loro sito — nessun file ufficiale disponibile).
+ * la mask li rende fedeli. Il logo Minoronzoni 1953 (il loro sito lo rende come
+ * solo testo) è stato fornito dal titolare e ridotto a sagoma monocroma allo
+ * stesso modo. Chiave = slug del brand a CMS: un brand senza voce qui
+ * semplicemente non mostra il logo.
  */
 export const LOGHI_BRAND: Record<string, string> = {
   '40weft': '/loghi/40weft.png',
@@ -22,6 +23,7 @@ export const LOGHI_BRAND: Record<string, string> = {
   'harmont-and-blaine': '/loghi/harmont-and-blaine.svg',
   homeward: '/loghi/homeward.svg',
   'mastai-ferretti': '/loghi/mastai-ferretti.png',
+  'minoronzoni-1953': '/loghi/minoronzoni-1953.png',
   'reebok-classic': '/loghi/reebok-classic.svg',
   replay: '/loghi/replay.svg',
   squad2: '/loghi/squad2.svg',
