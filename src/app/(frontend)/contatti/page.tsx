@@ -54,7 +54,7 @@ export default async function ContattiPage() {
             <span className="italic text-ottone-testo">Caro cliente,</span> vestire bene comincia da una
             conversazione. Da noi non trovi un camerino frettoloso, ma{' '}
             <span className="text-ottone-testo">il tempo</span> di capire cosa ti sta davvero bene: il
-            tessuto giusto, la vestibilità giusta, il consiglio di chi lo fa dal 2014.
+            tessuto giusto, la vestibilità giusta, il consiglio di chi lo fa con passione.
           </p>
         </Reveal>
         <hr className="filetto mt-12" data-traccia />

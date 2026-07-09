@@ -100,7 +100,7 @@ export default async function HomePage() {
               che si notano solo da vicino.
             </CredoReveal>
             <p className="mt-10 max-w-xl text-lg text-avorio/70">
-              Vestire bene è una forma di rispetto — per sé e per gli altri. Dal 2014 è il nostro
+              Vestire bene è una forma di rispetto — per sé e per gli altri. È il nostro
               mestiere, in Via Vittorio Emanuele II a Orbassano.
             </p>
           </Reveal>

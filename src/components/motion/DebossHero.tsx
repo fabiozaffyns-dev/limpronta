@@ -268,7 +268,7 @@ export function DebossHero({
 
       <div data-hero-eyebrow className="relative z-[2]">
         <Eyebrow as="div" scuro={dark}>
-          Abbigliamento uomo · Orbassano · dal{' '}2014
+          Abbigliamento uomo · Orbassano
         </Eyebrow>
       </div>
 

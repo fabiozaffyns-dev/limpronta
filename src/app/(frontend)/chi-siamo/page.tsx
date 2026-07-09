@@ -20,7 +20,7 @@ export const revalidate = 120
 export const metadata: Metadata = {
   title: 'Chi siamo',
   description:
-    "L'Impronta: abbigliamento uomo a Orbassano dal 2014. La materia e il segno — pochi marchi scelti, qualità vera e consiglio sartoriale.",
+    "L'Impronta: abbigliamento uomo a Orbassano. La materia e il segno — pochi marchi scelti, qualità vera e consiglio sartoriale.",
   alternates: { canonical: '/chi-siamo' },
 }
 
@@ -46,7 +46,7 @@ export default async function ChiSiamoPage() {
 
   return (
     <>
-      <PageIntro eyebrow="Dal 2014" titolo="Chi siamo">
+      <PageIntro titolo="Chi siamo">
         Un negozio di abbigliamento uomo a Orbassano, costruito su un&apos;idea semplice: poche
         cose, scelte bene. Perché vestire con cura è una forma di rispetto — e lascia un segno.
       </PageIntro>
@@ -58,7 +58,7 @@ export default async function ChiSiamoPage() {
             media={settings.chiSiamoFoto1}
             alt="L'Impronta — la nostra storia"
             aspect="4 / 5"
-            label="Orbassano · dal 2014"
+            label="Orbassano"
             parallax
           />
         </MaskReveal>
@@ -69,7 +69,7 @@ export default async function ChiSiamoPage() {
           </SplitLines>
           <div className="mt-6 space-y-5 text-lg text-pietra-scura">
             <p>
-              Abbiamo aperto nel 2014 con un&apos;ambizione precisa: portare a Orbassano un
+              Abbiamo aperto con un&apos;ambizione precisa: portare a Orbassano un
               guardaroba maschile fatto di marchi veri, tessuti che durano e tagli che non passano di
               moda.
             </p>
@@ -109,7 +109,7 @@ export default async function ChiSiamoPage() {
                   className="w-full"
                 />
                 <figcaption className="cartellino mt-4 text-avorio/75">
-                  Fabio Zaffino — Titolare, dal 2014
+                  Fabio Zaffino — Titolare
                 </figcaption>
               </figure>
             </MaskReveal>
