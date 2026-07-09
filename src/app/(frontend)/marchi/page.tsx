@@ -19,7 +19,7 @@ export default async function MarchiPage() {
 
   return (
     <>
-      <PageIntro eyebrow="Brand" titolo="La curatela">
+      <PageIntro eyebrow="Brand" titolo="La scelta">
         Non un assortimento, ma una linea di gusto. Ogni firma è scelta per coerenza, qualità e
         carattere — passa un nome e affiora la sua materia.
       </PageIntro>
