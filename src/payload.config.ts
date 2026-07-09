@@ -99,6 +99,11 @@ export default buildConfig({
   },
   db: postgresAdapter({
     pool: { connectionString: process.env.DATABASE_URI || '' },
+    // Push (sync schema automatico) SOLO fuori produzione. In prod lo schema si
+    // evolve con migrazioni versionate (payload migrate), MAI con un push
+    // automatico che potrebbe alterare/eliminare colonne senza rollback.
+    push: !isProd,
+    migrationDir: path.resolve(dirname, 'migrations'),
   }),
   sharp,
   localization: {
