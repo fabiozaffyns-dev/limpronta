@@ -20,7 +20,7 @@ gsap.registerPlugin(ScrollTrigger)
 export function IndiceMarchi({
   items,
 }: {
-  items: (BrandIndexItem & { logo?: string | null })[]
+  items: (BrandIndexItem & { logo?: string | null; logoEmblema?: boolean })[]
 }) {
   const root = useRef<HTMLOListElement>(null)
 
@@ -98,7 +98,7 @@ export function IndiceMarchi({
                allineate su tutte le righe. Il nome è già nel testo del link. */}
             <span
               aria-hidden
-              className="indice-logo"
+              className={b.logoEmblema ? 'indice-logo indice-logo-emblema' : 'indice-logo'}
               style={
                 b.logo
                   ? { WebkitMaskImage: `url("${b.logo}")`, maskImage: `url("${b.logo}")` }

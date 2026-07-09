@@ -307,8 +307,8 @@
     position: relative;
     font-family: var(--font-display);
     font-optical-sizing: auto;
-    line-height: 0.98;
-    font-size: clamp(1.85rem, 5.4vw, 4.5rem);
+    line-height: 1;
+    font-size: clamp(1.55rem, 4vw, 3.3rem);
     color: var(--color-inchiostro-tenue);
     font-variation-settings: 'opsz' var(--mk-opsz, 30), 'wght' var(--mk-wght, 360);
     transition:
@@ -378,6 +378,15 @@
     .indice-logo {
       display: block;
     }
+  }
+  /* Emblemi quasi quadrati/verticali (Canadiens, Suns): il box standard, largo e
+     basso con aggancio a destra, li rimpicciolisce e li incolla al filo. Qui il
+     box è più ALTO (sono limitati dall'altezza) e il segno è CENTRATO nella
+     colonna: il centro ottico torna in linea con quello dei wordmark. */
+  .indice-logo-emblema {
+    height: clamp(2.7rem, 5.4vw, 3.8rem);
+    -webkit-mask-position: center;
+    mask-position: center;
   }
   .indice-riga:hover .indice-logo,
   .indice-riga:focus-visible .indice-logo {

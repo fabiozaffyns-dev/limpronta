@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 import { IndiceMarchi } from '@/components/motion/IndiceMarchi'
 import { PageIntro } from '@/components/ui/PageIntro'
-import { LOGHI_BRAND } from '@/lib/loghi'
+import { LOGHI_BRAND, LOGHI_EMBLEMA } from '@/lib/loghi'
 import { getBrandsIndex } from '@/lib/queries'
 
 export const revalidate = 120
@@ -36,6 +36,7 @@ export default async function MarchiPage() {
               items={items.map((b) => ({
                 ...b,
                 logo: (b.slug && LOGHI_BRAND[b.slug]) || null,
+                logoEmblema: Boolean(b.slug && LOGHI_EMBLEMA.has(b.slug)),
               }))}
             />
             <p className="cartellino mt-16 text-pietra-scura">
