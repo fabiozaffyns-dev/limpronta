@@ -1,5 +1,3 @@
-import { ParallaxMedia } from '@/components/motion/ParallaxMedia'
-import { Reveal } from '@/components/motion/Reveal'
 import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { cn } from '@/lib/cn'
 import { mediaDoc } from '@/lib/media'
@@ -8,28 +6,36 @@ import type { Media } from '@/payload-types'
 type Img = number | Media
 
 /**
- * Mosaico editoriale della galleria lookbook: righe componibili con scale
- * diverse — piena (orizzontale, con parallasse), coppia di orizzontali,
- * coppia di verticali, grande+piccola, trittico — scelte in base al FORMATO
- * reale delle foto e variate con un generatore pseudo-casuale SEEDED (stabile
- * per lookbook: l'SSR/ISR deve produrre sempre lo stesso layout, e il ritmo
- * non deve cambiare a ogni rigenerazione). Su mobile tutto in colonna, in ordine.
+ * Galleria lookbook a MOSAICO "bento": celle di misure diverse che si incastrano
+ * in una griglia densa, senza spazi vuoti. Le foto riempiono la cella (object-cover,
+ * quindi ritagliate) come nel riferimento richiesto. Ogni foto è incorniciata da
+ * un filo sottile in ottone su fondo bianco (stampa montata). L'assegnazione delle
+ * misure è guidata dal formato reale delle foto e variata con un generatore
+ * pseudo-casuale SEEDED sullo slug: "random" ma stabile (SSR/ISR devono produrre
+ * sempre lo stesso layout — niente Math.random in RSC).
  */
 
-type Row =
-  | { tipo: 'piena'; img: Img }
-  | { tipo: 'meta-orizzontali'; imgs: [Img, Img] }
-  | { tipo: 'coppia'; imgs: [Img, Img] }
-  | { tipo: 'sbilanciata'; imgs: [Img, Img]; grandeADestra: boolean }
-  | { tipo: 'trittico'; imgs: [Img, Img, Img] }
-  | { tipo: 'solo'; img: Img }
+type Span = 'feature' | 'wide' | 'tall' | 'small'
+
+const SPAN_CLASS: Record<Span, string> = {
+  feature: 'col-span-2 row-span-2',
+  wide: 'col-span-2 row-span-1',
+  tall: 'col-span-1 row-span-2',
+  small: 'col-span-1 row-span-1',
+}
+const SPAN_SIZES: Record<Span, string> = {
+  feature: '(max-width: 640px) 100vw, 50vw',
+  wide: '(max-width: 640px) 100vw, 50vw',
+  tall: '(max-width: 640px) 50vw, 25vw',
+  small: '(max-width: 640px) 50vw, 25vw',
+}
 
 function isLandscape(img: Img): boolean {
   const doc = mediaDoc(img)
   return Boolean(doc?.width && doc?.height && doc.width > doc.height)
 }
 
-/** LCG deterministico: stesso seed → stessa sequenza (niente Math.random in RSC). */
+/** LCG deterministico: stesso seed → stessa sequenza. */
 function makeRnd(seed: string) {
   let s = 0
   for (const ch of seed) s = (s * 31 + ch.charCodeAt(0)) % 233280
@@ -39,43 +45,15 @@ function makeRnd(seed: string) {
   }
 }
 
-function buildRows(images: Img[], seed: string): Row[] {
+function buildSpans(images: Img[], seed: string): Span[] {
   const rnd = makeRnd(seed)
-  const rows: Row[] = []
-  let i = 0
-  while (i < images.length) {
-    const img = images[i]!
-    if (isLandscape(img)) {
-      const next = images[i + 1]
-      // Due orizzontali di fila: a volte si affiancano a metà larghezza.
-      if (next !== undefined && isLandscape(next) && rnd() < 0.45) {
-        rows.push({ tipo: 'meta-orizzontali', imgs: [img, next] })
-        i += 2
-      } else {
-        rows.push({ tipo: 'piena', img })
-        i += 1
-      }
-      continue
-    }
-    // Verticali consecutive a partire da i.
-    let run = 0
-    while (i + run < images.length && !isLandscape(images[i + run]!)) run++
-    if (run >= 3 && rnd() < 0.35) {
-      rows.push({ tipo: 'trittico', imgs: [images[i]!, images[i + 1]!, images[i + 2]!] })
-      i += 3
-    } else if (run >= 2) {
-      if (rnd() < 0.5) {
-        rows.push({ tipo: 'sbilanciata', imgs: [images[i]!, images[i + 1]!], grandeADestra: rnd() < 0.5 })
-      } else {
-        rows.push({ tipo: 'coppia', imgs: [images[i]!, images[i + 1]!] })
-      }
-      i += 2
-    } else {
-      rows.push({ tipo: 'solo', img })
-      i += 1
-    }
-  }
-  return rows
+  return images.map((img, i) => {
+    if (i === 0) return 'feature' // apertura sempre grande
+    if (isLandscape(img)) return rnd() < 0.22 ? 'feature' : 'wide'
+    // verticali: qualche cella alta, qualche piccola, di rado una grande
+    const r = rnd()
+    return r < 0.16 ? 'feature' : r < 0.6 ? 'tall' : 'small'
+  })
 }
 
 export function LookbookMosaic({
@@ -87,93 +65,32 @@ export function LookbookMosaic({
   seed: string
   titolo: string
 }) {
-  const rows = buildRows(images, seed)
-
-  // priority solo sulla primissima foto (LCP della pagina); alt numerati
-  // sull'ordine originale della galleria.
-  const Foto = ({ img, aspect, sizes }: { img: Img; aspect: string; sizes: string }) => (
-    <CloudinaryImage
-      media={img}
-      alt={`${titolo} — ${images.indexOf(img) + 1}`}
-      aspect={aspect}
-      sizes={sizes}
-      priority={img === images[0]}
-    />
-  )
+  const spans = buildSpans(images, seed)
 
   return (
-    <div className="flex flex-col gap-4">
-      {rows.map((row, r) => {
-        switch (row.tipo) {
-          case 'piena':
-            return (
-              <Reveal key={r}>
-                <ParallaxMedia>
-                  <Foto img={row.img} aspect="3 / 2" sizes="100vw" />
-                </ParallaxMedia>
-              </Reveal>
-            )
-          case 'meta-orizzontali':
-            return (
-              <Reveal key={r}>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {row.imgs.map((img, j) => (
-                    <Foto key={j} img={img} aspect="3 / 2" sizes="(max-width: 640px) 100vw, 50vw" />
-                  ))}
-                </div>
-              </Reveal>
-            )
-          case 'coppia':
-            return (
-              <Reveal key={r}>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  {row.imgs.map((img, j) => (
-                    <Foto key={j} img={img} aspect="4 / 5" sizes="(max-width: 640px) 100vw, 50vw" />
-                  ))}
-                </div>
-              </Reveal>
-            )
-          case 'sbilanciata': {
-            // Grande 7/12 + piccola 5/12: a schermo largo affiancate (la piccola
-            // più stretta), su mobile impilate a tutta larghezza. Entrambe 4:5:
-            // su mobile un 4:7 diventava altissimo (single column, ~700px).
-            const [a, b] = row.imgs
-            const grande = row.grandeADestra ? b : a
-            const piccola = row.grandeADestra ? a : b
-            return (
-              <Reveal key={r}>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-12">
-                  <div className={cn(row.grandeADestra ? 'sm:order-2 sm:col-span-7' : 'sm:col-span-7')}>
-                    <Foto img={grande} aspect="4 / 5" sizes="(max-width: 640px) 100vw, 58vw" />
-                  </div>
-                  <div className={cn(row.grandeADestra ? 'sm:order-1 sm:col-span-5' : 'sm:col-span-5')}>
-                    <Foto img={piccola} aspect="4 / 5" sizes="(max-width: 640px) 100vw, 42vw" />
-                  </div>
-                </div>
-              </Reveal>
-            )
-          }
-          case 'trittico':
-            return (
-              <Reveal key={r}>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-                  {row.imgs.map((img, j) => (
-                    <Foto key={j} img={img} aspect="4 / 5" sizes="(max-width: 640px) 100vw, 33vw" />
-                  ))}
-                </div>
-              </Reveal>
-            )
-          case 'solo':
-            return (
-              <Reveal key={r}>
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                  <div className={cn(r % 2 === 1 && 'sm:col-start-2')}>
-                    <Foto img={row.img} aspect="4 / 5" sizes="(max-width: 640px) 100vw, 50vw" />
-                  </div>
-                </div>
-              </Reveal>
-            )
-        }
+    <div className="grid auto-rows-[8.5rem] grid-cols-2 gap-2.5 [grid-auto-flow:dense] sm:auto-rows-[12rem] sm:grid-cols-4 sm:gap-3.5">
+      {images.map((img, i) => {
+        const span = spans[i]!
+        return (
+          <div
+            key={i}
+            className={cn('group relative overflow-hidden border bg-white', SPAN_CLASS[span])}
+            style={{
+              borderColor: 'color-mix(in srgb, var(--color-ottone) 30%, transparent)',
+              boxShadow: '0 10px 26px -18px rgba(28, 26, 23, 0.5)',
+            }}
+          >
+            <CloudinaryImage
+              media={img}
+              alt={`${titolo} — ${i + 1}`}
+              fillParent
+              sizes={SPAN_SIZES[span]}
+              priority={i === 0}
+              imgClassName="transition-transform duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+            />
+            <span className="pointer-events-none absolute inset-0 bg-inchiostro/0 transition-colors duration-500 group-hover:bg-inchiostro/[0.06]" />
+          </div>
+        )
       })}
     </div>
   )
