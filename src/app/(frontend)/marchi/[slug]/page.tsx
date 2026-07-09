@@ -6,12 +6,19 @@ import { ProductCard } from '@/components/ProductCard'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { RichText } from '@/components/ui/RichText'
 import { breadcrumbLd } from '@/lib/json-ld'
-import { getBrandBySlug, getProductsByBrand } from '@/lib/queries'
+import { getAllSlugs, getBrandBySlug, getProductsByBrand } from '@/lib/queries'
 import { jsonLdSafe, safeHref } from '@/lib/sanitize'
 
 type Params = { params: Promise<{ slug: string }> }
 
 export const revalidate = 120
+
+// Prerender al build tutti i marchi (pochi): niente cold start Neon sul primo
+// visitatore. dynamicParams resta true per gli slug aggiunti dopo il deploy.
+export async function generateStaticParams() {
+  const brands = await getAllSlugs('brands')
+  return brands.filter((b) => b.slug).map((b) => ({ slug: b.slug as string }))
+}
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params

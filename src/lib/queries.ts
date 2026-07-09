@@ -150,7 +150,7 @@ export type ProductFilters = {
   limit?: number
 }
 
-export async function getProducts(filters: ProductFilters = {}) {
+async function getProductsUncached(filters: ProductFilters = {}) {
   const payload = await getPayloadClient()
   const and: Where[] = [published]
 
@@ -186,6 +186,16 @@ export async function getProducts(filters: ProductFilters = {}) {
   })
 }
 
+/**
+ * Catalogo: risultato in Data Cache (chiave = filtri) per NON colpire Neon a
+ * ogni visita. /catalogo resta dinamica (searchParams), ma la query pesante è
+ * memoizzata per combinazione di filtri e invalidata dal tag 'payload'.
+ */
+export const getProducts = unstable_cache(getProductsUncached, ['products'], {
+  revalidate: 120,
+  tags: [PAYLOAD_TAG],
+})
+
 /** Valori distinti di taglia e colore per i filtri del catalogo. */
 export const getCatalogFacets = unstable_cache(
   async (): Promise<{ taglie: string[]; colori: string[] }> => {
@@ -203,8 +213,9 @@ export const getCatalogFacets = unstable_cache(
     })
     const taglie = new Set<string>()
     const colori = new Set<string>()
-    // Il cast serve perché `select` (as never) fa perdere il tipo dei docs.
-    for (const p of res.docs as Product[]) {
+    // `select` proietta solo taglie/colori: castiamo alla forma reale (parziale)
+    // invece che all'intero Product.
+    for (const p of res.docs as Array<Pick<Product, 'taglie' | 'colori'>>) {
       for (const t of p.taglie ?? []) if (t?.taglia) taglie.add(t.taglia)
       for (const c of p.colori ?? []) if (c?.nome) colori.add(c.nome)
     }

@@ -13,9 +13,10 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Wordmark } from '@/components/ui/Wordmark'
 import { cn } from '@/lib/cn'
+import { prefersReduced } from '@/lib/motion'
 import { appointmentMessage } from '@/lib/whatsapp'
 
-gsap.registerPlugin(ScrollTrigger, useGSAP, SplitText)
+gsap.registerPlugin(ScrollTrigger, SplitText)
 
 const SHADOW_LIGHT = '0 1px 0 rgba(255,255,255,0.5), 0 -1px 1px rgba(28,26,23,0.12)'
 const SHADOW_DARK = '0 1px 1px rgba(0,0,0,0.55), 0 -1px 0 rgba(255,255,255,0.06)'
@@ -64,12 +65,12 @@ export function DebossHero({
   // invisibile per tutti gli altri, non intacca l'esperienza normale.
   useEffect(() => {
     const v = videoRef.current
-    if (v && window.matchMedia('(prefers-reduced-motion: reduce)').matches) v.pause()
+    if (v && prefersReduced()) v.pause()
   }, [])
 
   useGSAP(
-    () => {
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    (_ctx, contextSafe) => {
+      if (prefersReduced()) return
 
       const markEl = root.current?.querySelector<HTMLElement>('[data-hero-mark]')
       let split: SplitText | null = null
@@ -110,8 +111,11 @@ export function DebossHero({
       // Pre-nascosta via CSS (html.js [data-hero-tag]) per evitare flash.
       const tagEl = root.current?.querySelector<HTMLElement>('[data-hero-tag]')
       const t0 = performance.now()
-      if (tagEl) {
-        void document.fonts.ready.then(() => {
+      if (tagEl && contextSafe) {
+        // L'animazione nasce dopo fonts.ready (async): con contextSafe entra nel
+        // context di useGSAP e viene revertata al cleanup anche se l'unmount
+        // avviene prima che la promise risolva (niente tween su nodo smontato).
+        const runTag = contextSafe(() => {
           if (!root.current) return
           tagEl.style.animation = 'none' // disinnesca la rivelazione CSS di scorta
           tagSplit = new SplitText(tagEl, { type: 'words', mask: 'words' })
@@ -126,6 +130,7 @@ export function DebossHero({
             delay: ritardo,
           })
         })
+        void document.fonts.ready.then(runTag)
       }
 
       // ── "IL CONIO" — lo sprofondo del sigillo ──────────────────────────────

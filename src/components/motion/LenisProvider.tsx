@@ -5,6 +5,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Lenis from 'lenis'
 import { useEffect, type ReactNode } from 'react'
 
+import { prefersReduced } from '@/lib/motion'
+
 gsap.registerPlugin(ScrollTrigger)
 
 /**
@@ -15,7 +17,7 @@ gsap.registerPlugin(ScrollTrigger)
 export function LenisProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     // html.js è già aggiunto dallo script inline in layout (pre-paint).
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    if (prefersReduced()) return
 
     const lenis = new Lenis({
       // lerp = interpolazione continua verso il target: scroll più "setoso" e

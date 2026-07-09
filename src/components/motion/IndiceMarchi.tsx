@@ -9,7 +9,7 @@ import { useRef } from 'react'
 import { EASE_SOFT, prefersReduced } from '@/lib/motion'
 import type { BrandIndexItem } from '@/lib/queries'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger)
 
 /**
  * Indice tipografico dei marchi: nomi giganti in Fraunces, uno per riga, che

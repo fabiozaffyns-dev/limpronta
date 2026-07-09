@@ -8,7 +8,7 @@ import { useRef, type ReactNode } from 'react'
 import { cn } from '@/lib/cn'
 import { prefersReduced } from '@/lib/motion'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger)
 
 // Stesso deboss del wordmark hero: il "colpo" che imprime le firme nel Lino.
 const DEBOSS = '0 1px 0 rgba(255,255,255,0.5), 0 -1px 1px rgba(28,26,23,0.12)'

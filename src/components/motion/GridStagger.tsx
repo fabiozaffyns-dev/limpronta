@@ -7,7 +7,7 @@ import { useRef, type ReactNode } from 'react'
 
 import { EASE_SOFT, prefersReduced } from '@/lib/motion'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger)
 
 /**
  * Le tessere di una griglia entrano con uno stagger a colonne (onda), non a

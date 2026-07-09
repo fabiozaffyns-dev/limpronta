@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 
 import { prefersReduced } from '@/lib/motion'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger)
 
 /**
  * "Il segno col gessetto": i filetti in ottone (.filetto) e i trattini delle

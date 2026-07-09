@@ -7,7 +7,7 @@ import { useRef, type ReactNode } from 'react'
 
 import { prefersReduced } from '@/lib/motion'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger)
 
 /**
  * Parallax disciplinato: l'immagine interna scorre di pochi punti percentuali

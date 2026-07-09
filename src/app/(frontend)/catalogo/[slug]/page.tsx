@@ -14,7 +14,7 @@ import { cn } from '@/lib/cn'
 import { formatPrice, formatStagioneEstesa } from '@/lib/format'
 import { breadcrumbLd, productLd } from '@/lib/json-ld'
 import { mediaUrl, rel } from '@/lib/media'
-import { getProductBySlug, getRelatedProducts, getSettings } from '@/lib/queries'
+import { getFeaturedProducts, getProductBySlug, getRelatedProducts, getSettings } from '@/lib/queries'
 import { jsonLdSafe } from '@/lib/sanitize'
 import { productInquiryMessage } from '@/lib/whatsapp'
 import type { Brand, Category } from '@/payload-types'
@@ -22,6 +22,13 @@ import type { Brand, Category } from '@/payload-types'
 type Params = { params: Promise<{ slug: string }> }
 
 export const revalidate = 120
+
+// Prerender al build le schede dei prodotti in evidenza (i più visitati): il
+// resto resta ISR on-demand (dynamicParams true), senza appesantire il build.
+export async function generateStaticParams() {
+  const featured = await getFeaturedProducts(12)
+  return featured.filter((p) => p.slug).map((p) => ({ slug: p.slug as string }))
+}
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params

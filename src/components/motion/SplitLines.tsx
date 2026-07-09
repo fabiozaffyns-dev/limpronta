@@ -8,7 +8,7 @@ import { useRef, type ElementType, type ReactNode } from 'react'
 
 import { EASE_EDITORIAL, STAGGER, prefersReduced } from '@/lib/motion'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText)
+gsap.registerPlugin(ScrollTrigger, SplitText)
 
 /**
  * Titolo che "si imprime" riga per riga allo scroll: ogni riga sale da dietro

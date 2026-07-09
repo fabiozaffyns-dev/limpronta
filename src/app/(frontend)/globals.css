@@ -79,16 +79,22 @@
     overflow-x: clip;
   }
 
-  /* Grana di carta/tessuto su tutto il fondo (sottile, non un campo piatto) */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    pointer-events: none;
-    opacity: 0.4;
-    mix-blend-mode: soft-light;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Grana di carta/tessuto su tutto il fondo (sottile, non un campo piatto).
+     Un layer fixed a tutto viewport con mix-blend-mode forza il compositing
+     dell'intero schermo a ogni frame di scroll: costo tangibile su GPU mobili.
+     Quindi SOLO da tablet in su e senza reduced-motion. z-index sotto le UI
+     fisse (header 50, banner 90) per non velare mai i dialog. */
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      pointer-events: none;
+      opacity: 0.4;
+      mix-blend-mode: soft-light;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
   }
 
   h1,

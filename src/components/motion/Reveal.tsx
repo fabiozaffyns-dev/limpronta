@@ -3,6 +3,7 @@
 import { useEffect, useRef, type ReactNode } from 'react'
 
 import { cn } from '@/lib/cn'
+import { prefersReduced } from '@/lib/motion'
 
 /**
  * Reveal allo scroll (fade-up). IntersectionObserver leggero e robusto.
@@ -24,8 +25,7 @@ export function Reveal({
     const el = ref.current
     if (!el) return
 
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduce) {
+    if (prefersReduced()) {
       el.classList.add('is-in')
       return
     }

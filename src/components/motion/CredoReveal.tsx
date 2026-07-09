@@ -8,7 +8,7 @@ import { useRef, type ReactNode } from 'react'
 
 import { prefersReduced } from '@/lib/motion'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger, SplitText)
+gsap.registerPlugin(ScrollTrigger, SplitText)
 
 /**
  * Il testo del "credo" si ACCENDE progressivamente mentre scorri: una parte alla
@@ -25,6 +25,7 @@ export function CredoReveal({ children, className }: { children: ReactNode; clas
       const el = ref.current
       if (!el) return
       let split: SplitText | null = null
+      let tween: gsap.core.Tween | null = null
       let cancelled = false
 
       document.fonts.ready.then(() => {
@@ -33,17 +34,24 @@ export function CredoReveal({ children, className }: { children: ReactNode; clas
         // Progressivo: le parole si accendono UNA PARTE ALLA VOLTA mentre scorri,
         // fino al completamento (scrub legato alla posizione di scroll). Ogni parola
         // va dal suo colore smorzato al suo colore naturale (ottone per "La cura").
-        gsap.from(split.words, {
-          color: 'rgba(242, 236, 224, 0.16)',
+        // Colore di partenza più alto (0.42, non 0.16) e fine anticipata (center 60%)
+        // così il testo è già leggibile mentre lo si legge, anche su mobile alto.
+        tween = gsap.from(split.words, {
+          color: 'rgba(242, 236, 224, 0.42)',
           ease: 'none',
           duration: 0.4,
           stagger: 0.25,
-          scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 55%', scrub: 0.5 },
+          scrollTrigger: { trigger: el, start: 'top 82%', end: 'center 60%', scrub: 0.5 },
         })
       })
 
+      // Il tween nasce in fonts.ready (fuori dallo scope sincrono di useGSAP):
+      // il suo ScrollTrigger NON è tracciato dal context → va ucciso a mano nel
+      // cleanup, altrimenti resta orfano a ogni cambio rotta (leak).
       return () => {
         cancelled = true
+        tween?.scrollTrigger?.kill()
+        tween?.kill()
         split?.revert()
       }
     },

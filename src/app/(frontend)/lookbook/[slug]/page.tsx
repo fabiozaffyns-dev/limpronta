@@ -7,11 +7,17 @@ import { Eyebrow } from '@/components/ui/Eyebrow'
 import { RichText } from '@/components/ui/RichText'
 import { formatStagioneEstesa } from '@/lib/format'
 import { mediaUrl } from '@/lib/media'
-import { getLookbookBySlug } from '@/lib/queries'
+import { getAllSlugs, getLookbookBySlug } from '@/lib/queries'
 
 type Params = { params: Promise<{ slug: string }> }
 
 export const revalidate = 120
+
+// Prerender al build tutti i lookbook (pochi). dynamicParams true per i nuovi.
+export async function generateStaticParams() {
+  const lookbooks = await getAllSlugs('lookbooks')
+  return lookbooks.filter((l) => l.slug).map((l) => ({ slug: l.slug as string }))
+}
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params

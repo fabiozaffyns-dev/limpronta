@@ -7,7 +7,7 @@ import { useRef, type ReactNode } from 'react'
 
 import { EASE_EDITORIAL, prefersReduced } from '@/lib/motion'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+gsap.registerPlugin(ScrollTrigger)
 
 /**
  * "Velina che si scosta": allo scroll il contenuto (di norma un'immagine) si
