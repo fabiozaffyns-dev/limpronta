@@ -42,6 +42,7 @@ const VALORI = [
 export default async function ChiSiamoPage() {
   const settings = await getSettings()
   const via = [settings.indirizzo?.via, settings.indirizzo?.civico].filter(Boolean).join(' ')
+  const hasTitolare = Boolean(mediaDoc(settings.titolareFoto))
 
   return (
     <>
@@ -82,41 +83,50 @@ export default async function ChiSiamoPage() {
               il capo, prendendosi il tempo. Per questo il nostro mestiere si fa qui, in negozio.
             </p>
           </div>
-          {/* La firma del titolare: una boutique che vende relazione e consiglio
-             ha un nome e un volto. Il ritratto quadrato compare se caricato in
-             Impostazioni → Chi siamo → "Foto del titolare". */}
-          <div className="mt-8 flex items-center gap-4">
-            {mediaDoc(settings.titolareFoto) && (
-              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full">
-                <CloudinaryImage
-                  media={settings.titolareFoto}
-                  alt="Fabio Zaffino — titolare de L'Impronta"
-                  fillParent
-                  sizes="64px"
-                />
-              </div>
-            )}
-            <div>
-              <p className="font-display text-2xl text-ottone-testo">Fabio Zaffino</p>
-              <p className="cartellino mt-1 text-pietra-scura">Titolare · L&rsquo;Impronta</p>
-            </div>
-          </div>
         </Reveal>
       </section>
 
-      {/* ─── Manifesto ────────────────────────────────────────────────────── */}
+      {/* ─── Manifesto + ritratto titolare ────────────────────────────────── */}
       <section className="bg-inchiostro text-avorio">
-        <div className="shell py-28 text-center md:py-36">
-          <Reveal>
-            <Eyebrow scuro>La nostra idea</Eyebrow>
-            <CredoReveal className="mx-auto mt-8 max-w-3xl font-display text-3xl leading-[1.2] text-avorio md:text-[2.7rem]">
-              Un capo è fatto di <span className="italic text-ottone-chiaro">materia</span> — lana,
-              cotone, mani che cuciono.
-              <br />E lascia un <span className="italic text-ottone-chiaro">segno</span>: il modo in
-              cui ti fa stare al mondo.
-            </CredoReveal>
-          </Reveal>
-        </div>
+        {hasTitolare ? (
+          <div className="shell grid items-center gap-12 py-24 md:py-32 lg:grid-cols-[1fr_0.58fr] lg:gap-20">
+            <Reveal>
+              <Eyebrow scuro>La nostra idea</Eyebrow>
+              <CredoReveal className="mt-8 max-w-2xl font-display text-3xl leading-[1.2] text-avorio md:text-[2.6rem]">
+                Un capo è fatto di <span className="italic text-ottone-chiaro">materia</span> — lana,
+                cotone, mani che cuciono.
+                <br />E lascia un <span className="italic text-ottone-chiaro">segno</span>: il modo in
+                cui ti fa stare al mondo.
+              </CredoReveal>
+            </Reveal>
+            <MaskReveal className="lg:justify-self-end">
+              <figure className="w-full lg:max-w-md">
+                <CloudinaryImage
+                  media={settings.titolareFoto}
+                  alt="Fabio Zaffino — titolare de L'Impronta"
+                  aspect="4 / 5"
+                  sizes="(max-width: 1024px) 100vw, 40vw"
+                  className="w-full"
+                />
+                <figcaption className="cartellino mt-4 text-avorio/75">
+                  Fabio Zaffino — Titolare, dal 2014
+                </figcaption>
+              </figure>
+            </MaskReveal>
+          </div>
+        ) : (
+          <div className="shell py-28 text-center md:py-36">
+            <Reveal>
+              <Eyebrow scuro>La nostra idea</Eyebrow>
+              <CredoReveal className="mx-auto mt-8 max-w-3xl font-display text-3xl leading-[1.2] text-avorio md:text-[2.7rem]">
+                Un capo è fatto di <span className="italic text-ottone-chiaro">materia</span> — lana,
+                cotone, mani che cuciono.
+                <br />E lascia un <span className="italic text-ottone-chiaro">segno</span>: il modo in
+                cui ti fa stare al mondo.
+              </CredoReveal>
+            </Reveal>
+          </div>
+        )}
       </section>
 
       {/* ─── Valori ───────────────────────────────────────────────────────── */}

@@ -236,10 +236,10 @@ export const Settings: GlobalConfig = {
               name: 'titolareFoto',
               type: 'upload',
               relationTo: 'media',
-              label: 'Foto del titolare — quadrata',
+              label: 'Foto del titolare — verticale',
               admin: {
                 description:
-                  'Ritratto QUADRATO (mezzo busto, sfondo neutro, min 600×600px) accanto alla firma in "La nostra storia". Vuoto = mostra solo il nome.',
+                  'Ritratto VERTICALE (4:5, alta risoluzione) mostrato a destra della sezione "La nostra idea". Vuoto = la sezione resta centrata senza foto.',
               },
             },
           ],
