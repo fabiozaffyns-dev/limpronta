@@ -17,7 +17,11 @@ gsap.registerPlugin(ScrollTrigger)
  * d'ottone) e la ritrazione delle altre firme sono in CSS puro. Senza JS /
  * reduced-motion resta un elenco di link statico e leggibile.
  */
-export function IndiceMarchi({ items }: { items: BrandIndexItem[] }) {
+export function IndiceMarchi({
+  items,
+}: {
+  items: (BrandIndexItem & { logo?: string | null })[]
+}) {
   const root = useRef<HTMLOListElement>(null)
 
   useGSAP(
@@ -89,6 +93,18 @@ export function IndiceMarchi({ items }: { items: BrandIndexItem[] }) {
             <span className="indice-meta cartellino">
               {b.count > 0 ? `${b.count} ${b.count === 1 ? 'pezzo' : 'pezzi'}` : 'Scopri'}
             </span>
+            {/* Logo ufficiale monocromo (CSS mask → colore dalla palette). Lo
+               span resta anche senza logo: riserva la colonna e tiene le meta
+               allineate su tutte le righe. Il nome è già nel testo del link. */}
+            <span
+              aria-hidden
+              className="indice-logo"
+              style={
+                b.logo
+                  ? { WebkitMaskImage: `url("${b.logo}")`, maskImage: `url("${b.logo}")` }
+                  : undefined
+              }
+            />
             <span aria-hidden className="indice-filo" />
           </Link>
         </li>

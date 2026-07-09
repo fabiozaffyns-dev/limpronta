@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 
 import { IndiceMarchi } from '@/components/motion/IndiceMarchi'
 import { PageIntro } from '@/components/ui/PageIntro'
+import { LOGHI_BRAND } from '@/lib/loghi'
 import { getBrandsIndex } from '@/lib/queries'
 
 export const revalidate = 120
@@ -31,7 +32,12 @@ export default async function MarchiPage() {
           </p>
         ) : (
           <>
-            <IndiceMarchi items={items} />
+            <IndiceMarchi
+              items={items.map((b) => ({
+                ...b,
+                logo: (b.slug && LOGHI_BRAND[b.slug]) || null,
+              }))}
+            />
             <p className="cartellino mt-16 text-pietra-scura">
               Selezione L&rsquo;Impronta · Orbassano — {items.length} firme
               {totPezzi > 0 ? `, ${totPezzi} pezzi in negozio` : ''}

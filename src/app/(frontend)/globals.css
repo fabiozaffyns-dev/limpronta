@@ -284,7 +284,8 @@
   .indice-riga {
     position: relative;
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    /* num | nome | meta | logo (timbro del marchio, sempre all'estremità destra) */
+    grid-template-columns: auto 1fr auto auto;
     align-items: baseline;
     gap: clamp(0.75rem, 3vw, 2.5rem);
     padding-block: clamp(1rem, 2.6vw, 1.9rem);
@@ -344,6 +345,30 @@
     white-space: nowrap;
     transition: opacity 0.4s ease;
   }
+  /* Logo ufficiale del marchio, reso monocromo via mask: il file (qualunque
+     colore abbia) diventa una sagoma dipinta con currentColor — pietra a riposo,
+     inchiostro sulla riga invitata. mask-position right = filo destro comune. */
+  .indice-logo {
+    align-self: center;
+    justify-self: end;
+    width: clamp(4rem, 9vw, 6.75rem);
+    height: clamp(1.3rem, 3.2vw, 2.05rem);
+    background-color: currentColor;
+    color: var(--color-pietra-scura);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: right center;
+    -webkit-mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: right center;
+    mask-size: contain;
+    transition:
+      color 0.4s ease,
+      opacity 0.4s ease;
+  }
+  .indice-riga:hover .indice-logo,
+  .indice-riga:focus-visible .indice-logo {
+    color: var(--color-inchiostro);
+  }
   .indice-filo {
     position: absolute;
     left: 0;
@@ -392,7 +417,8 @@
   @media (hover: hover) and (pointer: fine) {
     .indice:hover .indice-riga:not(:hover) .indice-nome,
     .indice:hover .indice-riga:not(:hover) .indice-num,
-    .indice:hover .indice-riga:not(:hover) .indice-meta {
+    .indice:hover .indice-riga:not(:hover) .indice-meta,
+    .indice:hover .indice-riga:not(:hover) .indice-logo {
       opacity: 0.3;
     }
   }
