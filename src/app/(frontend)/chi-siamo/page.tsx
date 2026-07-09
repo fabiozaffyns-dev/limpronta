@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 
 import { WhatsAppButton } from '@/components/WhatsAppButton'
+import { CloudinaryImage } from '@/components/ui/CloudinaryImage'
 import { EditorialFigure } from '@/components/ui/EditorialFigure'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { CredoReveal } from '@/components/motion/CredoReveal'
@@ -10,6 +11,7 @@ import { SplitLines } from '@/components/motion/SplitLines'
 import { PageIntro } from '@/components/ui/PageIntro'
 import { SwapLabel } from '@/components/ui/SwapLabel'
 import { Reveal } from '@/components/motion/Reveal'
+import { mediaDoc } from '@/lib/media'
 import { getSettings } from '@/lib/queries'
 import { appointmentMessage } from '@/lib/whatsapp'
 
@@ -81,9 +83,24 @@ export default async function ChiSiamoPage() {
             </p>
           </div>
           {/* La firma del titolare: una boutique che vende relazione e consiglio
-             ha un nome e un volto. La foto la carica Fabio in un secondo momento. */}
-          <p className="font-display mt-8 text-2xl text-ottone-testo">Fabio Zaffino</p>
-          <p className="cartellino mt-1 text-pietra-scura">Titolare · L&rsquo;Impronta</p>
+             ha un nome e un volto. Il ritratto quadrato compare se caricato in
+             Impostazioni → Chi siamo → "Foto del titolare". */}
+          <div className="mt-8 flex items-center gap-4">
+            {mediaDoc(settings.titolareFoto) && (
+              <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full">
+                <CloudinaryImage
+                  media={settings.titolareFoto}
+                  alt="Fabio Zaffino — titolare de L'Impronta"
+                  fillParent
+                  sizes="64px"
+                />
+              </div>
+            )}
+            <div>
+              <p className="font-display text-2xl text-ottone-testo">Fabio Zaffino</p>
+              <p className="cartellino mt-1 text-pietra-scura">Titolare · L&rsquo;Impronta</p>
+            </div>
+          </div>
         </Reveal>
       </section>
 

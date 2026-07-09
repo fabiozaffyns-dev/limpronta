@@ -232,6 +232,16 @@ export const Settings: GlobalConfig = {
                   'Foto VERTICALE dell’interno del negozio per la sezione "Vieni a trovarci" di Chi siamo. Vuoto = pannello materico.',
               },
             },
+            {
+              name: 'titolareFoto',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Foto del titolare — quadrata',
+              admin: {
+                description:
+                  'Ritratto QUADRATO (mezzo busto, sfondo neutro, min 600×600px) accanto alla firma in "La nostra storia". Vuoto = mostra solo il nome.',
+              },
+            },
           ],
         },
         {

@@ -788,6 +788,10 @@ export interface Setting {
    * Foto VERTICALE dell’interno del negozio per la sezione "Vieni a trovarci" di Chi siamo. Vuoto = pannello materico.
    */
   chiSiamoFoto2?: (number | null) | Media;
+  /**
+   * Ritratto QUADRATO (mezzo busto, sfondo neutro, min 600×600px) accanto alla firma in "La nostra storia". Vuoto = mostra solo il nome.
+   */
+  titolareFoto?: (number | null) | Media;
   seoDefault?: {
     titolo?: string | null;
     descrizione?: string | null;
@@ -841,6 +845,7 @@ export interface SettingsSelect<T extends boolean = true> {
   heroMedia?: T;
   chiSiamoFoto1?: T;
   chiSiamoFoto2?: T;
+  titolareFoto?: T;
   seoDefault?:
     | T
     | {
