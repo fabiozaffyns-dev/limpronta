@@ -95,9 +95,9 @@ export default async function HomePage() {
           <Reveal>
             <Eyebrow scuro>Il nostro credo</Eyebrow>
             <CredoReveal className="mt-8 max-w-4xl font-display text-3xl leading-[1.18] text-avorio md:text-[3.25rem]">
-              <span className="italic text-ottone-chiaro">La cura</span> prima della quantità. Pochi brand, scelti uno a
-              uno, che condividono la stessa idea di misura: tessuti veri, tagli che durano, dettagli
-              che si notano solo da vicino.
+              <span className="italic text-ottone-chiaro">La cura</span> prima della quantità.
+              <br />Pochi brand, scelti uno a uno, che condividono la stessa idea di misura:
+              tessuti veri, tagli che durano, dettagli che si notano solo da vicino.
             </CredoReveal>
             <p className="mt-10 max-w-xl text-lg text-avorio/70">
               Vestire bene è una forma di rispetto — per sé e per gli altri. È il nostro
