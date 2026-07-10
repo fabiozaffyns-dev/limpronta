@@ -18,7 +18,7 @@
  * Nell'indice ricevono un box più alto e centrato (.indice-logo-emblema),
  * altrimenti risulterebbero minuscoli e incollati al filo destro.
  */
-export const LOGHI_EMBLEMA = new Set(['canadiens', 'suns'])
+export const LOGHI_EMBLEMA = new Set(['canadiens', 'suns', 'sun68'])
 
 export const LOGHI_BRAND: Record<string, string> = {
   '40weft': '/loghi/40weft.png',

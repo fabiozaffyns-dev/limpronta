@@ -379,10 +379,10 @@
       display: block;
     }
   }
-  /* Emblemi quasi quadrati/verticali (Canadiens, Suns): il box standard, largo e
-     basso con aggancio a destra, li rimpicciolisce e li incolla al filo. Qui il
-     box è più ALTO (sono limitati dall'altezza) e il segno è CENTRATO nella
-     colonna: il centro ottico torna in linea con quello dei wordmark. */
+  /* Emblemi quasi quadrati/verticali (Canadiens, Suns, SUN68): il box standard,
+     largo e basso con aggancio a destra, li rimpicciolisce e li incolla al filo.
+     Qui il box è più ALTO (sono limitati dall'altezza) e il segno è CENTRATO
+     nella colonna: il centro ottico torna in linea con quello dei wordmark. */
   .indice-logo-emblema {
     height: clamp(2.7rem, 5.4vw, 3.8rem);
     -webkit-mask-position: center;
